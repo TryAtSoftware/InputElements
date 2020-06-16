@@ -1,6 +1,6 @@
 {
     "name": "@try-at-software/input-elements",
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.1-alpha.0",
     "description": "A package providing different input elements that are extensible and easily configurable for your custom needs.",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
@@ -8,17 +8,21 @@
         "lint": ".\\node_modules\\.bin\\eslint \"./src/**/*.{js,jsx,ts,tsx}\" && prettier --check \"src/**/*.{ts,tsx,js,jsx,css,less,json}\"",
         "fix-code-style": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,less,json}\"",
         "test": "jest",
-        "build": "tsc"
+        "build": "tsc",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm test && npm run lint",
+        "preversion": "npm run lint",
+        "version": "npm run format && git add -A src",
+        "postversion": "git push && git push --tags"
     },
     "repository": {
         "type": "git",
-        "url": "https://TryAtSoftware@dev.azure.com/TryAtSoftware/Input%20elements/_git/Input%20elements"
+        "url": "https://dev.azure.com/TryAtSoftware/InputElements"
     },
+    "homepage": "https://dev.azure.com/TryAtSoftware/InputElements",
     "files": [
         "./lib/**/*"
     ],
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm lint",
     "keywords": [
         "input",
         "input-element",
