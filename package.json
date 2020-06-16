@@ -1,8 +1,9 @@
 {
     "name": "@try-at-software/input-elements",
     "version": "1.0.0-alpha.1",
-    "description": "",
-    "main": "index.js",
+    "description": "A package providing different input elements that are extensible and easily configurable for your custom needs.",
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
     "scripts": {
         "lint": ".\\node_modules\\.bin\\eslint \"./src/**/*.{js,jsx,ts,tsx}\" && prettier --check \"src/**/*.{ts,tsx,js,jsx,css,less,json}\"",
         "fix-code-style": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,less,json}\"",
@@ -18,7 +19,12 @@
     ],
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm lint",
-    "keywords": [],
+    "keywords": [
+        "input",
+        "input-element",
+        "form",
+        "validation"
+    ],
     "author": "Tony Troeff",
     "license": "ISC",
     "devDependencies": {
