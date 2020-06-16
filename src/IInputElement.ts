@@ -1,0 +1,32 @@
+export interface IInputElement {
+    /**
+     * A boolean indicating if the entered value is valid (all validation rules pass).
+     */
+    isValid: boolean;
+
+    /**
+     * Gets or sets a value indicating whether the input element has any changes made.
+     */
+    hasChanges: boolean;
+
+    /**
+     * This method should render the 'componentToRender' with all necessary props.
+     */
+    render(): JSX.Element;
+
+    /**
+     * This method should be called every time after the input element has changed.
+     * It should not be implemented into the inheriting classes, but instead should be passed as a parameter (into the constructor would be best).
+     * You can use it to refresh your form or apply some custom update logic.
+     *
+     * @param isInitial                 A value indicating if the update was caused by setting the initial value of the input element.
+     */
+    update(isInitial?: boolean): void;
+}
+
+export interface IValueInputElement<TValue> extends IInputElement {
+    /**
+     * The value entered into the input element.
+     */
+    value: TValue;
+}
