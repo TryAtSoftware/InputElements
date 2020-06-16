@@ -14,7 +14,13 @@ export default interface ISingleValueInputElementConfiguration {
      * A value indicating whether error messages will be rendered by the underlying input element itself.
      * If it is set to false, no error message will be rendered but the validation pipeline will not be changed at all.
      */
-    renderErrors: boolean;
+    renderErrors?: boolean;
+
+    /**
+     * A value indicating whether the underlying component should render an appropriate indicator if it is required (and if the component itself is capable of doing this).
+     * If it is set to false, no required indicator will be rendered but the validation pipeline will not be changed at all.
+     */
+    renderRequiredIndicator?: boolean;
 
     /**
      * A predefined rule indicating if the input element is required.
@@ -23,6 +29,11 @@ export default interface ISingleValueInputElementConfiguration {
      * If it is not required but a value is provided, all validation rules should be executed and if any fails, an error message should be rendered.
      */
     isRequired: boolean;
+
+    /**
+     * A message that should be rendered instead of the default one whenever a required input element is empty.
+     */
+    requiredValidationMessage?: string;
 
     /**
      * A value indicating whether the input element should be validated even if it is not required and empty.

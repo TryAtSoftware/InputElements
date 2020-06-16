@@ -67,8 +67,8 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
      */
     public render(): JSX.Element {
         return (
-            <div className={[this.configuration?.className, 'q-input-element'].join(' ')}>
-                <div className="q-input-element-content">
+            <div className={[this.configuration?.className, 'tas-input-element'].join(' ')}>
+                <div className="tas-input-element-content">
                     {this.isLoading ? (
                         <Spinner size={SpinnerSize.medium} />
                     ) : (
@@ -76,7 +76,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
                             {...this.componentProps}
                             label={this.configuration?.label}
                             value={this.value}
-                            isRequired={this.configuration?.isRequired}
+                            isRequired={this.configuration.renderRequiredIndicator && this.configuration?.isRequired}
                             errorMessage={this.configuration?.renderErrors && this.errorMessage}
                             onChange={(newValue: TValue): void => {
                                 this.setInternalValue(newValue);
@@ -108,7 +108,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
         if (this.configuration?.isRequired && !this.value) {
             // If a value is required but the input field is empty.
-            errorMessage = `The field is required`;
+            errorMessage = this.configuration?.requiredValidationMessage || `The field is required`;
         } else if (this.configuration?.isRequired || this.value || this.configuration?.executeAllValidations) {
             // If a value is provided.
             this.validationRules.forEach((rule): void => {
