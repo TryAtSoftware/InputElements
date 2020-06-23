@@ -26,7 +26,6 @@ steps:
       targetType: 'inline'
       script: |
         npm test
-      failOnStderr: true
     displayName: 'Test the code'
 
   - task: Bash@3
@@ -34,17 +33,7 @@ steps:
       targetType: 'inline'
       script: |
         npm pack
-      failOnStderr: true
     displayName: 'Package'
-
-  - task: Bash@3
-    inputs:
-      targetType: 'inline'
-      script: |
-        cd lib
-        ls
-      failOnStderr: true
-    displayName: 'Show lib folder content'
 
   - task: CopyFiles@2
     inputs:
