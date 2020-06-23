@@ -7,42 +7,54 @@ pool:
     vmImage: 'windows-latest'
 
 steps:
-    - task: NodeTool@0
-      inputs:
-          versionSpec: '10.x'
-      displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
 
-    - script: |
-          npm install
-          npm run lint
-          npm run build
-          ls
-          cd lib
-          ls
-      displayName: 'Build the package'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        npm install
+        npm run lint
+        npm run build
+      failOnStderr: true
+    displayName: 'Build the package'
 
-    - script: |
-          npm test
-      displayName: 'Test the code'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        npm test
+      failOnStderr: true
+    displayName: 'Test the code'
 
-    - script: |
-          ls
-          npm pack
-      displayName: 'Package'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        npm pack
+      failOnStderr: true
+    displayName: 'Package'
 
-    - script: |
-          cd lib
-          ls
-      displayName: 'Show lib folder content'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd lib
+        ls
+      failOnStderr: true
+    displayName: 'Show lib folder content'
 
-    - task: CopyFiles@2
-      inputs:
-          contents: '*.tgz'
-          targetFolder: $(Build.ArtifactStagingDirectory)
-      displayName: 'Copy archives to artifacts staging directory'
+  - task: CopyFiles@2
+    inputs:
+      contents: '*.tgz'
+      targetFolder: $(Build.ArtifactStagingDirectory)
+    displayName: 'Copy archives to artifacts staging directory'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-          PathtoPublish: $(Build.ArtifactStagingDirectory)
-          ArtifactName: 'Package'
-      displayName: 'Publish artifacts'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: $(Build.ArtifactStagingDirectory)
+      ArtifactName: 'Package'
+    displayName: 'Publish artifacts'
