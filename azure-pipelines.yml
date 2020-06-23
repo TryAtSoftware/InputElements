@@ -16,6 +16,9 @@ steps:
           npm install
           npm run lint
           npm run build
+          ls
+          cd lib
+          ls
       displayName: 'Build the package'
 
     - script: |
@@ -23,6 +26,7 @@ steps:
       displayName: 'Test the code'
 
     - script: |
+          ls
           npm pack
       displayName: 'Package'
 
