@@ -1,6 +1,6 @@
 {
     "name": "@try-at-software/input-elements",
-    "version": "1.0.1-alpha.0",
+    "version": "1.0.1-alpha.1",
     "description": "A package providing different input elements that are extensible and easily configurable for your custom needs.",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
@@ -9,10 +9,9 @@
         "fix-code-style": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,less,json}\"",
         "test": "jest",
         "build": "tsc",
-        "prepare": "npm run build",
         "prepublishOnly": "npm test && npm run lint",
         "preversion": "npm run lint",
-        "postversion": "git push --tags && rm -rf ./lib"
+        "postversion": "git push --tags"
     },
     "repository": {
         "type": "git",
