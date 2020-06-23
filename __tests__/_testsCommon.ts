@@ -1,5 +1,6 @@
 export function getRandomString(length?: number): string {
-    const allowedCharacters = 'ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012456789\'"`,.?!';
+    // The allowed characters should not include symbols that are file-safe.
+    const allowedCharacters = 'ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012456789';
     let randomString = '';
 
     // If the length is faulty - this means that a string with random length should be returned.

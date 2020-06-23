@@ -1,15 +1,18 @@
 import * as React from 'react';
-import ISingleValueInputElement, { ValidationRule } from './ISingleValueInputElement';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import InputElement from '../InputElement';
+import ISingleValueInputElement from './ISingleValueInputElement';
 import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
 import ISingleValueInputElementProps from './ISingleValueInputElementProps';
+import { ValidationRule } from '../IInputElement';
 
 export default class SingleValueInputElement<TValue, TComponentProps> extends InputElement
     implements ISingleValueInputElement<TValue, TComponentProps> {
     private initialValue: TValue;
 
     private valueIsSet = false;
+
+    private _isInitiallyValid = true;
 
     public constructor(
         config: ISingleValueInputElementConfiguration,
@@ -22,7 +25,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
         this.configuration = config;
         this.componentToRender = component;
-        this.isValid = !this.configuration?.isRequired;
+        this._isInitiallyValid = !this.configuration?.isRequired;
         this.componentProps = props;
 
         this.validationRules = [];
@@ -49,7 +52,9 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
     public validationRules: ValidationRule<TValue>[];
 
     /** @inheritdoc */
-    public isValid: boolean;
+    public get isValid(): boolean {
+        return this.valueIsSet ? !this.errorMessage : this._isInitiallyValid;
+    }
 
     /**
      * @inheritdoc
@@ -76,7 +81,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
                             {...this.componentProps}
                             label={this.configuration?.label}
                             value={this.value}
-                            isRequired={this.configuration.renderRequiredIndicator && this.configuration?.isRequired}
+                            isRequired={this.configuration?.renderRequiredIndicator && this.configuration?.isRequired}
                             errorMessage={this.configuration?.renderErrors && this.errorMessage}
                             onChange={(newValue: TValue): void => {
                                 this.setInternalValue(newValue);
@@ -120,7 +125,6 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
         }
 
         this.errorMessage = errorMessage;
-        this.isValid = !errorMessage;
     }
 
     /**
