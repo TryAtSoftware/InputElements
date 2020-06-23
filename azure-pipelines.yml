@@ -16,3 +16,19 @@ steps:
 - script: |
     npm test
   displayName: 'Test the code'
+
+- script: |
+    npm pack
+  displayName: 'Package'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '*.tgz'
+    targetFolder: $(Build.ArtifactStagingDirectory)
+  displayName: 'Copy archives to artifacts staging directory'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    path: $(Build.ArtifactStagingDirectory)
+    artifact: package
+  displayName: 'Publish artifacts'
