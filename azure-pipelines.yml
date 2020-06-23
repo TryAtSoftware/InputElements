@@ -26,6 +26,11 @@ steps:
           npm pack
       displayName: 'Package'
 
+    - script: |
+          cd lib
+          ls
+      displayName: 'Show lib folder content'
+
     - task: CopyFiles@2
       inputs:
           contents: '*.tgz'
