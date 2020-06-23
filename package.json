@@ -9,10 +9,9 @@
         "fix-code-style": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,less,json}\"",
         "test": "jest",
         "build": "tsc",
-        "prepare": "npm run build",
         "prepublishOnly": "npm test && npm run lint",
         "preversion": "npm run lint",
-        "postversion": "git push --tags && rm -rf ./lib"
+        "postversion": "git push --tags"
     },
     "repository": {
         "type": "git",
