@@ -72,7 +72,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
      */
     public render(): JSX.Element {
         return (
-            <div className={[this.configuration?.className, 'tas-input-element'].join(' ')}>
+            <div className={[this.configuration?.className, 'tas-input-element'].filter((x): boolean => !!x).join(' ')}>
                 <div className="tas-input-element-content">
                     {this.isLoading ? (
                         <Spinner size={SpinnerSize.medium} />
