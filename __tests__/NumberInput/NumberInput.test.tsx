@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { getRandomProbability, getRandomString } from '../_testsCommon';
+import { emptyStrings, getRandomNumber, getRandomString } from '../_testsCommon';
+import each from 'jest-each';
+import EnzymeTestsHelper from '../EnzymeTestsHelper';
 import { mount } from 'enzyme';
 import NumberInput from '../../src/SingleValueInputElements/NumberInputElement/NumberInput';
+import SingleValueInputElementTestHelpers from '../SingleValueInputElementTestHelpers';
 import { SpinButton } from 'office-ui-fabric-react';
 
 describe('Number input', () => {
@@ -12,39 +15,30 @@ describe('Number input', () => {
         updateFunction.mockReset();
     });
 
-    it('should render correctly', () => {
-        const component = mount(
-            <NumberInput
-                value={1}
-                label={getRandomString()}
-                isRequired={getRandomProbability()}
-                errorMessage={getRandomString()}
-                onChange={updateFunction}
-            />
-        );
+    each([getRandomString(), ...emptyStrings]).it('should render correctly', (placeholderValue: string) => {
+        const props = SingleValueInputElementTestHelpers.getRandomProps(getRandomNumber(0, 1000), updateFunction);
+        const component = mount(<NumberInput {...props} placeholder={placeholderValue} />);
 
-        expect(component).toBeTruthy();
+        EnzymeTestsHelper.expectExists(component);
+
+        const underlyingSpinButton = component.find(SpinButton);
+        EnzymeTestsHelper.expectExists(underlyingSpinButton);
+
+        expect(underlyingSpinButton.prop('label')).toBeFalsy();
+        expect(underlyingSpinButton.prop('placeholder')).toEqual(placeholderValue);
+
         expect(updateFunction).toHaveBeenCalledTimes(0);
     });
 
     it('should call the update function on change', (): void => {
-        const component = mount(
-            <NumberInput
-                value={1}
-                label={getRandomString()}
-                isRequired={getRandomProbability()}
-                errorMessage={getRandomString()}
-                onChange={updateFunction}
-            />
-        );
+        const props = SingleValueInputElementTestHelpers.getRandomProps(getRandomNumber(0, 1000), updateFunction);
+        const component = mount(<NumberInput {...props} />);
 
         const spinButton = component.find(SpinButton);
-        expect(spinButton).toBeTruthy();
-        expect(spinButton.length).toEqual(1);
+        EnzymeTestsHelper.expectExists(spinButton);
 
         const input = spinButton.find(spinButtonInputQuerySelector);
-        expect(input).toBeTruthy();
-        expect(input.length).toEqual(1);
+        EnzymeTestsHelper.expectExists(input);
 
         input.simulate('change', { target: { value: '12.7' } });
         expect(updateFunction).toHaveBeenCalledTimes(1);

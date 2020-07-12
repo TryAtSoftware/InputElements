@@ -1,9 +1,9 @@
+import { emptyStrings, getRandomString } from './_testsCommon';
 import each from 'jest-each';
-import { getRandomString } from './_testsCommon';
 import { restrictEmptyText } from './../src/SingleValueInputElements/TextInputElement/EmptyValidationRules';
 
 describe('EmptyValidationRules', (): void => {
-    const invalidInputs = [null, '', undefined, '     ', '\t\t\t', '\r\r\r', '\n\n\n', ' \t\r\n'];
+    const invalidInputs = emptyStrings;
     const validInputs = [getRandomString()];
 
     function getTestData(): unknown[][] {

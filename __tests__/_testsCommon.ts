@@ -18,3 +18,5 @@ export function getRandomNumber(minValue: number, maxValue: number): number {
 export function getRandomProbability(perCent = 50): boolean {
     return getRandomNumber(0, 100) < perCent;
 }
+
+export const emptyStrings = [null, '', undefined, '     ', '\t\t\t', '\r\r\r', '\n\n\n', ' \t\r\n'];
