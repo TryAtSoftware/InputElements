@@ -5,4 +5,8 @@ export default class EnzymeTestsHelper {
         expect(component).toBeTruthy();
         expect(component.length).toEqual(expectedLength);
     }
+
+    public static mockEvent(value: unknown): unknown {
+        return { target: { value: value } };
+    }
 }

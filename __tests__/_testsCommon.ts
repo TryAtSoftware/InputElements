@@ -1,6 +1,8 @@
-export function getRandomString(length?: number): string {
+export function getRandomString(length?: number, allowDigits = true): string {
     // The allowed characters should not include symbols that are file-safe.
-    const allowedCharacters = 'ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012456789';
+    let allowedCharacters = 'ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    if (allowDigits) allowedCharacters += '012456789';
+
     let randomString = '';
 
     // If the length is faulty - this means that a string with random length should be returned.
@@ -11,8 +13,12 @@ export function getRandomString(length?: number): string {
     return randomString;
 }
 
-export function getRandomNumber(minValue: number, maxValue: number): number {
+export function getRandomNumber(minValue = 0, maxValue = 1000): number {
     return Math.floor(Math.random() * (maxValue - minValue)) + minValue;
+}
+
+export function getRandomFloat(minValue = 0, maxValue = 1000): number {
+    return Math.random() * (maxValue - minValue) + minValue;
 }
 
 export function getRandomProbability(perCent = 50): boolean {
