@@ -60,4 +60,34 @@ export interface IValueInputElement<TValue> extends IInputElement {
      * This should be useful for update operations.
      */
     setInitialValue(value: TValue): void;
+
+    /**
+     * A value indicating whether the input element is currently loading. It should not be changed from the outside.
+     * To modify this value, use the @see load method.
+     */
+    isLoading: boolean;
+
+    /**
+     * A function that will execute the passed @param action while rendering a loading indicator.
+     * It should handle errors internally.
+     */
+    load(action: (doneCallback: () => void) => void): void;
+
+    /**
+     * A value indicating whether the input element iss visible. It should not be changed from the outside.
+     * To modify this value, use the @see hide and @see show methods.
+     */
+    isVisible: boolean;
+
+    /**
+     * Use this function to hide the input element.
+     * If it is already hidden, nothing should happen.
+     */
+    hide(): void;
+
+    /**
+     * Use this function to show the input element if it was hidden before.
+     * If it is already visible, nothing should happen.
+     */
+    show(): void;
 }

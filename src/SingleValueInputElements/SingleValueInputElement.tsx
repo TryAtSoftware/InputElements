@@ -14,6 +14,8 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
     private _isInitiallyValid = true;
 
+    private _isVisible = true;
+
     public constructor(
         config: ISingleValueInputElementConfiguration,
         component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
@@ -56,21 +58,16 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
         return this.valueIsSet ? !this.errorMessage : this._isInitiallyValid;
     }
 
-    /**
-     * @inheritdoc
-     */
-
+    /** @inheritdoc */
     public componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public componentProps: TComponentProps;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public render(): JSX.Element {
+        if (!this._isVisible) return null;
+
         return (
             <div className={[this.configuration?.className, 'tas-input-element'].filter((x): boolean => !!x).join(' ')}>
                 <div className="tas-input-element-content">
@@ -131,6 +128,50 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
      * A value indicating whether a spinner should be rendered or the input element itself.
      */
     protected isLoading = false;
+
+    /** @inheritdoc */
+    public load(action: (doneCallback: () => void) => void): void {
+        if (!action) return;
+
+        const callback = (): void => {
+            this.isLoading = false;
+            this.update();
+        };
+
+        try {
+            // If a new value is provided, we should execute asynchronously the `onDependentValueChanged` callback to retrieve the requested selectable models.
+            this.isLoading = true;
+            this.update();
+
+            action(callback);
+        } catch (error) {
+            let newErrorMessage: string;
+
+            if (error instanceof Error) newErrorMessage = error.message;
+            if (typeof error === 'string') newErrorMessage = error;
+            else throw error;
+
+            this.errorMessage = newErrorMessage;
+            callback();
+        }
+    }
+
+    /** @inheritdoc */
+    public get isVisible(): boolean {
+        return this._isVisible;
+    }
+
+    /** @inheritdoc */
+    public hide(): void {
+        this._isVisible = false;
+        this.update();
+    }
+
+    /** @inheritdoc */
+    public show(): void {
+        this._isVisible = true;
+        this.update();
+    }
 
     /**
      * A method used to set new value, validate it and update the form.
