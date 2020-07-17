@@ -16,6 +16,8 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
     private _isVisible = true;
 
+    private _isLoading = false;
+
     public constructor(
         config: ISingleValueInputElementConfiguration,
         component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
@@ -108,7 +110,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
     public validate(): void {
         let errorMessage = '';
 
-        if (this.configuration?.isRequired && !this.value) {
+        if (this.configuration?.isRequired && !!this.value === false) {
             // If a value is required but the input field is empty.
             errorMessage = this.configuration?.requiredValidationMessage || `The field is required`;
         } else if (this.configuration?.isRequired || this.value || this.configuration?.executeAllValidations) {
@@ -124,23 +126,23 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
         this.errorMessage = errorMessage;
     }
 
-    /**
-     * A value indicating whether a spinner should be rendered or the input element itself.
-     */
-    protected isLoading = false;
+    /** @inheritdoc */
+    public get isLoading(): boolean {
+        return this._isLoading;
+    }
 
     /** @inheritdoc */
     public load(action: (doneCallback: () => void) => void): void {
         if (!action) return;
 
         const callback = (): void => {
-            this.isLoading = false;
+            this._isLoading = false;
             this.update();
         };
 
         try {
             // If a new value is provided, we should execute asynchronously the `onDependentValueChanged` callback to retrieve the requested selectable models.
-            this.isLoading = true;
+            this._isLoading = true;
             this.update();
 
             action(callback);
