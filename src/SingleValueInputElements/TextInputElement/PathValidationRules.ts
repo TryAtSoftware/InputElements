@@ -1,4 +1,4 @@
-import { ValidationRule } from '../../IInputElement';
+import { ValidationRule } from '../../IValueInputElement';
 
 export const invalidCharacters = ['<', '>', ':', '"', '/', '\\', '|', '?', '*'];
 

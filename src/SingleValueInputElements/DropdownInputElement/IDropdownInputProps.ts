@@ -1,7 +1,7 @@
 import { IDropdownOption } from 'office-ui-fabric-react';
 
 export default interface IDropdownInputProps {
-    options: Array<IDropdownOption>;
+    options?: Array<IDropdownOption>;
     placeholder?: string;
 
     /**

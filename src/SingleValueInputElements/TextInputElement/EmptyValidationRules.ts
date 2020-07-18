@@ -1,4 +1,4 @@
-import { ValidationRule } from '../../IInputElement';
+import { ValidationRule } from '../../IValueInputElement';
 
 export function restrictEmptyText(errorMessage?: string): ValidationRule<string> {
     return (newValue: string): string => {

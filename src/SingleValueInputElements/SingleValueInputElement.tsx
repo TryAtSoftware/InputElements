@@ -4,7 +4,9 @@ import InputElement from '../InputElement';
 import ISingleValueInputElement from './ISingleValueInputElement';
 import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
 import ISingleValueInputElementProps from './ISingleValueInputElementProps';
-import { ValidationRule } from '../IInputElement';
+import { UpdateCallback } from '../IInputElement';
+import UpdateType from '../UpdateType';
+import { ValidationRule } from '../IValueInputElement';
 
 export default class SingleValueInputElement<TValue, TComponentProps> extends InputElement
     implements ISingleValueInputElement<TValue, TComponentProps> {
@@ -22,7 +24,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
         config: ISingleValueInputElementConfiguration,
         component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
         props: TComponentProps,
-        update: (isInitial?: boolean) => void,
+        update: UpdateCallback,
         ...validationRules: ValidationRule<TValue>[]
     ) {
         super(update);
@@ -67,7 +69,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
     public componentProps: TComponentProps;
 
     /** @inheritdoc */
-    public render(): JSX.Element {
+    protected renderComponent(): JSX.Element {
         if (!this._isVisible) return null;
 
         return (
@@ -137,13 +139,13 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
         const callback = (): void => {
             this._isLoading = false;
-            this.update();
+            this.updateInternally(UpdateType.System);
         };
 
         try {
             // If a new value is provided, we should execute asynchronously the `onDependentValueChanged` callback to retrieve the requested selectable models.
             this._isLoading = true;
-            this.update();
+            this.updateInternally(UpdateType.System);
 
             action(callback);
         } catch (error) {
@@ -166,13 +168,13 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
     /** @inheritdoc */
     public hide(): void {
         this._isVisible = false;
-        this.update();
+        this.updateInternally(UpdateType.System);
     }
 
     /** @inheritdoc */
     public show(): void {
         this._isVisible = true;
-        this.update();
+        this.updateInternally(UpdateType.System);
     }
 
     /**
@@ -187,7 +189,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
         this.value = value;
         this.validate();
 
-        this.update(isInitial);
+        this.updateInternally(isInitial ? UpdateType.Initial : UpdateType.NewValue);
     }
 
     protected validateNonRequiredValue(): string {

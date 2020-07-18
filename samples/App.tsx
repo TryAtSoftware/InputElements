@@ -1,4 +1,5 @@
 import * as React from 'react';
+import DependentInputSample from '../src/SingleValueInputElements/DependentInputElement/__samples__/DependentInput.example';
 import DropdownInputSample from '../src/SingleValueInputElements/DropdownInputElement/__samples__/DropdownInput.example';
 import DropdownInputWithDefaultValueSample from '../src/SingleValueInputElements/DropdownInputElement/__samples__/DropdownInputWithDefaultValue.example';
 import TextInputSample from '../src/SingleValueInputElements/TextInputElement/__samples__/TextInput.example';
@@ -16,6 +17,9 @@ export default class App extends React.Component {
                 <h2>Dropdown input:</h2>
                 <DropdownInputSample />
                 <DropdownInputWithDefaultValueSample />
+
+                <h2>Dependent input:</h2>
+                <DependentInputSample />
             </div>
         );
     }

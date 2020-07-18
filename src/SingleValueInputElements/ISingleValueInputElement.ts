@@ -1,6 +1,6 @@
 import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
 import ISingleValueInputElementProps from './ISingleValueInputElementProps';
-import { IValueInputElement } from '../IInputElement';
+import { IValueInputElement } from '../IValueInputElement';
 
 export default interface ISingleValueInputElement<TValue, TComponentProps = unknown>
     extends IValueInputElement<TValue> {

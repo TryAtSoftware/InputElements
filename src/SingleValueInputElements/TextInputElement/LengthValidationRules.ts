@@ -1,4 +1,4 @@
-import { ValidationRule } from '../../IInputElement';
+import { ValidationRule } from '../../IValueInputElement';
 
 export function restrictMinimumLength(minLength: number, errorMessage?: string): ValidationRule<string> {
     return (newValue: string): string => {

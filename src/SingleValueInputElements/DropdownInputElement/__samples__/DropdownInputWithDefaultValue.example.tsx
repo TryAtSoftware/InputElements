@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IDropdownOption, PrimaryButton } from 'office-ui-fabric-react';
 import DropdownInput from '../DropdownInput';
 import IDropdownInputProps from '../IDropdownInputProps';
-import { IValueInputElement } from '../../../IInputElement';
+import { IValueInputElement } from '../../../IValueInputElement';
 import SingleValueInputElement from '../../SingleValueInputElement';
 
 export default class DropdownInputWithDefaultValueSample extends React.Component {

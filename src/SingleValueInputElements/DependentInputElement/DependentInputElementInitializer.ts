@@ -1,17 +1,19 @@
-import { IValueInputElement } from '../../IInputElement';
+import { IValueInputElement } from '../../IValueInputElement';
+import UpdateType from '../../UpdateType';
 
 export default class DependentInputElementInitializer {
     public static initializeDependency<TDependent, TPrincipal>(
         principal: IValueInputElement<TPrincipal>,
-        onPrincipalValueChanged: (newValue: TPrincipal, doneCallback: () => void) => void,
         dependent: IValueInputElement<TDependent>,
-        handleFalsyPrincipalValue: () => void
+        onPrincipalValueChanged: (newValue: TPrincipal, doneCallback: () => void) => void,
+        handleFalsyPrincipalValue?: () => void,
+        handleInitialRender?: () => void
     ): void {
         if (!dependent || !principal || !onPrincipalValueChanged) return;
 
         const originalUpdateFunction = principal.update;
-        principal.update = (isInitial?: boolean): void => {
-            if (!!originalUpdateFunction) originalUpdateFunction(isInitial);
+        principal.update = (updateType: UpdateType): void => {
+            if (!!originalUpdateFunction) originalUpdateFunction(updateType);
 
             if (!!principal.value === false) {
                 // If the falsy value is handled explicitly, execute that callback.
@@ -26,5 +28,10 @@ export default class DependentInputElementInitializer {
                 });
             }
         };
+
+        // If a callback to handle the initial render is passed, execute it.
+        // Else, hide the input element.
+        if (!!handleInitialRender) handleInitialRender();
+        else dependent.hide();
     }
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ITextInputProps from '../ITextInputProps';
-import { IValueInputElement } from '../../../IInputElement';
+import { IValueInputElement } from '../../../IValueInputElement';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import SingleValueInputElement from '../../SingleValueInputElement';
 import TextInput from '../TextInput';
