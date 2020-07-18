@@ -12,9 +12,9 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
     implements ISingleValueInputElement<TValue, TComponentProps> {
     private initialValue: TValue;
 
-    private valueIsSet = false;
+    private _valueIsSet = false;
 
-    private _isInitiallyValid = true;
+    private _initialValueIsSet = false;
 
     private _isVisible = true;
 
@@ -31,7 +31,6 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
         this.configuration = config;
         this.componentToRender = component;
-        this._isInitiallyValid = !this.configuration?.isRequired;
         this.componentProps = props;
 
         this.validationRules = [];
@@ -59,7 +58,10 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
     /** @inheritdoc */
     public get isValid(): boolean {
-        return this.valueIsSet ? !this.errorMessage : this._isInitiallyValid;
+        return (
+            ((!!this.configuration && !this.configuration.isRequired) || this._valueIsSet || this._initialValueIsSet) &&
+            !this.errorMessage
+        );
     }
 
     /** @inheritdoc */
@@ -96,7 +98,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
     /** @inheritdoc */
     public setInitialValue(value: TValue): void {
-        if (this.valueIsSet) return;
+        if (this._valueIsSet || this._initialValueIsSet) return;
 
         this.initialValue = value;
 
@@ -185,7 +187,9 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
      * @param isInitial         A value indicating if the initial value is being set.
      */
     protected setInternalValue(value: TValue, isInitial = false): void {
-        this.valueIsSet = !isInitial;
+        if (isInitial) this._initialValueIsSet = true;
+        else this._valueIsSet = true;
+
         this.value = value;
         this.validate();
 
