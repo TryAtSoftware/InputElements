@@ -13,7 +13,7 @@ export default class BasicWorkflowSample extends React.Component {
         super(props);
 
         this._inputElement = new SingleValueInputElement<string, ITextInputProps>(
-            { isRequired: true },
+            { isRequired: true, label: 'Required input element' },
             TextInput,
             { placeholder: 'Enter some value and observe how the checkboxes will react to it.' },
             this.updateForm
@@ -29,8 +29,8 @@ export default class BasicWorkflowSample extends React.Component {
         return (
             <div className="sample-group basic-workflow">
                 {this._inputElement.render()}
-                <Checkbox label="Is valid " checked={this._inputElement.isValid} disabled={true} />
-                <Checkbox label="Has changes " checked={this._inputElement.hasChanges} disabled={true} />
+                <Checkbox label="Is valid" checked={this._inputElement.isValid} disabled={true} />
+                <Checkbox label="Has changes" checked={this._inputElement.hasChanges} disabled={true} />
             </div>
         );
     }

@@ -1,7 +1,8 @@
+import IHidingInputElement from './IHidingInputElement';
 import { IInputElement } from './IInputElement';
 import ILoadingInputElement from './ILoadingInputElement';
 
-export interface IValueInputElement<TValue> extends IInputElement, ILoadingInputElement {
+export interface IValueInputElement<TValue> extends IInputElement, ILoadingInputElement, IHidingInputElement {
     /**
      * The value entered into the input element.
      */

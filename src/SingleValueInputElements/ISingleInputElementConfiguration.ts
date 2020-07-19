@@ -1,4 +1,6 @@
-export default interface ISingleValueInputElementConfiguration {
+import ILoadingInputElementConfiguration from '../ILoadingInputElementConfiguration';
+
+export default interface ISingleValueInputElementConfiguration extends ILoadingInputElementConfiguration {
     /**
      * The label associated with the input element.
      * It should not be too long and should give enough information for the end user.

@@ -13,7 +13,7 @@ export default class NonRequiredValueSample extends React.Component {
         super(props);
 
         this._inputElement = new SingleValueInputElement<string, ITextInputProps>(
-            { isRequired: false },
+            { isRequired: false, label: 'Not a required input element' },
             TextInput,
             { placeholder: 'Examine the validness of the input element when there is no value entered.' },
             this.updateForm
@@ -29,8 +29,8 @@ export default class NonRequiredValueSample extends React.Component {
         return (
             <div className="sample-group non-required-value">
                 {this._inputElement.render()}
-                <Checkbox label="Is valid " checked={this._inputElement.isValid} disabled={true} />
-                <Checkbox label="Has changes " checked={this._inputElement.hasChanges} disabled={true} />
+                <Checkbox label="Is valid" checked={this._inputElement.isValid} disabled={true} />
+                <Checkbox label="Has changes" checked={this._inputElement.hasChanges} disabled={true} />
             </div>
         );
     }

@@ -14,7 +14,7 @@ export default class InitialValueWorkflowSample extends React.Component {
         super(props);
 
         this._inputElement = new SingleValueInputElement<string, ITextInputProps>(
-            { isRequired: true },
+            { isRequired: true, label: 'Required input element with initial value being set' },
             TextInput,
             {
                 placeholder:
@@ -35,8 +35,8 @@ export default class InitialValueWorkflowSample extends React.Component {
         return (
             <div className="sample-group basic-workflow">
                 {this._inputElement.render()}
-                <Checkbox label="Is valid " checked={this._inputElement.isValid} disabled={true} />
-                <Checkbox label="Has changes " checked={this._inputElement.hasChanges} disabled={true} />
+                <Checkbox label="Is valid" checked={this._inputElement.isValid} disabled={true} />
+                <Checkbox label="Has changes" checked={this._inputElement.hasChanges} disabled={true} />
             </div>
         );
     }

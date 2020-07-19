@@ -75,7 +75,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
             <div className={[this.configuration?.className, 'tas-input-element'].filter((x): boolean => !!x).join(' ')}>
                 <div className="tas-input-element-content">
                     {this.isLoading ? (
-                        <Spinner size={SpinnerSize.medium} />
+                        this.renderLoadingIndicator()
                     ) : (
                         <this.componentToRender
                             {...this.componentProps}
@@ -195,5 +195,11 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
     protected validateNonRequiredValue(): string {
         return null;
+    }
+
+    private renderLoadingIndicator(): JSX.Element {
+        if (!!this.configuration?.renderLoadingComponent) return this.configuration.renderLoadingComponent();
+
+        return <Spinner size={SpinnerSize.medium} />;
     }
 }
