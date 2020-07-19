@@ -7,5 +7,6 @@ export default interface IDropdownInputProps {
     /**
      * The default option for the dropdown.
      */
+    // TODO: This should be of more generic and reusable type.
     defaultOption?: IDropdownOption;
 }

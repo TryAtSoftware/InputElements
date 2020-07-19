@@ -6,6 +6,7 @@ import DropdownInputWithDefaultValueSample from '../src/SingleValueInputElements
 import HidingInputElementsSample from '../src/SingleValueInputElements/__samples__/HidingInputElement.example';
 import InitialValueWorkflowSample from '../src/SingleValueInputElements/__samples__/InitialValueWorkflow.example';
 import { Link } from 'office-ui-fabric-react';
+import ListInputElementSample from '../src/DynamicListInputElement/__samples__/ListInputElement.example';
 import LoadingInputElementsSample from '../src/SingleValueInputElements/__samples__/LoadingInputElements.example';
 import NonRequiredValueSample from '../src/SingleValueInputElements/__samples__/NonRequiredValue.example';
 import TextInputSample from '../src/SingleValueInputElements/TextInputElement/__samples__/TextInput.example';
@@ -41,6 +42,11 @@ export default class App extends React.Component {
                     <Link href="#dependent-input">Dependent input</Link>
                 </h2>
                 <DependentInputSample />
+
+                <h2 id="dynamic-list-input-elements">
+                    <Link href="#dynamic-list-input-elements">Dynamic list input elements</Link>
+                </h2>
+                <ListInputElementSample />
             </div>
         );
     }
