@@ -1,3 +1,4 @@
+import IChangingInputElement from '../../IChangingInputElement';
 import IHidingInputElement from '../../IHidingInputElement';
 import ILoadingInputElement from '../../ILoadingInputElement';
 import { IValueInputElement } from '../../IValueInputElement';
@@ -6,7 +7,10 @@ import UpdateType from '../../UpdateType';
 export default class DependentInputElementInitializer {
     public static initializeDependency<TDependent, TPrincipal>(
         principal: IValueInputElement<TPrincipal>,
-        dependent: IValueInputElement<TDependent> & IHidingInputElement & ILoadingInputElement,
+        dependent: IValueInputElement<TDependent> &
+            IChangingInputElement<TDependent> &
+            IHidingInputElement &
+            ILoadingInputElement,
         onPrincipalValueChanged: (newValue: TPrincipal, doneCallback: () => void) => void,
         handleFalsyPrincipalValue?: () => void,
         handleInitialRender?: () => void
@@ -17,6 +21,7 @@ export default class DependentInputElementInitializer {
         principal.update = (updateType: UpdateType): void => {
             if (!!originalUpdateFunction) originalUpdateFunction(updateType);
 
+            dependent.resetValue();
             if (!!principal.value === false) {
                 // If the falsy value is handled explicitly, execute that callback.
                 // In every other case, hide the dependent component.

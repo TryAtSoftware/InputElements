@@ -11,4 +11,9 @@ export default interface IChangingInputElement<TValue> {
      * This should be useful for update operations.
      */
     setInitialValue(value: TValue): void;
+
+    /**
+     * This method will reset the current value of the input element.
+     */
+    resetValue(): void;
 }

@@ -19,7 +19,8 @@ export default class DropdownInput extends React.Component<
                 errorMessage={this.props?.errorMessage}
                 required={!!this.props?.isRequired}
                 placeholder={this.props?.placeholder}
-                defaultSelectedKey={this.props?.value || this.props?.defaultOption?.key}
+                // This value should never be `undefined`.
+                defaultSelectedKey={this.props?.value || this.props?.defaultOption?.key || null}
             />
         );
     }

@@ -1,21 +1,16 @@
 import * as React from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
+import { combineClasses } from '../Utilities/StylingHelper';
 import ExtendedInputElement from '../ExtendedInputElement';
 import ISingleValueInputElement from './ISingleValueInputElement';
 import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
 import ISingleValueInputElementProps from './ISingleValueInputElementProps';
 import { UpdateCallback } from '../IInputElement';
-import UpdateType from '../UpdateType';
 import { ValidationRule } from '../IValueInputElement';
 
-export default class SingleValueInputElement<TValue, TComponentProps> extends ExtendedInputElement
+export default class SingleValueInputElement<TValue, TComponentProps>
+    extends ExtendedInputElement<ISingleValueInputElementConfiguration, TValue>
     implements ISingleValueInputElement<TValue, TComponentProps> {
-    private initialValue: TValue;
-
-    private _valueIsSet = false;
-
-    private _initialValueIsSet = false;
-
     public constructor(
         config: ISingleValueInputElementConfiguration,
         component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
@@ -23,9 +18,8 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends Ex
         update: UpdateCallback,
         ...validationRules: ValidationRule<TValue>[]
     ) {
-        super(update);
+        super(config, update);
 
-        this.configuration = config;
         this.componentToRender = component;
         this.componentProps = props;
 
@@ -36,7 +30,10 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends Ex
     }
 
     /** @inheritdoc */
-    public configuration: ISingleValueInputElementConfiguration;
+    protected setInternalValue(value: TValue): void {
+        this.value = value;
+        this.validate();
+    }
 
     /** @inheritdoc */
     public get hasChanges(): boolean {
@@ -66,7 +63,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends Ex
     /** @inheritdoc */
     protected renderComponent(): JSX.Element {
         return (
-            <div className={[this.configuration?.className, 'tas-input-element'].filter((x): boolean => !!x).join(' ')}>
+            <div className={combineClasses('tas-input-element', this.configuration?.className)}>
                 <div className="tas-input-element-content">
                     {this.isLoading ? (
                         this.renderLoadingIndicator()
@@ -78,27 +75,13 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends Ex
                             isRequired={this.configuration?.renderRequiredIndicator && this.configuration?.isRequired}
                             errorMessage={this.configuration?.renderErrors && this.errorMessage}
                             onChange={(newValue: TValue): void => {
-                                this.setInternalValue(newValue);
+                                this.setValue(newValue);
                             }}
                         />
                     )}
                 </div>
             </div>
         );
-    }
-
-    /** @inheritdoc */
-    public setInitialValue(value: TValue): void {
-        if (this._valueIsSet || this._initialValueIsSet) return;
-
-        this.initialValue = value;
-
-        this.setInternalValue(value, true);
-    }
-
-    /** @inheritdoc */
-    public setValue(value: TValue): void {
-        this.setInternalValue(value, false);
     }
 
     /** @inheritdoc */
@@ -119,23 +102,6 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends Ex
         }
 
         this.errorMessage = errorMessage;
-    }
-
-    /**
-     * A method used to set new value, validate it and update the form.
-     *
-     * @param value             The new value of the input element.
-     *
-     * @param isInitial         A value indicating if the initial value is being set.
-     */
-    protected setInternalValue(value: TValue, isInitial = false): void {
-        if (isInitial) this._initialValueIsSet = true;
-        else this._valueIsSet = true;
-
-        this.value = value;
-        this.validate();
-
-        this.updateInternally(isInitial ? UpdateType.Initial : UpdateType.NewValue);
     }
 
     protected validateNonRequiredValue(): string {

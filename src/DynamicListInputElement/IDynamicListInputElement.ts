@@ -1,4 +1,6 @@
 import IChangingInputElement from '../IChangingInputElement';
+import IConfigurableInputElement from '../IConfigurableInputElement';
+import IDynamicListInputElementConfiguration from './IDynamicListInputElementConfiguration';
 import IDynamicListMenuOption from './Menu/IDynamicListMenuOption';
 import IHidingInputElement from '../IHidingInputElement';
 import ILoadingInputElement from '../ILoadingInputElement';
@@ -7,6 +9,7 @@ import { IValueInputElement } from '../IValueInputElement';
 
 export default interface IDynamicListInputElement<TValue>
     extends IValueInputElement<Array<TValue>>,
+        IConfigurableInputElement<IDynamicListInputElementConfiguration>,
         IChangingInputElement<Array<IDynamicValueChange<TValue>>>,
         IHidingInputElement,
         ILoadingInputElement {
@@ -16,5 +19,5 @@ export default interface IDynamicListInputElement<TValue>
 
 export interface IDynamicValueChange<TValue> {
     value: TValue;
-    inputCreationOption: IDynamicListMenuOption<TValue>;
+    inputCreationCallback: () => ISingleValueInputElement<TValue>;
 }

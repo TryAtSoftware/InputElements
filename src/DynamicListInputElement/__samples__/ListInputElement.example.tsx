@@ -15,10 +15,14 @@ export default class ListInputElementSample extends React.Component {
     public constructor(props: unknown) {
         super(props);
 
-        const initialListElement = this.createDropdown();
-
         this._inputElement = new DynamicListInputElement(
-            initialListElement,
+            {
+                isRequired: true,
+                canInsertValues: false,
+                canRemoveValues: true,
+                canRemoveAllInputs: true,
+                label: 'Input element that can dynamically add, remove and move other input elements (required)'
+            },
             [
                 {
                     name: 'default',

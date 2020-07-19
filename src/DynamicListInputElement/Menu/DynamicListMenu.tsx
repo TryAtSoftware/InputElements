@@ -1,32 +1,23 @@
 import * as React from 'react';
-import {
-    ActionButton,
-    CommandButton,
-    IContextualMenuItem,
-    IContextualMenuProps,
-    PrimaryButton
-} from 'office-ui-fabric-react';
+import { CommandButton, IContextualMenuItem, IContextualMenuProps, PrimaryButton } from 'office-ui-fabric-react';
 import IDynamicListMenuProps from './IDynamicListMenuProps';
 
 export default class DynamicListMenu<TValue> extends React.Component<IDynamicListMenuProps<TValue>> {
     public render(): JSX.Element {
         return (
             <div className="tas-dynamic-list-menu">
-                {this.renderAddButton()}
-
-                <ActionButton
-                    iconProps={{ iconName: 'Remove' }}
-                    text="Remove"
-                    disabled={!this.props.showRemoveButton}
-                    onClick={(): void => this.props.onRemoveClicked()}
-                />
+                {this.props?.insertButtonConfig?.show && this.renderInsertButton()}
+                {this.props?.removeButtonConfig?.show && this.renderRemoveButton()}
             </div>
         );
     }
 
-    private renderAddButton(): JSX.Element {
+    private renderInsertButton(): JSX.Element {
         const addOptions = this.getItems();
-        const commonProps = { iconProps: { iconName: 'Add' }, text: 'Insert' };
+        const commonProps = {
+            iconProps: { iconName: this.props?.insertButtonConfig?.iconName || 'Add' },
+            text: this.props?.insertButtonConfig?.label || 'Insert'
+        };
 
         if (!addOptions?.items || addOptions.items.length <= 0) return <PrimaryButton {...commonProps} disabled />;
         else if (addOptions.items.length === 1) {
@@ -42,6 +33,17 @@ export default class DynamicListMenu<TValue> extends React.Component<IDynamicLis
         } else return <CommandButton {...commonProps} menuProps={addOptions} disabled={false} />;
     }
 
+    private renderRemoveButton(): JSX.Element {
+        return (
+            <CommandButton
+                iconProps={{ iconName: this.props?.removeButtonConfig?.iconName || 'Remove' }}
+                text={this.props?.removeButtonConfig?.label || 'Remove'}
+                disabled={!this.props.removeButtonConfig?.isEnabled}
+                onClick={(): void => !!this.props.onRemoveClicked && this.props.onRemoveClicked()}
+            />
+        );
+    }
+
     private getItems(): IContextualMenuProps {
         return {
             items: this.props.options.map(
@@ -50,7 +52,7 @@ export default class DynamicListMenu<TValue> extends React.Component<IDynamicLis
                         key: index.toString(),
                         iconProps: { iconName: option.icon },
                         name: option.name,
-                        onClick: (): void => this.props.onAddClicked(option.createInput())
+                        onClick: (): void => !!this.props.onAddClicked && this.props.onAddClicked(option.createInput())
                     };
                 }
             )

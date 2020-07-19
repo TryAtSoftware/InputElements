@@ -1,4 +1,5 @@
 import IChangingInputElement from '../IChangingInputElement';
+import IConfigurableInputElement from '../IConfigurableInputElement';
 import IHidingInputElement from '../IHidingInputElement';
 import ILoadingInputElement from '../ILoadingInputElement';
 import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
@@ -7,14 +8,10 @@ import { IValueInputElement } from '../IValueInputElement';
 
 export default interface ISingleValueInputElement<TValue, TComponentProps = unknown>
     extends IValueInputElement<TValue>,
+        IConfigurableInputElement<ISingleValueInputElementConfiguration>,
         IChangingInputElement<TValue>,
         IHidingInputElement,
         ILoadingInputElement {
-    /**
-     * The configuration that should be used for that input element.
-     */
-    configuration: ISingleValueInputElementConfiguration;
-
     /**
      * A component containing the front-end part of the input element (all that is visible to the end user).
      * It should accept all necessary props for realizing the communication between the visual and the logical part of the input element.
