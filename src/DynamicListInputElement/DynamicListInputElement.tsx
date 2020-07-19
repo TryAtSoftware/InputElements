@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import DynamicListMenu from './Menu/DynamicListMenu';
 import IDynamicListInputElement from './IDynamicListInputElement';
 import IDynamicListMenuOption from './Menu/IDynamicListMenuOption';
@@ -7,6 +8,7 @@ import ISingleValueInputElement from '../SingleValueInputElements/ISingleValueIn
 import { UpdateCallback } from '../IInputElement';
 import UpdateType from '../UpdateType';
 import { ValidationRule } from '../IValueInputElement';
+import './DynamicListInputElement.less';
 
 export default class DynamicListInputElement<TValue> extends InputElement implements IDynamicListInputElement<TValue> {
     private _inputs: Array<ISingleValueInputElement<TValue>>;
@@ -86,33 +88,71 @@ export default class DynamicListInputElement<TValue> extends InputElement implem
     public renderComponent(): JSX.Element {
         return (
             <div className="tas-dynamic-list-input">
-                {this.inputs?.map(
-                    (i, index): JSX.Element => {
-                        if (!!i?.configuration?.label)
-                            i.configuration.label = `${i.configuration.label.replace(/\s#\d/, '')} #${index + 1}`;
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <Droppable droppableId="default-inputs-list">
+                        {(provided): React.ReactElement => (
+                            <div ref={provided.innerRef} {...provided.droppableProps}>
+                                {this.inputs?.map(
+                                    (i, index): JSX.Element => {
+                                        if (!!i?.configuration?.label)
+                                            i.configuration.label = `${i.configuration.label.replace(/\s#\d/, '')} #${
+                                                index + 1
+                                            }`;
 
-                        return (
-                            <div className="tas-dynamic-input-element" key={index}>
-                                <div className="tas-input-element-wrapper">{i.render()}</div>
-                                <div className="tas-menu-wrapper">
-                                    <DynamicListMenu
-                                        options={this.inputOptions}
-                                        onAddClicked={(createdInput): void => {
-                                            this._inputs.splice(index + 1, 0, createdInput);
-                                            this.updateInternally(UpdateType.System);
-                                        }}
-                                        onRemoveClicked={(): void => {
-                                            this._inputs.splice(index, 1);
-                                            this.updateInternally(UpdateType.System);
-                                        }}
-                                        showRemoveButton={this.inputs.length > 1}
-                                    />
-                                </div>
+                                        return (
+                                            <Draggable key={index} draggableId={index.toString()} index={index}>
+                                                {(provided): React.ReactElement => (
+                                                    <div
+                                                        className="tas-dynamic-input-element"
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                    >
+                                                        <div className="tas-move-gripper">
+                                                            <span>Drag</span>
+                                                        </div>
+                                                        <div className="tas-input-element-wrapper">{i.render()}</div>
+                                                        <div className="tas-menu-wrapper">
+                                                            <DynamicListMenu
+                                                                options={this.inputOptions}
+                                                                onAddClicked={(createdInput): void => {
+                                                                    this._inputs.splice(index + 1, 0, createdInput);
+                                                                    this.updateInternally(UpdateType.System);
+                                                                }}
+                                                                onRemoveClicked={(): void => {
+                                                                    this._inputs.splice(index, 1);
+                                                                    this.updateInternally(UpdateType.System);
+                                                                }}
+                                                                showRemoveButton={this.inputs.length > 1}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        );
+                                    }
+                                )}
+                                {provided.placeholder}
                             </div>
-                        );
-                    }
-                )}
+                        )}
+                    </Droppable>
+                </DragDropContext>
             </div>
         );
     }
+
+    private onDragEnd = (result: DropResult): void => {
+        if (!result?.destination) return;
+
+        this.reorder(result.source.index, result.destination.index);
+        this.update(UpdateType.System);
+    };
+
+    private reorder = (startIndex: number, endIndex: number): void => {
+        const result = Array.from(this._inputs);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        this._inputs = result;
+    };
 }

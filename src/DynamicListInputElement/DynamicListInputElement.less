@@ -1,20 +1,17 @@
-@import '../../../../GlobalStyling.less';
+div.tas-dynamic-list-input {
+    div.tas-dynamic-input-element {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: move;
+        padding: 5px;
 
-div.q-dynamic-list-input {
-    margin-top: 20px;
-    padding: 10px;
-
-    div.q-dynamic-input-element {
-        .flex(@justifyContent: space-between);
-        margin-bottom: 10px;
-
-        div.q-input-element-wrapper {
-            flex-grow: 5;
+        div.tas-input-element-wrapper {
+            flex: 1;
         }
 
-        div.q-menu-wrapper {
-            margin-left: 15px;
-            flex-shrink: 0;
+        div.tas-menu-wrapper {
+            display: flex;
         }
     }
 }

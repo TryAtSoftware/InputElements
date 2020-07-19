@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { IDropdownOption, PrimaryButton } from 'office-ui-fabric-react';
 import DropdownInput from '../DropdownInput';
+import IDropdownInputOption from '../IDropdownInputOption';
 import IDropdownInputProps from '../IDropdownInputProps';
 import { IValueInputElement } from '../../../IValueInputElement';
+import { PrimaryButton } from 'office-ui-fabric-react';
 import SingleValueInputElement from '../../SingleValueInputElement';
 
 export default class DropdownInputSample extends React.Component {
@@ -19,7 +20,7 @@ export default class DropdownInputSample extends React.Component {
             DropdownInput,
             {
                 options: options.map(
-                    (o): IDropdownOption => {
+                    (o): IDropdownInputOption => {
                         return {
                             key: o,
                             text: o

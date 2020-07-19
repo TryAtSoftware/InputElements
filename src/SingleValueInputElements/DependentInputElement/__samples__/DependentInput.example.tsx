@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { IDropdownOption, PrimaryButton } from 'office-ui-fabric-react';
 import DependentInputElementInitializer from '../DependentInputElementInitializer';
 import DropdownInput from '../../DropdownInputElement/DropdownInput';
+import IDropdownInputOption from '../../DropdownInputElement/IDropdownInputOption';
 import IDropdownInputProps from '../../DropdownInputElement/IDropdownInputProps';
 import ISingleValueInputElement from '../../ISingleValueInputElement';
 import { IValueInputElement } from '../../../IValueInputElement';
+import { PrimaryButton } from 'office-ui-fabric-react';
 import SingleValueInputElement from '../../SingleValueInputElement';
 
 export default class DependentInputSample extends React.Component {
@@ -22,14 +23,7 @@ export default class DependentInputSample extends React.Component {
             { isRequired: true, label: 'Principal dropdown (required, without error handling)' },
             DropdownInput,
             {
-                options: options.map(
-                    (o): IDropdownOption => {
-                        return {
-                            key: o,
-                            text: o
-                        };
-                    }
-                ),
+                options: this.mapToDropdownOptions(options),
                 placeholder: 'When you change the value, the dependent dropdown will appear.'
             },
             (): void => this.forceUpdate()
@@ -52,14 +46,7 @@ export default class DependentInputSample extends React.Component {
                 const dependentOptions: Array<string> = [];
                 for (let i = 0; i < 10; i++) dependentOptions.push(newPrincipalValue + i);
 
-                this._dependentInput.componentProps.options = dependentOptions.map(
-                    (o): IDropdownOption => {
-                        return {
-                            key: o,
-                            text: o
-                        };
-                    }
-                );
+                this._dependentInput.componentProps.options = this.mapToDropdownOptions(dependentOptions);
 
                 doneCallback();
             }
@@ -80,4 +67,17 @@ export default class DependentInputSample extends React.Component {
         console.log('Principal value: ' + this._principalInput.value);
         console.log('Dependent value: ' + this._dependentInput.value);
     };
+
+    private mapToDropdownOptions(values: Array<string>): Array<IDropdownInputOption> {
+        return values
+            ?.filter((x): boolean => !!x)
+            ?.map(
+                (o): IDropdownInputOption => {
+                    return {
+                        key: o,
+                        text: o
+                    };
+                }
+            );
+    }
 }

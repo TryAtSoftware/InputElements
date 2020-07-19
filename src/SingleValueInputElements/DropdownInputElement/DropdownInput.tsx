@@ -28,16 +28,22 @@ export default class DropdownInput extends React.Component<
         const options = [];
 
         if (!!this.props?.defaultOption) {
-            this.props.defaultOption.selected = true;
-            options.push(this.props.defaultOption);
+            const defaultOption: IDropdownOption = {
+                ...this.props.defaultOption,
+                selected: true
+            };
+            options.push(defaultOption);
         }
 
         if (!!this.props?.options)
             this.props.options.forEach((o): void => {
                 if (!o) return;
 
-                o.selected = false;
-                options.push(o);
+                const newOption: IDropdownOption = {
+                    ...o,
+                    selected: false
+                };
+                options.push(newOption);
             });
 
         return options;

@@ -61,7 +61,9 @@
     },
     "dependencies": {
         "@types/react": "^16.9.43",
+        "@types/react-beautiful-dnd": "^13.0.0",
         "office-ui-fabric-react": "^7.123.3",
-        "react": "^16.13.1"
+        "react": "^16.13.1",
+        "react-beautiful-dnd": "^13.0.0"
     }
 }

@@ -14,15 +14,12 @@ export default class DynamicListMenu<TValue> extends React.Component<IDynamicLis
             <div className="tas-dynamic-list-menu">
                 {this.renderAddButton()}
 
-                {this.props.showRemoveButton && (
-                    <ActionButton
-                        iconProps={{ iconName: 'Remove' }}
-                        text="Remove"
-                        disabled={false}
-                        checked={false}
-                        onClick={(): void => this.props.onRemoveClicked()}
-                    />
-                )}
+                <ActionButton
+                    iconProps={{ iconName: 'Remove' }}
+                    text="Remove"
+                    disabled={!this.props.showRemoveButton}
+                    onClick={(): void => this.props.onRemoveClicked()}
+                />
             </div>
         );
     }
