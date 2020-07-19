@@ -7,6 +7,11 @@ export interface IInputElement {
     isValid: boolean;
 
     /**
+     * The message of the first validation error that occurred if any.
+     */
+    errorMessage: string;
+
+    /**
      * Gets or sets a value indicating whether the input element has any changes made.
      */
     hasChanges: boolean;
@@ -20,8 +25,6 @@ export interface IInputElement {
      * This method should be called every time after the input element has changed.
      * It should not be implemented into the inheriting classes, but instead should be passed as a parameter (into the constructor would be best).
      * You can use it to refresh your form or apply some custom update logic.
-     *
-     * @param isInitial                 A value indicating if the update was caused by setting the initial value of the input element.
      */
     update: UpdateCallback;
 }

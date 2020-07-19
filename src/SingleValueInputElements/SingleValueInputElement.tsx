@@ -51,9 +51,6 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
     public value: TValue;
 
     /** @inheritdoc */
-    public errorMessage: string;
-
-    /** @inheritdoc */
     public validationRules: ValidationRule<TValue>[];
 
     /** @inheritdoc */

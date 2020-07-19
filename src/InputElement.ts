@@ -8,19 +8,16 @@ export default abstract class InputElement implements IInputElement {
         this.update = update;
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public abstract isValid: boolean;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
+    public errorMessage: string;
+
+    /** @inheritdoc */
     public abstract hasChanges: boolean;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public render(): JSX.Element {
         this._isRendered = true;
 
@@ -29,9 +26,7 @@ export default abstract class InputElement implements IInputElement {
 
     protected abstract renderComponent(): JSX.Element;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public update: UpdateCallback = (_updateType: UpdateType): void => {
         // This function should never ever be called in such a manner.
         // Instead a custom function should be passed to the constructor and immediately after that - assigned to this property.
