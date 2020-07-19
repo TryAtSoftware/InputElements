@@ -8,7 +8,11 @@ import InitialValueWorkflowSample from '../src/SingleValueInputElements/__sample
 import { Link } from 'office-ui-fabric-react';
 import ListInputElementSample from '../src/DynamicListInputElement/__samples__/ListInputElement.example';
 import LoadingInputElementsSample from '../src/SingleValueInputElements/__samples__/LoadingInputElements.example';
+import MultipleDependenciesSample from '../src/SingleValueInputElements/DependentInputElement/__samples__/MultipleDependencies.example';
+import MultipleOptionsListInputElementSample from '../src/DynamicListInputElement/__samples__/MultipleOptionsListInputElement.example';
+import NonRequiredDependentInputSample from '../src/SingleValueInputElements/DependentInputElement/__samples__/NonRequiredDependentInput.example';
 import NonRequiredValueSample from '../src/SingleValueInputElements/__samples__/NonRequiredValue.example';
+import SequentialDependenciesSample from '../src/SingleValueInputElements/DependentInputElement/__samples__/SequentialDependencies.example';
 import TextInputSample from '../src/SingleValueInputElements/TextInputElement/__samples__/TextInput.example';
 import './styles.less';
 import './App.less';
@@ -42,11 +46,15 @@ export default class App extends React.Component {
                     <Link href="#dependent-input">Dependent input</Link>
                 </h2>
                 <DependentInputSample />
+                <NonRequiredDependentInputSample />
+                <MultipleDependenciesSample />
+                <SequentialDependenciesSample />
 
                 <h2 id="dynamic-list-input-elements">
                     <Link href="#dynamic-list-input-elements">Dynamic list input elements</Link>
                 </h2>
                 <ListInputElementSample />
+                <MultipleOptionsListInputElementSample />
             </div>
         );
     }

@@ -5,11 +5,13 @@ import IDropdownInputOption from '../../SingleValueInputElements/DropdownInputEl
 import IDropdownInputProps from '../../SingleValueInputElements/DropdownInputElement/IDropdownInputProps';
 import IDynamicListInputElement from '../IDynamicListInputElement';
 import ISingleValueInputElement from '../../SingleValueInputElements/ISingleValueInputElement';
+import ITextInputProps from '../../SingleValueInputElements/TextInputElement/ITextInputProps';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import SingleValueInputElement from '../../SingleValueInputElements/SingleValueInputElement';
+import TextInput from '../../SingleValueInputElements/TextInputElement/TextInput';
 import { UpdateCallback } from '../../IInputElement';
 
-export default class ListInputElementSample extends React.Component {
+export default class MultipleOptionsListInputElementSample extends React.Component {
     private _inputElement: IDynamicListInputElement<string>;
 
     public constructor(props: unknown) {
@@ -18,7 +20,7 @@ export default class ListInputElementSample extends React.Component {
         this._inputElement = new DynamicListInputElement(
             {
                 isRequired: true,
-                canInsertValues: false,
+                canInsertValues: true,
                 canRemoveValues: true,
                 canRemoveAllInputs: true
             },
@@ -27,6 +29,11 @@ export default class ListInputElementSample extends React.Component {
                     name: 'Dropdown',
                     icon: 'Dropdown',
                     createInput: this.createDropdown
+                },
+                {
+                    name: 'Text field',
+                    icon: 'TextField',
+                    createInput: this.createTextField
                 }
             ],
             this.updateForm
@@ -57,6 +64,17 @@ export default class ListInputElementSample extends React.Component {
                     }
                 ),
                 placeholder: 'Choose any value'
+            },
+            this.updateForm
+        );
+    };
+
+    private createTextField = (): ISingleValueInputElement<string> => {
+        return new SingleValueInputElement<string, ITextInputProps>(
+            { isRequired: true },
+            TextInput,
+            {
+                placeholder: 'Write any value'
             },
             this.updateForm
         );

@@ -8,7 +8,7 @@ import { PrimaryButton } from 'office-ui-fabric-react';
 import SingleValueInputElement from '../../SingleValueInputElement';
 import { UpdateCallback } from '../../../IInputElement';
 
-export default class DependentInputSample extends React.Component {
+export default class NonRequiredDependentInputSample extends React.Component {
     private _principalInput: ISingleValueInputElement<string, IDropdownInputProps>;
 
     private _dependentInput: ISingleValueInputElement<string, IDropdownInputProps>;
@@ -20,7 +20,10 @@ export default class DependentInputSample extends React.Component {
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
         this._principalInput = new SingleValueInputElement<string, IDropdownInputProps>(
-            { isRequired: true, label: 'Principal dropdown (required, without error handling)' },
+            {
+                isRequired: true,
+                label: 'Principal dropdown with non-required dependency (required, without error handling)'
+            },
             DropdownInput,
             {
                 options: this.mapToDropdownOptions(options),
@@ -30,11 +33,10 @@ export default class DependentInputSample extends React.Component {
         );
 
         this._dependentInput = new SingleValueInputElement<string, IDropdownInputProps>(
-            { isRequired: true, label: 'Dependent dropdown (required, without error handling)' },
+            { isRequired: false, label: 'Dependent dropdown (not required, without error handling)' },
             DropdownInput,
             {
-                placeholder:
-                    'When you change the value, the button will become enabled and this message will disappear.'
+                placeholder: 'This input element is not required, so the button is already enabled.'
             },
             this.updateForm
         );
@@ -58,7 +60,11 @@ export default class DependentInputSample extends React.Component {
             <div className="sample-group basic-dropdown-input">
                 {this._principalInput.render()}
                 {this._dependentInput.render()}
-                <PrimaryButton text="Submit" disabled={!this._dependentInput.isValid} onClick={this.printValues} />
+                <PrimaryButton
+                    text="Submit"
+                    disabled={!this._principalInput.isValid || !this._dependentInput.isValid}
+                    onClick={this.printValues}
+                />
             </div>
         );
     }

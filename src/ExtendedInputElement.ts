@@ -59,7 +59,7 @@ export default abstract class ExtendedInputElement<
     public resetValue(): void {
         if (!this._valueIsSet) return;
 
-        this.setInternalValue(null, false);
+        this.setInternalValue(undefined, false);
         this.updateInternally(UpdateType.NewValue);
     }
 

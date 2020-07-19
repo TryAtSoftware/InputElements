@@ -1,21 +1,21 @@
-import IChangingInputElement from '../../IChangingInputElement';
-import IHidingInputElement from '../../IHidingInputElement';
-import ILoadingInputElement from '../../ILoadingInputElement';
-import { IValueInputElement } from '../../IValueInputElement';
+import ISingleValueInputElement from '../ISingleValueInputElement';
 import UpdateType from '../../UpdateType';
 
 export default class DependentInputElementInitializer {
-    public static initializeDependency<TDependent, TPrincipal>(
-        principal: IValueInputElement<TPrincipal>,
-        dependent: IValueInputElement<TDependent> &
-            IChangingInputElement<TDependent> &
-            IHidingInputElement &
-            ILoadingInputElement,
+    public static initializeDependency<TDependent, TPrincipal, TDependentProps = unknown, TPrincipalProps = unknown>(
+        principal: ISingleValueInputElement<TPrincipal, TPrincipalProps>,
+        dependent: ISingleValueInputElement<TDependent, TDependentProps>,
         onPrincipalValueChanged: (newValue: TPrincipal, doneCallback: () => void) => void,
         handleFalsyPrincipalValue?: () => void,
         handleInitialRender?: () => void
     ): void {
         if (!dependent || !principal || !onPrincipalValueChanged) return;
+
+        // If the dependent input element is required, this means that the principal should be required as well.
+        if (!!dependent.configuration?.isRequired) {
+            if (!principal.configuration) principal.configuration = { isRequired: true };
+            else principal.configuration.isRequired = true;
+        }
 
         const originalUpdateFunction = principal.update;
         principal.update = (updateType: UpdateType): void => {
