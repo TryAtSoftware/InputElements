@@ -1,8 +1,6 @@
-import IHidingInputElement from './IHidingInputElement';
 import { IInputElement } from './IInputElement';
-import ILoadingInputElement from './ILoadingInputElement';
 
-export interface IValueInputElement<TValue> extends IInputElement, ILoadingInputElement, IHidingInputElement {
+export interface IValueInputElement<TValue> extends IInputElement {
     /**
      * The value entered into the input element.
      */
@@ -10,27 +8,16 @@ export interface IValueInputElement<TValue> extends IInputElement, ILoadingInput
 
     /**
      * Collection of validation rules that are executed whenever the entered value has changed.
+     * Some input elements may not use this value, e.g. dynamic list input elements should ignore it as every single underlying input element can have unique rules.
      */
     validationRules: ValidationRule<TValue>[];
 
     /**
      * This method is called every time after the entered value has changed.
      * Its main purpose is to call every single validation rule and update the error message if some of them has failed.
+     * It can be safely called from outside.
      */
     validate(): void;
-
-    /**
-     * A method used to set new value, validate it and update the form.
-     *
-     * @param value             The new value of the input element.
-     */
-    setValue(value: TValue): void;
-
-    /**
-     * Use this method to set an initial value to the input element.
-     * This should be useful for update operations.
-     */
-    setInitialValue(value: TValue): void;
 }
 
 export type ValidationRule<TValue> = (value: TValue) => string;

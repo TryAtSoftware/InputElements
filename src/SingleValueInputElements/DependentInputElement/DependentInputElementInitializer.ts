@@ -1,10 +1,12 @@
+import IHidingInputElement from '../../IHidingInputElement';
+import ILoadingInputElement from '../../ILoadingInputElement';
 import { IValueInputElement } from '../../IValueInputElement';
 import UpdateType from '../../UpdateType';
 
 export default class DependentInputElementInitializer {
     public static initializeDependency<TDependent, TPrincipal>(
         principal: IValueInputElement<TPrincipal>,
-        dependent: IValueInputElement<TDependent>,
+        dependent: IValueInputElement<TDependent> & IHidingInputElement & ILoadingInputElement,
         onPrincipalValueChanged: (newValue: TPrincipal, doneCallback: () => void) => void,
         handleFalsyPrincipalValue?: () => void,
         handleInitialRender?: () => void

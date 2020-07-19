@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
-import InputElement from '../InputElement';
+import ExtendedInputElement from '../ExtendedInputElement';
 import ISingleValueInputElement from './ISingleValueInputElement';
 import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
 import ISingleValueInputElementProps from './ISingleValueInputElementProps';
@@ -8,17 +8,13 @@ import { UpdateCallback } from '../IInputElement';
 import UpdateType from '../UpdateType';
 import { ValidationRule } from '../IValueInputElement';
 
-export default class SingleValueInputElement<TValue, TComponentProps> extends InputElement
+export default class SingleValueInputElement<TValue, TComponentProps> extends ExtendedInputElement
     implements ISingleValueInputElement<TValue, TComponentProps> {
     private initialValue: TValue;
 
     private _valueIsSet = false;
 
     private _initialValueIsSet = false;
-
-    private _isVisible = true;
-
-    private _isLoading = false;
 
     public constructor(
         config: ISingleValueInputElementConfiguration,
@@ -69,8 +65,6 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
 
     /** @inheritdoc */
     protected renderComponent(): JSX.Element {
-        if (!this._isVisible) return null;
-
         return (
             <div className={[this.configuration?.className, 'tas-input-element'].filter((x): boolean => !!x).join(' ')}>
                 <div className="tas-input-element-content">
@@ -125,55 +119,6 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
         }
 
         this.errorMessage = errorMessage;
-    }
-
-    /** @inheritdoc */
-    public get isLoading(): boolean {
-        return this._isLoading;
-    }
-
-    /** @inheritdoc */
-    public load(action: (doneCallback: () => void) => void): void {
-        if (!action) return;
-
-        const callback = (): void => {
-            this._isLoading = false;
-            this.updateInternally(UpdateType.System);
-        };
-
-        try {
-            // If a new value is provided, we should execute asynchronously the `onDependentValueChanged` callback to retrieve the requested selectable models.
-            this._isLoading = true;
-            this.updateInternally(UpdateType.System);
-
-            action(callback);
-        } catch (error) {
-            let newErrorMessage: string;
-
-            if (error instanceof Error) newErrorMessage = error.message;
-            if (typeof error === 'string') newErrorMessage = error;
-            else throw error;
-
-            this.errorMessage = newErrorMessage;
-            callback();
-        }
-    }
-
-    /** @inheritdoc */
-    public get isVisible(): boolean {
-        return this._isVisible;
-    }
-
-    /** @inheritdoc */
-    public hide(): void {
-        this._isVisible = false;
-        this.updateInternally(UpdateType.System);
-    }
-
-    /** @inheritdoc */
-    public show(): void {
-        this._isVisible = true;
-        this.updateInternally(UpdateType.System);
     }
 
     /**

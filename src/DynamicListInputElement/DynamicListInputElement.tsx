@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import IDynamicListInputElement, { IDynamicValueChange } from './IDynamicListInputElement';
 import DynamicListMenu from './Menu/DynamicListMenu';
-import IDynamicListInputElement from './IDynamicListInputElement';
+import ExtendedInputElement from '../ExtendedInputElement';
 import IDynamicListMenuOption from './Menu/IDynamicListMenuOption';
-import InputElement from '../InputElement';
 import ISingleValueInputElement from '../SingleValueInputElements/ISingleValueInputElement';
 import { UpdateCallback } from '../IInputElement';
 import UpdateType from '../UpdateType';
@@ -15,7 +15,8 @@ interface IInputInformation<TValue> {
     input: ISingleValueInputElement<TValue>;
 }
 
-export default class DynamicListInputElement<TValue> extends InputElement implements IDynamicListInputElement<TValue> {
+export default class DynamicListInputElement<TValue> extends ExtendedInputElement
+    implements IDynamicListInputElement<TValue> {
     private static counter = 0;
 
     private _inputs: Array<IInputInformation<TValue>>;
@@ -33,40 +34,37 @@ export default class DynamicListInputElement<TValue> extends InputElement implem
         this.inputOptions = inputOptions;
     }
 
+    /**
+     * @inheritdoc
+     * This property will be unused.
+     */
     public validationRules: Array<ValidationRule<TValue[]>>;
 
+    /** @inheritdoc */
     public validate(): void {
         this.inputs.forEach((x): void => x.validate());
     }
 
+    /** @inheritdoc */
     public get hasChanges(): boolean {
         return this.inputs.some((x): boolean => x.hasChanges);
     }
 
-    public setValue(value: TValue[]): void {
-        console.log(value);
+    /** @inheritdoc */
+    public setValue(valueChange: IDynamicValueChange<TValue>[]): void {
+        this.setInternalValue(valueChange, (input, value): void => {
+            input?.setValue(value);
+        });
     }
 
-    public setInitialValue(value: TValue[]): void {
-        console.log(value);
+    /** @inheritdoc */
+    public setInitialValue(valueChange: IDynamicValueChange<TValue>[]): void {
+        this.setInternalValue(valueChange, (input, value): void => {
+            input?.setInitialValue(value);
+        });
     }
 
-    public isLoading: boolean;
-
-    public load(action: (doneCallback: () => void) => void): void {
-        console.log(action);
-    }
-
-    public isVisible: boolean;
-
-    public hide(): void {
-        throw new Error('Method not implemented.');
-    }
-
-    public show(): void {
-        throw new Error('Method not implemented.');
-    }
-
+    /** @inheritdoc */
     public inputOptions: Array<IDynamicListMenuOption<TValue>>;
 
     /** @inheritdoc */
@@ -133,8 +131,7 @@ export default class DynamicListInputElement<TValue> extends InputElement implem
         return (
             <>
                 <div className="tas-move-gripper hidable">
-                    #{index + 1}
-                    {/* <span>#{index + 1}</span> */}
+                    <span>#{index + 1}</span>
                 </div>
                 <div className="tas-input-element-wrapper">{input.render()}</div>
                 <div className="tas-menu-wrapper">
@@ -163,11 +160,8 @@ export default class DynamicListInputElement<TValue> extends InputElement implem
     };
 
     private reorder(startIndex: number, endIndex: number): void {
-        const result = Array.from(this._inputs);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-
-        this._inputs = result;
+        const [removed] = this._inputs.splice(startIndex, 1);
+        this._inputs.splice(endIndex, 0, removed);
     }
 
     private convert(input: ISingleValueInputElement<TValue>): IInputInformation<TValue> {
@@ -177,6 +171,28 @@ export default class DynamicListInputElement<TValue> extends InputElement implem
             uniqueId: DynamicListInputElement.counter++,
             input: input
         };
+    }
+
+    private setInternalValue(
+        valueChange: IDynamicValueChange<TValue>[],
+        setValueCallback: (createdInput: ISingleValueInputElement<TValue>, value: TValue) => void
+    ): void {
+        const newInputs: Array<IInputInformation<TValue>> = [];
+
+        if (!valueChange) return;
+
+        valueChange
+            .filter((x): boolean => !!x?.inputCreationOption)
+            .forEach((vc): void => {
+                const createdInput = vc.inputCreationOption.createInput();
+
+                if (!createdInput) return;
+
+                setValueCallback(createdInput, vc.value);
+                newInputs.push(this.convert(createdInput));
+            });
+
+        this._inputs = newInputs;
     }
 
     private filterInputs(): Array<IInputInformation<TValue>> {

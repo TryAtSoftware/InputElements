@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Checkbox } from 'office-ui-fabric-react';
+import IChangingInputElement from './../../IChangingInputElement';
 import ITextInputProps from '../TextInputElement/ITextInputProps';
 import { IValueInputElement } from '../../IValueInputElement';
 import SingleValueInputElement from '../SingleValueInputElement';
@@ -8,7 +9,7 @@ import { UpdateCallback } from '../../IInputElement';
 import UpdateType from '../../UpdateType';
 
 export default class InitialValueWorkflowSample extends React.Component {
-    private _inputElement: IValueInputElement<string>;
+    private _inputElement: IValueInputElement<string> & IChangingInputElement<string>;
 
     public constructor(props: unknown) {
         super(props);

@@ -3,6 +3,8 @@ import DependentInputElementInitializer from '../DependentInputElementInitialize
 import DropdownInput from '../../DropdownInputElement/DropdownInput';
 import IDropdownInputOption from '../../DropdownInputElement/IDropdownInputOption';
 import IDropdownInputProps from '../../DropdownInputElement/IDropdownInputProps';
+import IHidingInputElement from '../../../IHidingInputElement';
+import ILoadingInputElement from '../../../ILoadingInputElement';
 import ISingleValueInputElement from '../../ISingleValueInputElement';
 import { IValueInputElement } from '../../../IValueInputElement';
 import { PrimaryButton } from 'office-ui-fabric-react';
@@ -11,7 +13,9 @@ import SingleValueInputElement from '../../SingleValueInputElement';
 export default class DependentInputSample extends React.Component {
     private _principalInput: IValueInputElement<string>;
 
-    private _dependentInput: ISingleValueInputElement<string, IDropdownInputProps>;
+    private _dependentInput: ISingleValueInputElement<string, IDropdownInputProps> &
+        IHidingInputElement &
+        ILoadingInputElement;
 
     public constructor(props: unknown) {
         super(props);
