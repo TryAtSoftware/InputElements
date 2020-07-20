@@ -8,13 +8,13 @@ import ISingleValueInputElement from '../SingleValueInputElements/ISingleValueIn
 import { IValueInputElement } from '../IValueInputElement';
 
 export default interface IDynamicListInputElement<TValue>
-    extends IValueInputElement<Array<TValue>>,
+    extends IValueInputElement<TValue[]>,
         IConfigurableInputElement<IDynamicListInputElementConfiguration>,
-        IChangingInputElement<Array<IDynamicValueChange<TValue>>>,
+        IChangingInputElement<IDynamicValueChange<TValue>[]>,
         IHidingInputElement,
         ILoadingInputElement {
-    inputOptions: Array<IDynamicListMenuOption<TValue>>;
-    inputs: Array<ISingleValueInputElement<TValue>>;
+    inputOptions: IDynamicListMenuOption<TValue>[];
+    inputs: ISingleValueInputElement<TValue>[];
 }
 
 export interface IDynamicValueChange<TValue> {

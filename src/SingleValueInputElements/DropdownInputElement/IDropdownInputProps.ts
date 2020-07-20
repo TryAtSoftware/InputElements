@@ -1,7 +1,7 @@
 import IDropdownInputOption from './IDropdownInputOption';
 
 export default interface IDropdownInputProps {
-    options?: Array<IDropdownInputOption>;
+    options?: IDropdownInputOption[];
 
     /**
      * The default option for the dropdown.

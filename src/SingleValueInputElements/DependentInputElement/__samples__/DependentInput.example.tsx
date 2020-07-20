@@ -16,7 +16,7 @@ export default class DependentInputSample extends React.Component {
     public constructor(props: unknown) {
         super(props);
 
-        const options: Array<string> = [];
+        const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
         this._principalInput = new SingleValueInputElement<string, IDropdownInputProps>(
@@ -43,7 +43,7 @@ export default class DependentInputSample extends React.Component {
             this._principalInput,
             this._dependentInput,
             (newPrincipalValue: string, doneCallback: () => void): void => {
-                const dependentOptions: Array<string> = [];
+                const dependentOptions: string[] = [];
                 for (let i = 0; i < 10; i++) dependentOptions.push(newPrincipalValue + i);
 
                 this._dependentInput.componentProps.options = this.mapToDropdownOptions(dependentOptions);
@@ -72,7 +72,7 @@ export default class DependentInputSample extends React.Component {
         console.log('Dependent value: ' + this._dependentInput.value);
     };
 
-    private mapToDropdownOptions(values: Array<string>): Array<IDropdownInputOption> {
+    private mapToDropdownOptions(values: string[]): IDropdownInputOption[] {
         return values
             ?.filter((x): boolean => !!x)
             ?.map(

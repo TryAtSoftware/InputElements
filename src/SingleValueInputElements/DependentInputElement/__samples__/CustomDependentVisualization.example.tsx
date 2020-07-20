@@ -15,7 +15,7 @@ export default class CustomVisualizationSequentialDependenciesSample extends Rea
         super(props);
 
         const dependentElementsCount = 5;
-        const options: Array<string> = [];
+        const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
         const initialInput = new SingleValueInputElement<string, IDropdownInputProps>(
@@ -55,7 +55,7 @@ export default class CustomVisualizationSequentialDependenciesSample extends Rea
                 (newPrincipalValue: string, doneCallback: () => void): void => {
                     currentDependentInput.componentProps.isDisabled = false;
 
-                    const dependentOptions: Array<string> = [];
+                    const dependentOptions: string[] = [];
                     for (let i = 0; i < 10; i++) dependentOptions.push(newPrincipalValue + i);
 
                     currentDependentInput.componentProps.options = this.mapToDropdownOptions(dependentOptions);
@@ -96,7 +96,7 @@ export default class CustomVisualizationSequentialDependenciesSample extends Rea
         console.log('All values: ' + this._allInputs.map((x): string => x.value));
     };
 
-    private mapToDropdownOptions(values: Array<string>): Array<IDropdownInputOption> {
+    private mapToDropdownOptions(values: string[]): IDropdownInputOption[] {
         return values
             ?.filter((x): boolean => !!x)
             ?.map(

@@ -26,7 +26,7 @@ export default class DropdownInput extends React.Component<
         );
     }
 
-    private getNormalizedOptions(): Array<IDropdownOption> {
+    private getNormalizedOptions(): IDropdownOption[] {
         const options = [];
 
         if (!!this.props?.defaultOption) {

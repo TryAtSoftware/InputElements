@@ -12,7 +12,7 @@ export default class DropdownInputWithDefaultValueSample extends React.Component
     public constructor(props: unknown) {
         super(props);
 
-        const options: Array<string> = [];
+        const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
         const defaultKey = 'default';

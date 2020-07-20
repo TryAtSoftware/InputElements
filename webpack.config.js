@@ -6,7 +6,7 @@ const path = require('path');
 module.exports = {
     name: 'Input elements sample',
 
-    entry: './samples/index.tsx',
+    entry: './src/__samples__/index.tsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
@@ -18,8 +18,8 @@ module.exports = {
     // Enable sourcemaps for debugging webpack's output.
     devtool: 'source-map',
     devServer: {
-        port: 8080,
-        contentBase: './samples',
+        port: 5000,
+        contentBase: './src/__samples__',
         inline: true,
         hot: true
     },
@@ -86,8 +86,8 @@ module.exports = {
 
     plugins: [
         new HtmlWebPackPlugin({
-            template: './samples/index.html',
-            favicon: './samples/favicon.ico'
+            template: './src/__samples__/index.html',
+            favicon: './src/__samples__/favicon.ico'
         })
     ]
 };

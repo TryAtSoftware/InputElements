@@ -12,7 +12,7 @@ export default class DropdownInputSample extends React.Component {
     public constructor(props: unknown) {
         super(props);
 
-        const options: Array<string> = [];
+        const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
         this._dropdownInput = new SingleValueInputElement<string, IDropdownInputProps>(
@@ -40,7 +40,7 @@ export default class DropdownInputSample extends React.Component {
                 {this._dropdownInput.render()}
                 <PrimaryButton
                     text="Submit"
-                    disabled={!this._dropdownInput.isValid}
+                    disabled={!this._dropdownInput.isValid || !this._dropdownInput.hasChanges}
                     onClick={(): void => console.log(this._dropdownInput.value)}
                 />
             </div>

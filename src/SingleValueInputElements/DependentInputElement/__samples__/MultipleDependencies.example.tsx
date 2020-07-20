@@ -17,7 +17,7 @@ export default class MultipleDependenciesSample extends React.Component {
         super(props);
 
         const dependentElementsCount = 5;
-        const options: Array<string> = [];
+        const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
         this._principalInput = new SingleValueInputElement<string, IDropdownInputProps>(
@@ -47,7 +47,7 @@ export default class MultipleDependenciesSample extends React.Component {
                 this._principalInput,
                 currentDependentInput,
                 (newPrincipalValue: string, doneCallback: () => void): void => {
-                    const dependentOptions: Array<string> = [];
+                    const dependentOptions: string[] = [];
                     for (let i = 0; i < 10; i++) dependentOptions.push(newPrincipalValue + i);
 
                     currentDependentInput.componentProps.options = this.mapToDropdownOptions(dependentOptions);
@@ -87,7 +87,7 @@ export default class MultipleDependenciesSample extends React.Component {
         console.log('Dependent value: ' + this._dependentInputs.map((x): string => x.value));
     };
 
-    private mapToDropdownOptions(values: Array<string>): Array<IDropdownInputOption> {
+    private mapToDropdownOptions(values: string[]): IDropdownInputOption[] {
         return values
             ?.filter((x): boolean => !!x)
             ?.map(

@@ -18,20 +18,20 @@ interface IInputInformation<TValue> {
 }
 
 export default class DynamicListInputElement<TValue>
-    extends ExtendedInputElement<IDynamicListInputElementConfiguration, Array<IDynamicValueChange<TValue>>>
+    extends ExtendedInputElement<IDynamicListInputElementConfiguration, IDynamicValueChange<TValue>[]>
     implements IDynamicListInputElement<TValue> {
     private static counter = 0;
 
-    private _inputs: Array<IInputInformation<TValue>>;
+    private _inputs: IInputInformation<TValue>[];
 
     public constructor(
         configuration: IDynamicListInputElementConfiguration,
-        inputOptions: Array<IDynamicListMenuOption<TValue>>,
+        inputOptions: IDynamicListMenuOption<TValue>[],
         update: UpdateCallback
     ) {
         super(configuration, update);
 
-        this._inputs = new Array<IInputInformation<TValue>>();
+        this._inputs = [];
         this.inputOptions = inputOptions;
     }
 
@@ -39,7 +39,7 @@ export default class DynamicListInputElement<TValue>
      * @inheritdoc
      * This property will be unused.
      */
-    public validationRules: Array<ValidationRule<TValue[]>>;
+    public validationRules: ValidationRule<TValue[]>[];
 
     /** @inheritdoc */
     public validate(): void {
@@ -52,10 +52,10 @@ export default class DynamicListInputElement<TValue>
     }
 
     /** @inheritdoc */
-    public inputOptions: Array<IDynamicListMenuOption<TValue>>;
+    public inputOptions: IDynamicListMenuOption<TValue>[];
 
     /** @inheritdoc */
-    public get inputs(): Array<ISingleValueInputElement<TValue>> {
+    public get inputs(): ISingleValueInputElement<TValue>[] {
         return this.filterInputs().map((i): ISingleValueInputElement<TValue> => i.input);
     }
 
@@ -68,7 +68,7 @@ export default class DynamicListInputElement<TValue>
     }
 
     /** @inheritdoc */
-    public get value(): Array<TValue> {
+    public get value(): TValue[] {
         return this.inputs?.map((i): TValue => i.value);
     }
 
@@ -207,7 +207,7 @@ export default class DynamicListInputElement<TValue>
     }
 
     protected setInternalValue(valueChange: IDynamicValueChange<TValue>[], isInitial: boolean): void {
-        const newInputs: Array<IInputInformation<TValue>> = [];
+        const newInputs: IInputInformation<TValue>[] = [];
 
         if (!!valueChange) {
             valueChange
@@ -227,7 +227,7 @@ export default class DynamicListInputElement<TValue>
         this._inputs = newInputs;
     }
 
-    private filterInputs(): Array<IInputInformation<TValue>> {
+    private filterInputs(): IInputInformation<TValue>[] {
         return this._inputs?.filter((i): boolean => !!i?.input);
     }
 }
