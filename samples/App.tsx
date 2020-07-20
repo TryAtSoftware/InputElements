@@ -1,5 +1,6 @@
 import * as React from 'react';
 import BasicWorkflowSample from '../src/SingleValueInputElements/__samples__/BasicWorkflow.example';
+import CustomVisualizationSequentialDependenciesSample from '../src/SingleValueInputElements/DependentInputElement/__samples__/CustomDependentVisualization.example';
 import DependentInputSample from '../src/SingleValueInputElements/DependentInputElement/__samples__/DependentInput.example';
 import DropdownInputSample from '../src/SingleValueInputElements/DropdownInputElement/__samples__/DropdownInput.example';
 import DropdownInputWithDefaultValueSample from '../src/SingleValueInputElements/DropdownInputElement/__samples__/DropdownInputWithDefaultValue.example';
@@ -49,6 +50,7 @@ export default class App extends React.Component {
                 <NonRequiredDependentInputSample />
                 <MultipleDependenciesSample />
                 <SequentialDependenciesSample />
+                <CustomVisualizationSequentialDependenciesSample />
 
                 <h2 id="dynamic-list-input-elements">
                     <Link href="#dynamic-list-input-elements">Dynamic list input elements</Link>

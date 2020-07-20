@@ -8,7 +8,7 @@ import { PrimaryButton } from 'office-ui-fabric-react';
 import SingleValueInputElement from '../../SingleValueInputElement';
 import { UpdateCallback } from '../../../IInputElement';
 
-export default class SequentialDependenciesSample extends React.Component {
+export default class CustomVisualizationSequentialDependenciesSample extends React.Component {
     private _allInputs: ISingleValueInputElement<string, IDropdownInputProps>[] = [];
 
     public constructor(props: unknown) {
@@ -45,17 +45,25 @@ export default class SequentialDependenciesSample extends React.Component {
                 this.updateForm
             );
 
+            const disableInput = (): void => {
+                currentDependentInput.componentProps.isDisabled = true;
+            };
+
             DependentInputElementInitializer.initializeDependency(
                 previousElement,
                 currentDependentInput,
                 (newPrincipalValue: string, doneCallback: () => void): void => {
+                    currentDependentInput.componentProps.isDisabled = false;
+
                     const dependentOptions: Array<string> = [];
                     for (let i = 0; i < 10; i++) dependentOptions.push(newPrincipalValue + i);
 
                     currentDependentInput.componentProps.options = this.mapToDropdownOptions(dependentOptions);
 
                     doneCallback();
-                }
+                },
+                disableInput,
+                disableInput
             );
 
             this._allInputs.push(currentDependentInput);

@@ -21,6 +21,7 @@ export default class DropdownInput extends React.Component<
                 placeholder={this.props?.placeholder}
                 // This value should never be `undefined`.
                 defaultSelectedKey={this.props?.value || this.props?.defaultOption?.key || null}
+                disabled={this.props?.isDisabled}
             />
         );
     }

@@ -21,6 +21,8 @@ export default class LongTextInput extends React.Component<
     };
 
     public render(): JSX.Element {
+        if (!this.props) return null;
+
         return (
             <TextField
                 label={this.props.label}
@@ -42,6 +44,7 @@ export default class LongTextInput extends React.Component<
                 multiline={this.state.isMultiline}
                 autoAdjustHeight={this.state.isMultiline}
                 validateOnFocusOut={true}
+                disabled={this.props.isDisabled}
             />
         );
     }

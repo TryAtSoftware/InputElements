@@ -19,6 +19,7 @@ export default class TextInput extends React.Component<ISingleValueInputElementP
                 type={this.props.contentType}
                 placeholder={this.props.placeholder}
                 validateOnFocusOut={true}
+                disabled={this.props.isDisabled}
             />
         );
     }

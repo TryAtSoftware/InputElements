@@ -7,6 +7,7 @@ import IDynamicListInputElement from '../IDynamicListInputElement';
 import ISingleValueInputElement from '../../SingleValueInputElements/ISingleValueInputElement';
 import ITextInputProps from '../../SingleValueInputElements/TextInputElement/ITextInputProps';
 import { PrimaryButton } from 'office-ui-fabric-react';
+import { restrictValidPath } from '../../SingleValueInputElements/TextInputElement/PathValidationRules';
 import SingleValueInputElement from '../../SingleValueInputElements/SingleValueInputElement';
 import TextInput from '../../SingleValueInputElements/TextInputElement/TextInput';
 import { UpdateCallback } from '../../IInputElement';
@@ -71,12 +72,13 @@ export default class MultipleOptionsListInputElementSample extends React.Compone
 
     private createTextField = (): ISingleValueInputElement<string> => {
         return new SingleValueInputElement<string, ITextInputProps>(
-            { isRequired: true },
+            { isRequired: true, renderErrors: true },
             TextInput,
             {
                 placeholder: 'Write any value'
             },
-            this.updateForm
+            this.updateForm,
+            restrictValidPath()
         );
     };
 
