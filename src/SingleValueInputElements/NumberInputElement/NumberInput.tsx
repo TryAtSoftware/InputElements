@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
-import INumberInputProps from './INumberInputProps';
-import ISingleValueInputElementProps from '../ISingleValueInputElementProps';
+import { INumberInputProps } from './INumberInputProps';
+import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 
-export default class NumberInput extends React.Component<ISingleValueInputElementProps<number> & INumberInputProps> {
+export class NumberInput extends React.Component<ISingleValueInputElementProps<number> & INumberInputProps> {
     public render(): JSX.Element {
         return (
             <>
@@ -33,9 +33,7 @@ export default class NumberInput extends React.Component<ISingleValueInputElemen
                     min={Number.MIN_SAFE_INTEGER}
                     max={Number.MAX_SAFE_INTEGER}
                 />
-                {!!this.props?.errorMessage && (
-                    <MessageBar messageBarType={MessageBarType.warning}>{this.props.errorMessage}</MessageBar>
-                )}
+                {!!this.props?.errorMessage && <MessageBar messageBarType={MessageBarType.warning}>{this.props.errorMessage}</MessageBar>}
             </>
         );
     }

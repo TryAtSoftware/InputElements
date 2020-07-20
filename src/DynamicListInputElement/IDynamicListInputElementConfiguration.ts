@@ -1,10 +1,8 @@
-import IBasicMenuButtonConfiguration from './IBasicMenuButtonConfiguration';
-import IInputElementConfiguration from '../IInputElementConfiguration';
-import ILoadingInputElementConfiguration from '../ILoadingInputElementConfiguration';
+import { IBasicMenuButtonConfiguration } from './IBasicMenuButtonConfiguration';
+import { IInputElementConfiguration } from '../IInputElementConfiguration';
+import { ILoadingInputElementConfiguration } from '../ILoadingInputElementConfiguration';
 
-export default interface IDynamicListInputElementConfiguration
-    extends IInputElementConfiguration,
-        ILoadingInputElementConfiguration {
+export interface IDynamicListInputElementConfiguration extends IInputElementConfiguration, ILoadingInputElementConfiguration {
     removeButtonConfig?: IBasicMenuButtonConfiguration;
     insertButtonConfig?: IBasicMenuButtonConfiguration;
     addButtonConfig?: IBasicMenuButtonConfiguration;

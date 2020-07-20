@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react';
-import IDropdownInputProps from './IDropdownInputProps';
-import ISingleValueInputElementProps from '../ISingleValueInputElementProps';
+import { IDropdownInputProps } from './IDropdownInputProps';
+import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 
-export default class DropdownInput extends React.Component<
-    ISingleValueInputElementProps<string> & IDropdownInputProps
-> {
+export class DropdownInput extends React.Component<ISingleValueInputElementProps<string> & IDropdownInputProps> {
     public render(): JSX.Element {
         const normalizedOptions = this.getNormalizedOptions();
 

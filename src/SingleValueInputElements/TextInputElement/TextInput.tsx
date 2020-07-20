@@ -1,9 +1,9 @@
 import * as React from 'react';
-import ISingleValueInputElementProps from '../ISingleValueInputElementProps';
-import ITextInputProps from './ITextInputProps';
+import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
+import { ITextInputProps } from './ITextInputProps';
 import { TextField } from 'office-ui-fabric-react';
 
-export default class TextInput extends React.Component<ISingleValueInputElementProps<string> & ITextInputProps> {
+export class TextInput extends React.Component<ISingleValueInputElementProps<string> & ITextInputProps> {
     public render(): JSX.Element {
         if (!this.props) return null;
 
@@ -20,6 +20,7 @@ export default class TextInput extends React.Component<ISingleValueInputElementP
                 placeholder={this.props.placeholder}
                 validateOnFocusOut={true}
                 disabled={this.props.isDisabled}
+                autoFocus={this.props.autoFocus}
             />
         );
     }

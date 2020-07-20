@@ -17,8 +17,7 @@ export default class HidingInputElementsSample extends React.Component {
             { isRequired: true, label: 'Hiding required input element' },
             TextInput,
             {
-                placeholder:
-                    'Enter some value and examine the behavior after pressing the buttons managing the visibility of the element.'
+                placeholder: 'Enter some value and examine the behavior after pressing the buttons managing the visibility of the element.'
             },
             this.updateForm
         );

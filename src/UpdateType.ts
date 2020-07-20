@@ -1,5 +1,5 @@
 /** This enum should define all possible values and reasons that may cause the update of an input element. */
-enum UpdateType {
+export enum UpdateType {
     /** This value describes the behavior when a new value has been acquired for the input element and the form should be refreshed in order to visualize it. */
     NewValue,
 
@@ -12,5 +12,3 @@ enum UpdateType {
      */
     System
 }
-
-export default UpdateType;

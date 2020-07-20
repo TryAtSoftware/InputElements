@@ -1,6 +1,6 @@
-import IInputElementConfiguration from './IInputElementConfiguration';
+import { IInputElementConfiguration } from './IInputElementConfiguration';
 
-export default interface IConfigurableInputElement<TConfiguration extends IInputElementConfiguration> {
+export interface IConfigurableInputElement<TConfiguration extends IInputElementConfiguration> {
     /**
      * The configuration that should be used for that input element.
      */

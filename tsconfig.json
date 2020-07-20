@@ -6,7 +6,12 @@
         "module": "commonjs",
         "target": "es6",
         "declaration": true,
-        "jsx": "react"
+        "jsx": "react",
+
+        "baseUrl": ".",
+        "paths": {
+            "@try-at-software/input-elements": ["node_modules/@try-at-software/input-elements"]
+        }
     },
     "include": ["./src"],
     "exclude": ["./node_modules", "**/__tests__/*", "**/__samples__/*"]

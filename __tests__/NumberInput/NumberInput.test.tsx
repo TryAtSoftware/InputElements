@@ -3,7 +3,7 @@ import { emptyStrings, getRandomFloat, getRandomNumber, getRandomString } from '
 import each from 'jest-each';
 import EnzymeTestsHelper from '../EnzymeTestsHelper';
 import { mount } from 'enzyme';
-import NumberInput from '../../src/SingleValueInputElements/NumberInputElement/NumberInput';
+import { NumberInput } from '@try-at-software/input-elements';
 import SingleValueInputElementTestHelpers from '../SingleValueInputElementTestHelpers';
 import { SpinButton } from 'office-ui-fabric-react';
 
@@ -97,9 +97,7 @@ describe('Number input', () => {
 
     each(getTestData()).it('should call the update function on change', (testInput: ITestCase): void => {
         const props = SingleValueInputElementTestHelpers.getRandomProps(getRandomNumber(0, 1000), updateFunction);
-        const component = mount(
-            <NumberInput {...props} handleDecimalValues={testInput.allowDecimals} suffix={testInput.suffix} />
-        );
+        const component = mount(<NumberInput {...props} handleDecimalValues={testInput.allowDecimals} suffix={testInput.suffix} />);
 
         const spinButton = component.find(SpinButton);
         EnzymeTestsHelper.expectExists(spinButton);

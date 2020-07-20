@@ -1,6 +1,6 @@
-import IMenuButtonConfiguration from './IMenuButtonConfiguration';
+import { IMenuButtonConfiguration } from './IMenuButtonConfiguration';
 
-export default interface IDynamicListMenuConfiguration {
+export interface IDynamicListMenuConfiguration {
     removeButtonConfig?: IMenuButtonConfiguration;
     insertButtonConfig?: IMenuButtonConfiguration;
 }

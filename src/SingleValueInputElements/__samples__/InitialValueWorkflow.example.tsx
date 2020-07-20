@@ -18,8 +18,7 @@ export default class InitialValueWorkflowSample extends React.Component {
             { isRequired: true, label: 'Required input element with initial value being set' },
             TextInput,
             {
-                placeholder:
-                    'Examine how the `hasChanges` property will change if you insert the initial value once again.'
+                placeholder: 'Examine how the `hasChanges` property will change if you insert the initial value once again.'
             },
             this.updateForm
         );

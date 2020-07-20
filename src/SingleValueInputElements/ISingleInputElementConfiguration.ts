@@ -1,9 +1,7 @@
-import IInputElementConfiguration from '../IInputElementConfiguration';
-import ILoadingInputElementConfiguration from '../ILoadingInputElementConfiguration';
+import { IInputElementConfiguration } from '../IInputElementConfiguration';
+import { ILoadingInputElementConfiguration } from '../ILoadingInputElementConfiguration';
 
-export default interface ISingleValueInputElementConfiguration
-    extends IInputElementConfiguration,
-        ILoadingInputElementConfiguration {
+export interface ISingleValueInputElementConfiguration extends IInputElementConfiguration, ILoadingInputElementConfiguration {
     /**
      * A value indicating whether error messages will be rendered by the underlying input element itself.
      * If it is set to false, no error message will be rendered but the validation pipeline will not be changed at all.
@@ -20,4 +18,10 @@ export default interface ISingleValueInputElementConfiguration
      * A value indicating whether the input element should be validated even if it is not required and empty.
      */
     executeAllValidations?: boolean;
+
+    /**
+     * A function that should be executed before every validation.
+     * If it returns false, no validation rule will be executed.
+     */
+    shouldExecuteValidation?: () => boolean;
 }

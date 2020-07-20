@@ -19,8 +19,7 @@ export default class LoadingInputElementsSample extends React.Component {
             { isRequired: true, label: 'Loading required input element' },
             TextInput,
             {
-                placeholder:
-                    'Enter some value and examine the behavior after pressing the buttons managing the loading state.'
+                placeholder: 'Enter some value and examine the behavior after pressing the buttons managing the loading state.'
             },
             this.updateForm
         );
@@ -36,16 +35,8 @@ export default class LoadingInputElementsSample extends React.Component {
             <div className="sample-group loading-input-elements">
                 {this._inputElement.render()}
                 <Stack horizontal tokens={{ childrenGap: 5 }}>
-                    <DefaultButton
-                        text="Start loading"
-                        onClick={this.startLoading}
-                        disabled={!!this.loadingFinishedCallback}
-                    />
-                    <DefaultButton
-                        text="Finish loading"
-                        onClick={this.finishLoading}
-                        disabled={!this.loadingFinishedCallback}
-                    />
+                    <DefaultButton text="Start loading" onClick={this.startLoading} disabled={!!this.loadingFinishedCallback} />
+                    <DefaultButton text="Finish loading" onClick={this.finishLoading} disabled={!this.loadingFinishedCallback} />
                 </Stack>
                 <Checkbox label="Is valid" checked={this._inputElement.isValid} disabled={true} />
                 <Checkbox label="Has changes" checked={this._inputElement.hasChanges} disabled={true} />

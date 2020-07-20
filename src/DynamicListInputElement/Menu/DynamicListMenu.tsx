@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { CommandButton, IContextualMenuItem, IContextualMenuProps, PrimaryButton } from 'office-ui-fabric-react';
-import IDynamicListMenuProps from './IDynamicListMenuProps';
+import { IDynamicListMenuProps } from './IDynamicListMenuProps';
 
-export default class DynamicListMenu<TValue> extends React.Component<IDynamicListMenuProps<TValue>> {
+export class DynamicListMenu<TValue> extends React.Component<IDynamicListMenuProps<TValue>> {
     public render(): JSX.Element {
         return (
             <div className="tas-dynamic-list-menu">

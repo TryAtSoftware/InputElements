@@ -1,12 +1,14 @@
 import * as React from 'react';
-import DependentInputElementInitializer from '../DependentInputElementInitializer';
-import DropdownInput from '../../DropdownInputElement/DropdownInput';
-import IDropdownInputOption from '../../DropdownInputElement/IDropdownInputOption';
-import IDropdownInputProps from '../../DropdownInputElement/IDropdownInputProps';
-import ISingleValueInputElement from '../../ISingleValueInputElement';
+import {
+    DependentInputElementInitializer,
+    DropdownInput,
+    IDropdownInputOption,
+    IDropdownInputProps,
+    ISingleValueInputElement,
+    SingleValueInputElement,
+    UpdateCallback
+} from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import SingleValueInputElement from '../../SingleValueInputElement';
-import { UpdateCallback } from '../../../IInputElement';
 
 export default class CustomVisualizationSequentialDependenciesSample extends React.Component {
     private _allInputs: ISingleValueInputElement<string, IDropdownInputProps>[] = [];
@@ -79,11 +81,7 @@ export default class CustomVisualizationSequentialDependenciesSample extends Rea
                         <React.Fragment key={index}>{x.render()}</React.Fragment>
                     )
                 )}
-                <PrimaryButton
-                    text="Submit"
-                    disabled={this._allInputs.some((x): boolean => !x?.isValid)}
-                    onClick={this.printValues}
-                />
+                <PrimaryButton text="Submit" disabled={this._allInputs.some((x): boolean => !x?.isValid)} onClick={this.printValues} />
             </div>
         );
     }

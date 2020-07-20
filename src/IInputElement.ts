@@ -1,4 +1,4 @@
-import UpdateType from './UpdateType';
+import { UpdateType } from './UpdateType';
 
 export interface IInputElement {
     /**

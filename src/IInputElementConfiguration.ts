@@ -1,4 +1,4 @@
-export default interface IInputElementConfiguration {
+export interface IInputElementConfiguration {
     /**
      * The label associated with the input element.
      * It should not be too long and should give enough information for the end user.

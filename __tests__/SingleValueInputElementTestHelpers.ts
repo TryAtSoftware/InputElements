@@ -1,5 +1,5 @@
 import { getRandomProbability, getRandomString } from './_testsCommon';
-import ISingleValueInputElementProps from '../src/SingleValueInputElements/ISingleValueInputElementProps';
+import ISingleValueInputElementProps from '@try-at-software/input-elements/lib/SingleValueInputElements/ISingleValueInputElementProps';
 
 export interface IAdditionalSingleValuePropsConfiguration {
     label?: string;

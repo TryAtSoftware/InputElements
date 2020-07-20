@@ -1,13 +1,15 @@
 import * as React from 'react';
-import DropdownInput from '../../SingleValueInputElements/DropdownInputElement/DropdownInput';
-import DynamicListInputElement from '../DynamicListInputElement';
-import IDropdownInputOption from '../../SingleValueInputElements/DropdownInputElement/IDropdownInputOption';
-import IDropdownInputProps from '../../SingleValueInputElements/DropdownInputElement/IDropdownInputProps';
-import IDynamicListInputElement from '../IDynamicListInputElement';
-import ISingleValueInputElement from '../../SingleValueInputElements/ISingleValueInputElement';
+import {
+    DropdownInput,
+    DynamicListInputElement,
+    IDropdownInputOption,
+    IDropdownInputProps,
+    IDynamicListInputElement,
+    ISingleValueInputElement,
+    SingleValueInputElement,
+    UpdateCallback
+} from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import SingleValueInputElement from '../../SingleValueInputElements/SingleValueInputElement';
-import { UpdateCallback } from '../../IInputElement';
 
 export default class ListInputElementSample extends React.Component {
     private _inputElement: IDynamicListInputElement<string>;

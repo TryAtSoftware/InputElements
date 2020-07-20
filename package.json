@@ -30,6 +30,8 @@
     "author": "Tony Troeff",
     "license": "ISC",
     "devDependencies": {
+        "@types/react": "^16.9.43",
+        "@types/react-beautiful-dnd": "^13.0.0",
         "@types/enzyme": "^3.10.5",
         "@types/enzyme-adapter-react-16": "^1.0.6",
         "@types/jest": "^26.0.4",
@@ -60,8 +62,6 @@
         "webpack-dev-server": "^3.11.0"
     },
     "dependencies": {
-        "@types/react": "^16.9.43",
-        "@types/react-beautiful-dnd": "^13.0.0",
         "office-ui-fabric-react": "^7.123.3",
         "react": "^16.13.1",
         "react-beautiful-dnd": "^13.0.0"

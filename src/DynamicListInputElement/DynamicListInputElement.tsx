@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import IDynamicListInputElement, { IDynamicValueChange } from './IDynamicListInputElement';
+import { IDynamicListInputElement, IDynamicValueChange } from './IDynamicListInputElement';
 import { combineClasses } from '../Utilities/StylingHelper';
-import DynamicListMenu from './Menu/DynamicListMenu';
-import ExtendedInputElement from '../ExtendedInputElement';
-import IDynamicListInputElementConfiguration from './IDynamicListInputElementConfiguration';
-import IDynamicListMenuOption from './Menu/IDynamicListMenuOption';
-import ISingleValueInputElement from '../SingleValueInputElements/ISingleValueInputElement';
+import { DynamicListMenu } from './Menu/DynamicListMenu';
+import { ExtendedConfigurableInputElement } from '../ExtendedConfigurableInputElement';
+import { IDynamicListInputElementConfiguration } from './IDynamicListInputElementConfiguration';
+import { IDynamicListMenuOption } from './Menu/IDynamicListMenuOption';
+import { ISingleValueInputElement } from '../SingleValueInputElements/ISingleValueInputElement';
 import { UpdateCallback } from '../IInputElement';
-import UpdateType from '../UpdateType';
+import { UpdateType } from '../UpdateType';
 import { ValidationRule } from '../IValueInputElement';
 import './DynamicListInputElement.less';
 
-interface IInputInformation<TValue> {
+export interface IInputInformation<TValue> {
     uniqueId: number;
     input: ISingleValueInputElement<TValue>;
 }
 
-export default class DynamicListInputElement<TValue>
-    extends ExtendedInputElement<IDynamicListInputElementConfiguration, IDynamicValueChange<TValue>[]>
+export class DynamicListInputElement<TValue>
+    extends ExtendedConfigurableInputElement<IDynamicListInputElementConfiguration, IDynamicValueChange<TValue>[]>
     implements IDynamicListInputElement<TValue> {
     private static counter = 0;
 
@@ -123,11 +123,7 @@ export default class DynamicListInputElement<TValue>
         return (
             <>
                 <div className="tas-move-gripper hidable">
-                    {!!this.configuration?.renderMoveGripper ? (
-                        this.configuration.renderMoveGripper()
-                    ) : (
-                        <span>#{index + 1}</span>
-                    )}
+                    {!!this.configuration?.renderMoveGripper ? this.configuration.renderMoveGripper() : <span>#{index + 1}</span>}
                 </div>
                 <div className="tas-input-element-wrapper">{input.render()}</div>
                 <div className="tas-menu-wrapper">{this.renderMenu(index)}</div>

@@ -1,12 +1,14 @@
 import * as React from 'react';
-import DependentInputElementInitializer from '../DependentInputElementInitializer';
-import DropdownInput from '../../DropdownInputElement/DropdownInput';
-import IDropdownInputOption from '../../DropdownInputElement/IDropdownInputOption';
-import IDropdownInputProps from '../../DropdownInputElement/IDropdownInputProps';
-import ISingleValueInputElement from '../../ISingleValueInputElement';
+import {
+    DependentInputElementInitializer,
+    DropdownInput,
+    IDropdownInputOption,
+    IDropdownInputProps,
+    ISingleValueInputElement,
+    SingleValueInputElement,
+    UpdateCallback
+} from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import SingleValueInputElement from '../../SingleValueInputElement';
-import { UpdateCallback } from '../../../IInputElement';
 
 export default class DependentInputSample extends React.Component {
     private _principalInput: ISingleValueInputElement<string, IDropdownInputProps>;
@@ -33,8 +35,7 @@ export default class DependentInputSample extends React.Component {
             { isRequired: true, label: 'Dependent dropdown (required, without error handling)' },
             DropdownInput,
             {
-                placeholder:
-                    'When you change the value, the button will become enabled and this message will disappear.'
+                placeholder: 'When you change the value, the button will become enabled and this message will disappear.'
             },
             this.updateForm
         );

@@ -1,7 +1,7 @@
-import ISingleValueInputElement from '../ISingleValueInputElement';
-import UpdateType from '../../UpdateType';
+import { ISingleValueInputElement } from '../ISingleValueInputElement';
+import { UpdateType } from '../../UpdateType';
 
-export default class DependentInputElementInitializer {
+export class DependentInputElementInitializer {
     public static initializeDependency<TDependent, TPrincipal, TDependentProps = unknown, TPrincipalProps = unknown>(
         principal: ISingleValueInputElement<TPrincipal, TPrincipalProps>,
         dependent: ISingleValueInputElement<TDependent, TDependentProps>,

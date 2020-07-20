@@ -1,22 +1,12 @@
-import IChangingInputElement from './IChangingInputElement';
-import IConfigurableInputElement from './IConfigurableInputElement';
-import IHidingInputElement from './IHidingInputElement';
-import IInputElementConfiguration from './IInputElementConfiguration';
-import ILoadingInputElement from './ILoadingInputElement';
-import ILoadingInputElementConfiguration from './ILoadingInputElementConfiguration';
-import InputElement from './InputElement';
+import { IChangingInputElement } from './IChangingInputElement';
+import { IHidingInputElement } from './IHidingInputElement';
+import { ILoadingInputElement } from './ILoadingInputElement';
+import { InputElement } from './InputElement';
 import { UpdateCallback } from './IInputElement';
-import UpdateType from './UpdateType';
+import { UpdateType } from './UpdateType';
 
-export default abstract class ExtendedInputElement<
-    TConfiguration extends IInputElementConfiguration & ILoadingInputElementConfiguration,
-    TChangeValue
-> extends InputElement
-    implements
-        IHidingInputElement,
-        ILoadingInputElement,
-        IConfigurableInputElement<TConfiguration>,
-        IChangingInputElement<TChangeValue> {
+export abstract class ExtendedInputElement<TChangeValue> extends InputElement
+    implements IHidingInputElement, ILoadingInputElement, IChangingInputElement<TChangeValue> {
     protected initialValue: TChangeValue;
 
     protected _valueIsSet = false;
@@ -27,14 +17,9 @@ export default abstract class ExtendedInputElement<
 
     private _isLoading = false;
 
-    protected constructor(configuration: TConfiguration, update: UpdateCallback) {
+    protected constructor(update: UpdateCallback) {
         super(update);
-
-        this.configuration = configuration;
     }
-
-    /** @inheritdoc */
-    public configuration: TConfiguration;
 
     /** @inheritdoc */
     public setInitialValue(value: TChangeValue): void {

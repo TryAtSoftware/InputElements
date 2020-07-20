@@ -1,9 +1,6 @@
 import * as React from 'react';
-import ITextInputProps from '../ITextInputProps';
-import { IValueInputElement } from '../../../IValueInputElement';
+import { ITextInputProps, IValueInputElement, SingleValueInputElement, TextInput } from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import SingleValueInputElement from '../../SingleValueInputElement';
-import TextInput from '../TextInput';
 
 export default class TextInputSample extends React.Component {
     private _textInput: IValueInputElement<string>;
@@ -23,11 +20,7 @@ export default class TextInputSample extends React.Component {
         return (
             <div className="sample-group basic-text-input">
                 {this._textInput.render()}
-                <PrimaryButton
-                    text="Submit"
-                    disabled={!this._textInput.isValid}
-                    onClick={(): void => console.log(this._textInput.value)}
-                />
+                <PrimaryButton text="Submit" disabled={!this._textInput.isValid} onClick={(): void => console.log(this._textInput.value)} />
             </div>
         );
     }

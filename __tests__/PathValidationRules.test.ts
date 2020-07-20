@@ -1,7 +1,4 @@
-import {
-    invalidCharacters,
-    restrictValidPath
-} from '../src/SingleValueInputElements/TextInputElement/PathValidationRules';
+import { invalidCharacters, restrictValidPath } from '@try-at-software/input-elements';
 import each from 'jest-each';
 import { getRandomString } from './_testsCommon';
 

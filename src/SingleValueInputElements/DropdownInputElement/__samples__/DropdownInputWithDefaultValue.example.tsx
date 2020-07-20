@@ -1,10 +1,12 @@
 import * as React from 'react';
-import DropdownInput from '../DropdownInput';
-import IDropdownInputOption from '../IDropdownInputOption';
-import IDropdownInputProps from '../IDropdownInputProps';
-import { IValueInputElement } from '../../../IValueInputElement';
+import {
+    DropdownInput,
+    IDropdownInputOption,
+    IDropdownInputProps,
+    IValueInputElement,
+    SingleValueInputElement
+} from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import SingleValueInputElement from '../../SingleValueInputElement';
 
 export default class DropdownInputWithDefaultValueSample extends React.Component {
     private _dropdownInput: IValueInputElement<string>;

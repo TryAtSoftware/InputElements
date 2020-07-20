@@ -1,12 +1,12 @@
-import IChangingInputElement from '../IChangingInputElement';
-import IConfigurableInputElement from '../IConfigurableInputElement';
-import IHidingInputElement from '../IHidingInputElement';
-import ILoadingInputElement from '../ILoadingInputElement';
-import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
-import ISingleValueInputElementProps from './ISingleValueInputElementProps';
+import { IChangingInputElement } from '../IChangingInputElement';
+import { IConfigurableInputElement } from '../IConfigurableInputElement';
+import { IHidingInputElement } from '../IHidingInputElement';
+import { ILoadingInputElement } from '../ILoadingInputElement';
+import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
+import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 import { IValueInputElement } from '../IValueInputElement';
 
-export default interface ISingleValueInputElement<TValue, TComponentProps = unknown>
+export interface ISingleValueInputElement<TValue, TComponentProps = unknown>
     extends IValueInputElement<TValue>,
         IConfigurableInputElement<ISingleValueInputElementConfiguration>,
         IChangingInputElement<TValue>,

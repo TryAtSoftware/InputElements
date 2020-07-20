@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import { combineClasses } from '../Utilities/StylingHelper';
-import ExtendedInputElement from '../ExtendedInputElement';
-import ISingleValueInputElement from './ISingleValueInputElement';
-import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
-import ISingleValueInputElementProps from './ISingleValueInputElementProps';
+import { ExtendedConfigurableInputElement } from '../ExtendedConfigurableInputElement';
+import { ISingleValueInputElement } from './ISingleValueInputElement';
+import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
+import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
 
-export default class SingleValueInputElement<TValue, TComponentProps>
-    extends ExtendedInputElement<ISingleValueInputElementConfiguration, TValue>
+export class SingleValueInputElement<TValue, TComponentProps>
+    extends ExtendedConfigurableInputElement<ISingleValueInputElementConfiguration, TValue>
     implements ISingleValueInputElement<TValue, TComponentProps> {
     public constructor(
         config: ISingleValueInputElementConfiguration,
@@ -49,8 +49,7 @@ export default class SingleValueInputElement<TValue, TComponentProps>
     /** @inheritdoc */
     public get isValid(): boolean {
         return (
-            ((!!this.configuration && !this.configuration.isRequired) || this._valueIsSet || this._initialValueIsSet) &&
-            !this.errorMessage
+            ((!!this.configuration && !this.configuration.isRequired) || this._valueIsSet || this._initialValueIsSet) && !this.errorMessage
         );
     }
 
@@ -86,6 +85,8 @@ export default class SingleValueInputElement<TValue, TComponentProps>
 
     /** @inheritdoc */
     public validate(): void {
+        if (!!this.configuration?.shouldExecuteValidation && this.configuration.shouldExecuteValidation() === false) return;
+
         let errorMessage = '';
 
         if (this.configuration?.isRequired && !!this.value === false) {

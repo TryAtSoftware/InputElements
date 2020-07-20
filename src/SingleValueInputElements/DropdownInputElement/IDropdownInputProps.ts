@@ -1,6 +1,6 @@
-import IDropdownInputOption from './IDropdownInputOption';
+import { IDropdownInputOption } from './IDropdownInputOption';
 
-export default interface IDropdownInputProps {
+export interface IDropdownInputProps {
     options?: IDropdownInputOption[];
 
     /**

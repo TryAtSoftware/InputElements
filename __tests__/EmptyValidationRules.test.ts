@@ -1,6 +1,6 @@
 import { emptyStrings, getRandomString } from './_testsCommon';
 import each from 'jest-each';
-import { restrictEmptyText } from './../src/SingleValueInputElements/TextInputElement/EmptyValidationRules';
+import { restrictEmptyText } from '@try-at-software/input-elements';
 
 describe('EmptyValidationRules', (): void => {
     const invalidInputs = emptyStrings;
@@ -26,22 +26,19 @@ describe('EmptyValidationRules', (): void => {
         return table;
     }
 
-    each(getTestData()).it(
-        'Should return an error message for empty input',
-        (message: string, input: string, isEmpty: boolean): void => {
-            // Get the validation rule for the previously generated length.
-            const validationRule = restrictEmptyText(message);
+    each(getTestData()).it('Should return an error message for empty input', (message: string, input: string, isEmpty: boolean): void => {
+        // Get the validation rule for the previously generated length.
+        const validationRule = restrictEmptyText(message);
 
-            // Assert that if a shorter value is passed, an error is returned.
-            const result = validationRule(input);
+        // Assert that if a shorter value is passed, an error is returned.
+        const result = validationRule(input);
 
-            if (isEmpty) {
-                expect(result).toBeTruthy();
+        if (isEmpty) {
+            expect(result).toBeTruthy();
 
-                if (!!message) expect(result).toEqual(message);
-            } else expect(result).toBeFalsy();
-        }
-    );
+            if (!!message) expect(result).toEqual(message);
+        } else expect(result).toBeFalsy();
+    });
 
     it('Should not return error if the input is correct', (): void => {
         validInputs.forEach((ic): void => {

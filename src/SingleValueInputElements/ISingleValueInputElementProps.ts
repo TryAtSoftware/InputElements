@@ -1,4 +1,4 @@
-export default interface ISingleValueInputElementProps<TValue> {
+export interface ISingleValueInputElementProps<TValue> {
     value: TValue;
     label: string;
     isRequired: boolean;

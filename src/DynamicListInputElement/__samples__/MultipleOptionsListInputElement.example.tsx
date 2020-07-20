@@ -1,16 +1,18 @@
 import * as React from 'react';
-import DropdownInput from '../../SingleValueInputElements/DropdownInputElement/DropdownInput';
-import DynamicListInputElement from '../DynamicListInputElement';
-import IDropdownInputOption from '../../SingleValueInputElements/DropdownInputElement/IDropdownInputOption';
-import IDropdownInputProps from '../../SingleValueInputElements/DropdownInputElement/IDropdownInputProps';
-import IDynamicListInputElement from '../IDynamicListInputElement';
-import ISingleValueInputElement from '../../SingleValueInputElements/ISingleValueInputElement';
-import ITextInputProps from '../../SingleValueInputElements/TextInputElement/ITextInputProps';
+import {
+    DropdownInput,
+    DynamicListInputElement,
+    IDropdownInputOption,
+    IDropdownInputProps,
+    IDynamicListInputElement,
+    ISingleValueInputElement,
+    ITextInputProps,
+    restrictValidPath,
+    SingleValueInputElement,
+    TextInput,
+    UpdateCallback
+} from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import { restrictValidPath } from '../../SingleValueInputElements/TextInputElement/PathValidationRules';
-import SingleValueInputElement from '../../SingleValueInputElements/SingleValueInputElement';
-import TextInput from '../../SingleValueInputElements/TextInputElement/TextInput';
-import { UpdateCallback } from '../../IInputElement';
 
 export default class MultipleOptionsListInputElementSample extends React.Component {
     private _inputElement: IDynamicListInputElement<string>;

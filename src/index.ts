@@ -1,3 +1,4 @@
+export * from './ExtendedConfigurableInputElement';
 export * from './ExtendedInputElement';
 export * from './IChangingInputElement';
 export * from './IConfigurableInputElement';

@@ -1,6 +1,6 @@
-import IBasicMenuButtonConfiguration from './IBasicMenuButtonConfiguration';
+import { IBasicMenuButtonConfiguration } from './IBasicMenuButtonConfiguration';
 
-export default interface IMenuButtonConfiguration extends IBasicMenuButtonConfiguration {
+export interface IMenuButtonConfiguration extends IBasicMenuButtonConfiguration {
     className?: string;
     label?: string;
     iconName?: string;

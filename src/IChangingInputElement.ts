@@ -1,4 +1,4 @@
-export default interface IChangingInputElement<TValue> {
+export interface IChangingInputElement<TValue> {
     /**
      * A method used to set new value, validate it and update the form.
      *
