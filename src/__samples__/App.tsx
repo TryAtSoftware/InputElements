@@ -15,6 +15,8 @@ import NonRequiredDependentInputSample from '../SingleValueInputElements/Depende
 import NonRequiredValueSample from '../SingleValueInputElements/__samples__/NonRequiredValue.example';
 import SequentialDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/SequentialDependencies.example';
 import TextInputSample from '../SingleValueInputElements/TextInputElement/__samples__/TextInput.example';
+import TimePickerSample from '../SingleValueInputElements/TimePickerInputElement/__samples__/TimePicker.example';
+import TimePickerWithMonthsSample from '../SingleValueInputElements/TimePickerInputElement/__samples__/TimePickerWithMonths.example';
 import './styles.less';
 import './App.less';
 
@@ -42,6 +44,12 @@ export default class App extends React.Component {
                 </h2>
                 <DropdownInputSample />
                 <DropdownInputWithDefaultValueSample />
+
+                <h2 id="time-picker">
+                    <Link href="#time-picker">Time picker</Link>
+                </h2>
+                <TimePickerSample />
+                <TimePickerWithMonthsSample />
 
                 <h2 id="dependent-input">
                     <Link href="#dependent-input">Dependent input</Link>

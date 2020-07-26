@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "./lib/",
+        "outDir": "lib",
         "sourceMap": true,
         "noImplicitAny": true,
         "module": "commonjs",
@@ -13,6 +13,6 @@
             "@try-at-software/input-elements": ["node_modules/@try-at-software/input-elements"]
         }
     },
-    "include": ["./src"],
-    "exclude": ["./node_modules", "**/__tests__/*", "**/__samples__/*"]
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "**/__tests__/*", "**/__samples__/*"]
 }

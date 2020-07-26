@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { IInputElement, UpdateCallback } from '../../IInputElement';
+import { ITextInputProps, SingleValueInputElement, TextInput, UpdateType } from '@try-at-software/input-elements';
 import { Checkbox } from 'office-ui-fabric-react';
-import ITextInputProps from '../TextInputElement/ITextInputProps';
-import SingleValueInputElement from '../SingleValueInputElement';
-import TextInput from '../TextInputElement/TextInput';
-import UpdateType from '../../UpdateType';
 
 export default class BasicWorkflowSample extends React.Component {
     private _inputElement: IInputElement;

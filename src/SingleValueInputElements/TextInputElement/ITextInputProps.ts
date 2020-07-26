@@ -1,6 +1,5 @@
-export interface ITextInputProps {
+import { IBaseInputElementProps } from '../IBaseInputElementProps';
+
+export interface ITextInputProps extends IBaseInputElementProps {
     contentType?: string;
-    placeholder?: string;
-    isDisabled?: boolean;
-    autoFocus?: boolean;
 }

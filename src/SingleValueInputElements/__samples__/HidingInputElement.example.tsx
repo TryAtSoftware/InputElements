@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { Checkbox, DefaultButton, Stack } from 'office-ui-fabric-react';
-import IHidingInputElement from '../../IHidingInputElement';
-import ITextInputProps from '../TextInputElement/ITextInputProps';
-import SingleValueInputElement from '../SingleValueInputElement';
-import TextInput from '../TextInputElement/TextInput';
+import { IHidingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateType } from '@try-at-software/input-elements';
 import { UpdateCallback } from '../../IInputElement';
-import UpdateType from '../../UpdateType';
 
 export default class HidingInputElementsSample extends React.Component {
     private _inputElement: IHidingInputElement;

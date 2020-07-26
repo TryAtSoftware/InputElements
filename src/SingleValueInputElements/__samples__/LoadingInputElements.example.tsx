@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { Checkbox, DefaultButton, Stack } from 'office-ui-fabric-react';
-import ILoadingInputElement from '../../ILoadingInputElement';
-import ITextInputProps from '../TextInputElement/ITextInputProps';
-import SingleValueInputElement from '../SingleValueInputElement';
-import TextInput from '../TextInputElement/TextInput';
+import { ILoadingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateType } from '@try-at-software/input-elements';
 import { UpdateCallback } from '../../IInputElement';
-import UpdateType from '../../UpdateType';
 
 export default class LoadingInputElementsSample extends React.Component {
     private loadingFinishedCallback: () => void;
