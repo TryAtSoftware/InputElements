@@ -5,6 +5,8 @@ import DependentInputSample from '../SingleValueInputElements/DependentInputElem
 import DropdownInputSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInput.example';
 import DropdownInputWithDefaultValueSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInputWithDefaultValue.example';
 import HidingInputElementsSample from '../SingleValueInputElements/__samples__/HidingInputElement.example';
+import IdentityPickerSample from '../SingleValueInputElements/IdentityPickerInputElement/__samples__/IdentityPicker.example';
+import IdentityPickerWithInitialValueSample from '../SingleValueInputElements/IdentityPickerInputElement/__samples__/IdentityPickerWithInitialValue.example';
 import InitialValueWorkflowSample from '../SingleValueInputElements/__samples__/InitialValueWorkflow.example';
 import { Link } from 'office-ui-fabric-react';
 import ListInputElementSample from '../DynamicListInputElement/__samples__/ListInputElement.example';
@@ -50,6 +52,12 @@ export default class App extends React.Component {
                 </h2>
                 <TimePickerSample />
                 <TimePickerWithMonthsSample />
+
+                <h2 id="identity-picker">
+                    <Link href="#identity-picker">Identity picker</Link>
+                </h2>
+                <IdentityPickerSample />
+                <IdentityPickerWithInitialValueSample />
 
                 <h2 id="dependent-input">
                     <Link href="#dependent-input">Dependent input</Link>

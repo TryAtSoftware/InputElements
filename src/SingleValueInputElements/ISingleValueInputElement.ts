@@ -8,7 +8,7 @@ import { IValueInputElement } from '../IValueInputElement';
 
 export interface ISingleValueInputElement<TValue, TComponentProps = unknown>
     extends IValueInputElement<TValue>,
-        IConfigurableInputElement<ISingleValueInputElementConfiguration>,
+        IConfigurableInputElement<ISingleValueInputElementConfiguration<TValue>>,
         IChangingInputElement<TValue>,
         IHidingInputElement,
         ILoadingInputElement {

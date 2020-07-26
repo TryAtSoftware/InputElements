@@ -25,7 +25,7 @@ export default class TimePickerWithMonthsSample extends React.Component {
 
     public render(): JSX.Element {
         return (
-            <div className="sample-group basic-text-input">
+            <div className="sample-group time-picker-with-months-input">
                 {this._timePicker.render()}
                 <PrimaryButton
                     text="Submit"

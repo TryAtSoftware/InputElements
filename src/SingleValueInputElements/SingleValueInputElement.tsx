@@ -9,10 +9,10 @@ import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
 
 export class SingleValueInputElement<TValue, TComponentProps>
-    extends ExtendedConfigurableInputElement<ISingleValueInputElementConfiguration, TValue>
+    extends ExtendedConfigurableInputElement<ISingleValueInputElementConfiguration<TValue>, TValue>
     implements ISingleValueInputElement<TValue, TComponentProps> {
     public constructor(
-        config: ISingleValueInputElementConfiguration,
+        config: ISingleValueInputElementConfiguration<TValue>,
         component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
         props: TComponentProps,
         update: UpdateCallback,
@@ -37,7 +37,9 @@ export class SingleValueInputElement<TValue, TComponentProps>
 
     /** @inheritdoc */
     public get hasChanges(): boolean {
-        return this.value !== this.initialValue;
+        return !!this.configuration?.comparator
+            ? !this.configuration.comparator.areEqual(this.value, this.initialValue)
+            : this.value !== this.initialValue;
     }
 
     /** @inheritdoc */

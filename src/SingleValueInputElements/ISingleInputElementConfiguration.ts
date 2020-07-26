@@ -1,7 +1,8 @@
 import { IInputElementConfiguration } from '../IInputElementConfiguration';
 import { ILoadingInputElementConfiguration } from '../ILoadingInputElementConfiguration';
+import { IValueComparator } from './Comparators/IValueComparator';
 
-export interface ISingleValueInputElementConfiguration extends IInputElementConfiguration, ILoadingInputElementConfiguration {
+export interface ISingleValueInputElementConfiguration<TValue> extends IInputElementConfiguration, ILoadingInputElementConfiguration {
     /**
      * A value indicating whether error messages will be rendered by the underlying input element itself.
      * If it is set to false, no error message will be rendered but the validation pipeline will not be changed at all.
@@ -24,4 +25,10 @@ export interface ISingleValueInputElementConfiguration extends IInputElementConf
      * If it returns false, no validation rule will be executed.
      */
     shouldExecuteValidation?: () => boolean;
+
+    /**
+     * An object used to override the default comparing mechanism for computing the `hasChanges` value.
+     * This may be useful when a single input element is used to provide multiple values. The `===` operator will not work well with array so it should be overridden.
+     */
+    comparator?: IValueComparator<TValue>;
 }
