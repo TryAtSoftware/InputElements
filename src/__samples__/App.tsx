@@ -1,6 +1,9 @@
 import * as React from 'react';
 import BasicWorkflowSample from '../SingleValueInputElements/__samples__/BasicWorkflow.example';
+import CustomPrecisionNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/CustomPrecisionNumberInput.example';
+import CustomStepNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/CustomStepNumberInput.example';
 import CustomVisualizationSequentialDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/CustomDependentVisualization.example';
+import DecimalNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/DecimalNumberInput.example';
 import DependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/DependentInput.example';
 import DropdownInputSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInput.example';
 import DropdownInputWithDefaultValueSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInputWithDefaultValue.example';
@@ -17,6 +20,7 @@ import MultipleDependenciesSample from '../SingleValueInputElements/DependentInp
 import MultipleOptionsListInputElementSample from '../DynamicListInputElement/__samples__/MultipleOptionsListInputElement.example';
 import NonRequiredDependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/NonRequiredDependentInput.example';
 import NonRequiredValueSample from '../SingleValueInputElements/__samples__/NonRequiredValue.example';
+import NumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/NumberInput.example';
 import SequentialDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/SequentialDependencies.example';
 import TextInputSample from '../SingleValueInputElements/TextInputElement/__samples__/TextInput.example';
 import TimePickerSample from '../SingleValueInputElements/TimePickerInputElement/__samples__/TimePicker.example';
@@ -48,6 +52,14 @@ export default class App extends React.Component {
                 </h2>
                 <DropdownInputSample />
                 <DropdownInputWithDefaultValueSample />
+
+                <h2 id="number-input">
+                    <Link href="#number-input">Number input</Link>
+                </h2>
+                <NumberInputSample />
+                <CustomStepNumberInputSample />
+                <DecimalNumberInputSample />
+                <CustomPrecisionNumberInputSample />
 
                 <h2 id="time-picker">
                     <Link href="#time-picker">Time picker</Link>

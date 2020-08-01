@@ -23,7 +23,7 @@ export default class InitialValueWorkflowSample extends React.Component {
     }
 
     private updateForm: UpdateCallback = (updateType: UpdateType): void => {
-        console.log(updateType);
+        if (updateType === UpdateType.Initial) return;
         this.forceUpdate();
     };
 

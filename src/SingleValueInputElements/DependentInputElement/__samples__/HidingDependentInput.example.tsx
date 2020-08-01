@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { Checkbox, DefaultButton, Label, PrimaryButton, Stack } from 'office-ui-fabric-react';
-import { IDropdownInputOption, IDropdownInputProps, UpdateCallback } from '@try-at-software/input-elements';
-import { DependentInputElementInitializer } from '../DependentInputElementInitializer';
-import { DropdownInput } from '../../DropdownInputElement/DropdownInput';
-import { ISingleValueInputElement } from '../../ISingleValueInputElement';
-import { SingleValueInputElement } from '../../SingleValueInputElement';
+import {
+    DependentInputElementInitializer,
+    DropdownInput,
+    IDropdownInputOption,
+    IDropdownInputProps,
+    ISingleValueInputElement,
+    SingleValueInputElement,
+    UpdateCallback
+} from '@try-at-software/input-elements';
 
 export default class HidingDependentInputSample extends React.Component {
     private _principalInput: ISingleValueInputElement<string, IDropdownInputProps>;
