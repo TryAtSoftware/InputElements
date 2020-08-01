@@ -4,12 +4,14 @@ import CustomVisualizationSequentialDependenciesSample from '../SingleValueInput
 import DependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/DependentInput.example';
 import DropdownInputSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInput.example';
 import DropdownInputWithDefaultValueSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInputWithDefaultValue.example';
+import HidingDependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/HidingDependentInput.example';
 import HidingInputElementsSample from '../SingleValueInputElements/__samples__/HidingInputElement.example';
 import IdentityPickerSample from '../SingleValueInputElements/IdentityPickerInputElement/__samples__/IdentityPicker.example';
 import IdentityPickerWithInitialValueSample from '../SingleValueInputElements/IdentityPickerInputElement/__samples__/IdentityPickerWithInitialValue.example';
 import InitialValueWorkflowSample from '../SingleValueInputElements/__samples__/InitialValueWorkflow.example';
 import { Link } from 'office-ui-fabric-react';
 import ListInputElementSample from '../DynamicListInputElement/__samples__/ListInputElement.example';
+import LoadingDependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/LoadingDependentInput.example';
 import LoadingInputElementsSample from '../SingleValueInputElements/__samples__/LoadingInputElements.example';
 import MultipleDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/MultipleDependencies.example';
 import MultipleOptionsListInputElementSample from '../DynamicListInputElement/__samples__/MultipleOptionsListInputElement.example';
@@ -67,6 +69,8 @@ export default class App extends React.Component {
                 <MultipleDependenciesSample />
                 <SequentialDependenciesSample />
                 <CustomVisualizationSequentialDependenciesSample />
+                <LoadingDependentInputSample />
+                <HidingDependentInputSample />
 
                 <h2 id="dynamic-list-input-elements">
                     <Link href="#dynamic-list-input-elements">Dynamic list input elements</Link>

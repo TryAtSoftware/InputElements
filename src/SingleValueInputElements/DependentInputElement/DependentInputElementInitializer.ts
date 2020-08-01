@@ -21,18 +21,25 @@ export class DependentInputElementInitializer {
         principal.update = (updateType: UpdateType): void => {
             if (!!originalUpdateFunction) originalUpdateFunction(updateType);
 
-            dependent.resetValue();
-            if (!!principal.value === false) {
-                // If the falsy value is handled explicitly, execute that callback.
-                // In every other case, hide the dependent component.
-                if (!!handleFalsyPrincipalValue) handleFalsyPrincipalValue();
-                else if (dependent.isVisible) dependent.hide();
+            if (updateType === UpdateType.System) {
+                // Handle the system events - loading/ hiding an input element.
+                if (principal.isLoading || !principal.isVisible) dependent.hide();
+                else dependent.show();
             } else {
-                // Ensure that the dependent input element is visible.
-                if (!dependent.isVisible) dependent.show();
-                dependent.load((finish: () => void): void => {
-                    onPrincipalValueChanged(principal.value, finish);
-                });
+                dependent.resetValue();
+                if (!!principal.value === false) {
+                    // If the falsy value is handled explicitly, execute that callback.
+                    // In every other case, hide the dependent component.
+                    if (!!handleFalsyPrincipalValue) handleFalsyPrincipalValue();
+                    else if (dependent.isVisible) dependent.hide();
+                } else {
+                    // Ensure that the dependent input element is visible.
+                    if (!dependent.isVisible) dependent.show();
+
+                    dependent.load((finish: () => void): void => {
+                        onPrincipalValueChanged(principal.value, finish);
+                    });
+                }
             }
         };
 

@@ -75,7 +75,7 @@ export default class IdentityPickerWithInitialValueSample extends React.Componen
     private _listContainsPersona = (persona: IPersonaProps, personas: IPersonaProps[]): boolean => {
         if (!personas || !personas.length || personas.length === 0) return false;
 
-        return personas.filter((item) => item.text === persona.text).length > 0;
+        return personas.filter((item): boolean => item.text === persona.text).length > 0;
     };
 
     private _getTextFromItem = (item: IPersonaProps): string => {
