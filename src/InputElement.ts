@@ -34,7 +34,8 @@ export abstract class InputElement implements IInputElement {
     };
 
     protected updateInternally(updateType: UpdateType): void {
-        if (!this._isRendered) return;
+        // System events should not lead to re-render if the input element is never visualized.
+        if (!this._isRendered && updateType === UpdateType.System) return;
 
         this.update(updateType);
     }
