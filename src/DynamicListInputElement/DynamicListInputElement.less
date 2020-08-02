@@ -1,0 +1,33 @@
+div.tas-dynamic-list-input div.tas-dynamic-input-element {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: move;
+    padding: 5px;
+
+    .hidable {
+        visibility: hidden;
+    }
+
+    &:hover .hidable {
+        visibility: visible;
+    }
+
+    div.tas-move-gripper {
+        margin-right: 20px;
+    }
+
+    div.tas-input-element-wrapper {
+        flex: 1;
+    }
+
+    div.tas-menu-wrapper {
+        display: flex;
+    }
+}
+
+div.tas-dynamic-list-input div.tas-dynamic-input-element:hover {
+    .hidable {
+        visibility: visible;
+    }
+}

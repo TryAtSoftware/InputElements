@@ -1,0 +1,2 @@
+# We do not want es-lint to lint our bundle files.
+lib/

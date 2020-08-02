@@ -1,15 +1,8 @@
-export default interface ISingleValueInputElementConfiguration {
-    /**
-     * The label associated with the input element.
-     * It should not be too long and should give enough information for the end user.
-     */
-    label?: string;
+import { IInputElementConfiguration } from '../IInputElementConfiguration';
+import { ILoadingInputElementConfiguration } from '../ILoadingInputElementConfiguration';
+import { IValueComparator } from './Comparators/IValueComparator';
 
-    /**
-     * A class name that should be used while rendering the input element.
-     */
-    className?: string;
-
+export interface ISingleValueInputElementConfiguration<TValue> extends IInputElementConfiguration, ILoadingInputElementConfiguration {
     /**
      * A value indicating whether error messages will be rendered by the underlying input element itself.
      * If it is set to false, no error message will be rendered but the validation pipeline will not be changed at all.
@@ -23,20 +16,19 @@ export default interface ISingleValueInputElementConfiguration {
     renderRequiredIndicator?: boolean;
 
     /**
-     * A predefined rule indicating if the input element is required.
-     * If it is required and no value is provided, an error message should be rendered.
-     * If it is not required and no value is provided, no validation rules should be run and respectively no error message should be rendered.
-     * If it is not required but a value is provided, all validation rules should be executed and if any fails, an error message should be rendered.
-     */
-    isRequired: boolean;
-
-    /**
-     * A message that should be rendered instead of the default one whenever a required input element is empty.
-     */
-    requiredValidationMessage?: string;
-
-    /**
      * A value indicating whether the input element should be validated even if it is not required and empty.
      */
     executeAllValidations?: boolean;
+
+    /**
+     * A function that should be executed before every validation.
+     * If it returns false, no validation rule will be executed.
+     */
+    shouldExecuteValidation?: () => boolean;
+
+    /**
+     * An object used to override the default comparing mechanism for computing the `hasChanges` value.
+     * This may be useful when a single input element is used to provide multiple values. The `===` operator will not work well with array so it should be overridden.
+     */
+    comparator?: IValueComparator<TValue>;
 }

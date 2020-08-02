@@ -1,31 +1,26 @@
 import * as React from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
-import InputElement from '../InputElement';
-import ISingleValueInputElement from './ISingleValueInputElement';
-import ISingleValueInputElementConfiguration from './ISingleInputElementConfiguration';
-import ISingleValueInputElementProps from './ISingleValueInputElementProps';
-import { ValidationRule } from '../IInputElement';
+import { combineClasses } from '../Utilities/StylingHelper';
+import { ExtendedConfigurableInputElement } from '../ExtendedConfigurableInputElement';
+import { ISingleValueInputElement } from './ISingleValueInputElement';
+import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
+import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
+import { UpdateCallback } from '../IInputElement';
+import { ValidationRule } from '../IValueInputElement';
 
-export default class SingleValueInputElement<TValue, TComponentProps> extends InputElement
+export class SingleValueInputElement<TValue, TComponentProps>
+    extends ExtendedConfigurableInputElement<ISingleValueInputElementConfiguration<TValue>, TValue>
     implements ISingleValueInputElement<TValue, TComponentProps> {
-    private initialValue: TValue;
-
-    private valueIsSet = false;
-
-    private _isInitiallyValid = true;
-
     public constructor(
-        config: ISingleValueInputElementConfiguration,
+        config: ISingleValueInputElementConfiguration<TValue>,
         component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
         props: TComponentProps,
-        update: (isInitial?: boolean) => void,
+        update: UpdateCallback,
         ...validationRules: ValidationRule<TValue>[]
     ) {
-        super(update);
+        super(config, update);
 
-        this.configuration = config;
         this.componentToRender = component;
-        this._isInitiallyValid = !this.configuration?.isRequired;
         this.componentProps = props;
 
         this.validationRules = [];
@@ -35,47 +30,44 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
     }
 
     /** @inheritdoc */
-    public configuration: ISingleValueInputElementConfiguration;
+    protected setInternalValue(value: TValue): void {
+        this.value = value;
+        this.validate();
+    }
 
     /** @inheritdoc */
     public get hasChanges(): boolean {
-        return this.value !== this.initialValue;
+        return !!this.configuration?.comparator
+            ? !this.configuration.comparator.areEqual(this.value, this.initialValue)
+            : this.value !== this.initialValue;
     }
 
     /** @inheritdoc */
     public value: TValue;
 
     /** @inheritdoc */
-    public errorMessage: string;
-
-    /** @inheritdoc */
     public validationRules: ValidationRule<TValue>[];
 
     /** @inheritdoc */
     public get isValid(): boolean {
-        return this.valueIsSet ? !this.errorMessage : this._isInitiallyValid;
+        return (
+            ((!!this.configuration && !this.configuration.isRequired) || this._valueIsSet || this._initialValueIsSet) && !this.errorMessage
+        );
     }
 
-    /**
-     * @inheritdoc
-     */
-
+    /** @inheritdoc */
     public componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public componentProps: TComponentProps;
 
-    /**
-     * @inheritdoc
-     */
-    public render(): JSX.Element {
+    /** @inheritdoc */
+    protected renderComponent(): JSX.Element {
         return (
-            <div className={[this.configuration?.className, 'tas-input-element'].join(' ')}>
+            <div className={combineClasses('tas-input-element', this.configuration?.className)}>
                 <div className="tas-input-element-content">
                     {this.isLoading ? (
-                        <Spinner size={SpinnerSize.medium} />
+                        this.renderLoadingIndicator()
                     ) : (
                         <this.componentToRender
                             {...this.componentProps}
@@ -84,7 +76,7 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
                             isRequired={this.configuration?.renderRequiredIndicator && this.configuration?.isRequired}
                             errorMessage={this.configuration?.renderErrors && this.errorMessage}
                             onChange={(newValue: TValue): void => {
-                                this.setInternalValue(newValue);
+                                this.setValue(newValue);
                             }}
                         />
                     )}
@@ -94,24 +86,12 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
     }
 
     /** @inheritdoc */
-    public setInitialValue(value: TValue): void {
-        if (this.valueIsSet) return;
-
-        this.initialValue = value;
-
-        this.setInternalValue(value, true);
-    }
-
-    /** @inheritdoc */
-    public setValue(value: TValue): void {
-        this.setInternalValue(value, false);
-    }
-
-    /** @inheritdoc */
     public validate(): void {
+        if (!!this.configuration?.shouldExecuteValidation && this.configuration.shouldExecuteValidation() === false) return;
+
         let errorMessage = '';
 
-        if (this.configuration?.isRequired && !this.value) {
+        if (this.configuration?.isRequired && !!this.value === false) {
             // If a value is required but the input field is empty.
             errorMessage = this.configuration?.requiredValidationMessage || `The field is required`;
         } else if (this.configuration?.isRequired || this.value || this.configuration?.executeAllValidations) {
@@ -127,27 +107,13 @@ export default class SingleValueInputElement<TValue, TComponentProps> extends In
         this.errorMessage = errorMessage;
     }
 
-    /**
-     * A value indicating whether a spinner should be rendered or the input element itself.
-     */
-    protected isLoading = false;
-
-    /**
-     * A method used to set new value, validate it and update the form.
-     *
-     * @param value             The new value of the input element.
-     *
-     * @param isInitial         A value indicating if the initial value is being set.
-     */
-    protected setInternalValue(value: TValue, isInitial = false): void {
-        this.valueIsSet = !isInitial;
-        this.value = value;
-        this.validate();
-
-        this.update(isInitial);
-    }
-
     protected validateNonRequiredValue(): string {
         return null;
+    }
+
+    private renderLoadingIndicator(): JSX.Element {
+        if (!!this.configuration?.renderLoadingComponent) return this.configuration.renderLoadingComponent();
+
+        return <Spinner size={SpinnerSize.medium} />;
     }
 }
