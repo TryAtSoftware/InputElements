@@ -1,10 +1,10 @@
 trigger:
-    - dev
-    - staging
-    - master
+  - dev
+  - staging
+  - master
 
 pool:
-    vmImage: 'windows-latest'
+  vmImage: 'windows-latest'
 
 steps:
   - task: NodeTool@0
@@ -20,6 +20,13 @@ steps:
         npm run lint
         npm run build
     displayName: 'Build the package'
+
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      scripts: |
+        npm run link-dev-package
+    displayName: 'Link the package'
 
   - task: Bash@3
     inputs:
