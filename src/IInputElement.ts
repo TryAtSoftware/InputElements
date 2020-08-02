@@ -1,8 +1,15 @@
+import { UpdateType } from './UpdateType';
+
 export interface IInputElement {
     /**
      * A boolean indicating if the entered value is valid (all validation rules pass).
      */
     isValid: boolean;
+
+    /**
+     * The message of the first validation error that occurred if any.
+     */
+    errorMessage: string;
 
     /**
      * Gets or sets a value indicating whether the input element has any changes made.
@@ -18,15 +25,8 @@ export interface IInputElement {
      * This method should be called every time after the input element has changed.
      * It should not be implemented into the inheriting classes, but instead should be passed as a parameter (into the constructor would be best).
      * You can use it to refresh your form or apply some custom update logic.
-     *
-     * @param isInitial                 A value indicating if the update was caused by setting the initial value of the input element.
      */
-    update(isInitial?: boolean): void;
+    update: UpdateCallback;
 }
 
-export interface IValueInputElement<TValue> extends IInputElement {
-    /**
-     * The value entered into the input element.
-     */
-    value: TValue;
-}
+export type UpdateCallback = (updateType: UpdateType) => void;
