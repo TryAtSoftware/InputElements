@@ -24,7 +24,7 @@ steps:
   - task: Bash@3
     inputs:
       targetType: 'inline'
-      scripts: |
+      script: |
         npm run link-dev-package
     displayName: 'Link the package'
 
