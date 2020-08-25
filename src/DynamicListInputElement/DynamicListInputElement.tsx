@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { IDynamicListInputElement, IDynamicValueChange } from './IDynamicListInputElement';
+import { DragDropContext, Draggable, DraggableProvided, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
+import { IDynamicListInputElement, IDynamicValueChange, InternalDynamicInput } from './IDynamicListInputElement';
 import { combineClasses } from '../Utilities/StylingHelper';
 import { DynamicListMenu } from './Menu/DynamicListMenu';
 import { ExtendedConfigurableInputElement } from '../ExtendedConfigurableInputElement';
@@ -9,12 +9,12 @@ import { IDynamicListMenuOption } from './Menu/IDynamicListMenuOption';
 import { ISingleValueInputElement } from '../SingleValueInputElements/ISingleValueInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { UpdateType } from '../UpdateType';
-import { ValidationRule } from '../IValueInputElement';
+import { ValidationRule } from 'src/IValueInputElement';
 import './DynamicListInputElement.less';
 
 export interface IInputInformation<TValue> {
     uniqueId: number;
-    input: ISingleValueInputElement<TValue>;
+    input: InternalDynamicInput<TValue>;
 }
 
 export class DynamicListInputElement<TValue>
@@ -55,8 +55,8 @@ export class DynamicListInputElement<TValue>
     public inputOptions: IDynamicListMenuOption<TValue>[];
 
     /** @inheritdoc */
-    public get inputs(): ISingleValueInputElement<TValue>[] {
-        return this.filterInputs().map((i): ISingleValueInputElement<TValue> => i.input);
+    public get inputs(): InternalDynamicInput<TValue>[] {
+        return this.filterInputs().map((i): InternalDynamicInput<TValue> => i.input);
     }
 
     /** @inheritdoc */
@@ -78,7 +78,7 @@ export class DynamicListInputElement<TValue>
             <div className={combineClasses('tas-dynamic-list-input', this.configuration?.className)}>
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="default-inputs-list">
-                        {(provided): React.ReactElement => (
+                        {(provided: DroppableProvided): React.ReactElement => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
                                 {this.renderInputsList()}
                                 {provided.placeholder}
@@ -99,7 +99,7 @@ export class DynamicListInputElement<TValue>
                     (i, index): JSX.Element => {
                         return (
                             <Draggable key={i.uniqueId} draggableId={i.uniqueId.toString()} index={index}>
-                                {(provided): React.ReactElement => (
+                                {(provided: DraggableProvided): React.ReactElement => (
                                     <div
                                         className="tas-dynamic-input-element"
                                         ref={provided.innerRef}
@@ -117,7 +117,7 @@ export class DynamicListInputElement<TValue>
         );
     }
 
-    private renderDynamicInput(input: ISingleValueInputElement<TValue>, index: number): JSX.Element {
+    private renderDynamicInput(input: InternalDynamicInput<TValue>, index: number): JSX.Element {
         if (!input || index < 0) return null;
 
         return (
@@ -193,7 +193,7 @@ export class DynamicListInputElement<TValue>
         this._inputs.splice(endIndex, 0, removed);
     }
 
-    private convert(input: ISingleValueInputElement<TValue>): IInputInformation<TValue> {
+    private convert(input: InternalDynamicInput<TValue>): IInputInformation<TValue> {
         if (!input) return null;
 
         return {

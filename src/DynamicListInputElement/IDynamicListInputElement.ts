@@ -4,7 +4,6 @@ import { IDynamicListInputElementConfiguration } from './IDynamicListInputElemen
 import { IDynamicListMenuOption } from './Menu/IDynamicListMenuOption';
 import { IHidingInputElement } from '../IHidingInputElement';
 import { ILoadingInputElement } from '../ILoadingInputElement';
-import { ISingleValueInputElement } from '../SingleValueInputElements/ISingleValueInputElement';
 import { IValueInputElement } from '../IValueInputElement';
 
 export interface IDynamicListInputElement<TValue>
@@ -14,10 +13,12 @@ export interface IDynamicListInputElement<TValue>
         IHidingInputElement,
         ILoadingInputElement {
     inputOptions: IDynamicListMenuOption<TValue>[];
-    inputs: ISingleValueInputElement<TValue>[];
+    inputs: InternalDynamicInput<TValue>[];
 }
 
 export interface IDynamicValueChange<TValue> {
     value: TValue;
-    inputCreationCallback: () => ISingleValueInputElement<TValue>;
+    inputCreationCallback: () => InternalDynamicInput<TValue>;
 }
+
+export type InternalDynamicInput<TValue> = IValueInputElement<TValue> & IChangingInputElement<TValue>;
