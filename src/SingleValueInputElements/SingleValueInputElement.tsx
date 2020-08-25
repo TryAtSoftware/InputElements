@@ -91,7 +91,7 @@ export class SingleValueInputElement<TValue, TComponentProps>
 
         let errorMessage = '';
 
-        if (this.configuration?.isRequired && !!this.value === false) {
+        if (this.configuration?.isRequired && !this.valueIsValid()) {
             // If a value is required but the input field is empty.
             errorMessage = this.configuration?.requiredValidationMessage || `The field is required`;
         } else if (this.configuration?.isRequired || this.value || this.configuration?.executeAllValidations) {
@@ -106,6 +106,12 @@ export class SingleValueInputElement<TValue, TComponentProps>
 
         this.errorMessage = errorMessage;
     }
+
+    private valueIsValid = (): boolean => {
+        if (!!this.configuration?.comparator) return this.configuration.comparator.isValid(this.value);
+
+        return !!this.value;
+    };
 
     protected validateNonRequiredValue(): string {
         return null;

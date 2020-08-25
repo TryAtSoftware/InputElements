@@ -13,4 +13,9 @@ export class ArrayComparator<T> implements IValueComparator<T[]> {
 
         return true;
     }
+
+    /** @inheritdoc */
+    public isValid(value: T[]): boolean {
+        return !!value && value.length > 0;
+    }
 }
