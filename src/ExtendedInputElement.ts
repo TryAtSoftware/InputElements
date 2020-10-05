@@ -28,7 +28,7 @@ export abstract class ExtendedInputElement<TChangeValue> extends InputElement
         this._initialValueIsSet = true;
         this.initialValue = value;
 
-        this.setInternalValue(value, false);
+        this.setInternalValue(value, true);
         this.updateInternally(UpdateType.Initial);
     }
 
