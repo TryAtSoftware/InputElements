@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
+import { Label, MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
 import { INumberInputProps } from './INumberInputProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
-import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
 
 export class NumberInput extends React.Component<ISingleValueInputElementProps<number> & INumberInputProps> {
     public render(): JSX.Element {
@@ -10,14 +9,13 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
 
         return (
             <>
+                {!!this.props.label && <Label required={this.props.isRequired}>{this.props.label}</Label>}
                 <SpinButton
                     inputProps={{
                         autoFocus: this.props.autoFocus,
                         placeholder: this.props.placeholder,
                         disabled: this.props.isDisabled
                     }}
-                    label={this.props.label}
-                    labelPosition={this.getLabelPosition()}
                     value={this.getValue(this.props.value)}
                     onValidate={(newValue: string): void => {
                         this.processValue(newValue);
@@ -47,19 +45,6 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
 
         const stringifiedValue = value.toFixed(this.getPrecision());
         return !!this.props.suffix ? stringifiedValue + ' ' + this.props.suffix : stringifiedValue.toString();
-    }
-
-    private getLabelPosition(): Position {
-        switch (this.props?.labelPosition) {
-            case 'bottom':
-                return Position.bottom;
-            case 'left':
-                return Position.start;
-            case 'right':
-                return Position.end;
-            default:
-                return Position.top;
-        }
     }
 
     private removeSuffixFromNumber(value: string): number {

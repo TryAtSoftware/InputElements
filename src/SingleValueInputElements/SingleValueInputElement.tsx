@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
-import { combineClasses } from '../Utilities/StylingHelper';
+import { combineClasses } from '../Utilities';
 import { ExtendedConfigurableInputElement } from '../ExtendedConfigurableInputElement';
 import { ISingleValueInputElement } from './ISingleValueInputElement';
 import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';

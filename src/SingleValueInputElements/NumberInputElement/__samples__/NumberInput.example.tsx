@@ -8,11 +8,8 @@ export default class NumberInputSample extends React.Component {
     public constructor(props: unknown) {
         super(props);
 
-        const options: string[] = [];
-        for (let i = 0; i < 10; i++) options.push(i.toString());
-
         this._numberInput = new SingleValueInputElement<number, INumberInputProps>(
-            { isRequired: true, label: 'Basic numeric input (required, without error handling)' },
+            { isRequired: true, renderRequiredIndicator: true, label: 'Basic numeric input (required, without error handling)' },
             NumberInput,
             {
                 placeholder: 'When you enter some number, the button will become enabled.'
