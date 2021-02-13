@@ -9,7 +9,7 @@ import { IDynamicListMenuOption } from './Menu/IDynamicListMenuOption';
 import { ISingleValueInputElement } from '../SingleValueInputElements/ISingleValueInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { UpdateType } from '../UpdateType';
-import { ValidationRule } from 'src/IValueInputElement';
+import { ValidationRule } from '../IValueInputElement';
 import './DynamicListInputElement.less';
 
 export interface IInputInformation<TValue> {
