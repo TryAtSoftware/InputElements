@@ -2,15 +2,19 @@ import * as React from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import { combineClasses } from '../Utilities';
 import { ExtendedConfigurableInputElement } from '../ExtendedConfigurableInputElement';
+import { InputElementPresentationType } from './IInputElementPresentation';
 import { ISingleValueInputElement } from './ISingleValueInputElement';
 import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
 import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
+import { withCommonInputBehavior } from './InternalPresentationComponents/InputElementPresentationWrapper';
 
 export class SingleValueInputElement<TValue, TComponentProps>
     extends ExtendedConfigurableInputElement<ISingleValueInputElementConfiguration<TValue>, TValue>
     implements ISingleValueInputElement<TValue, TComponentProps> {
+    private _componentRef: React.RefObject<InputElementPresentationType<TValue, TComponentProps>>;
+
     public constructor(
         config: ISingleValueInputElementConfiguration<TValue>,
         component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
@@ -20,7 +24,14 @@ export class SingleValueInputElement<TValue, TComponentProps>
     ) {
         super(config, update);
 
-        this.componentToRender = component;
+        this._componentRef = React.createRef();
+        this.componentToRender = withCommonInputBehavior(component, {
+            renderLoadingIndicator:
+                config?.renderLoadingComponent ??
+                ((): JSX.Element => {
+                    return <Spinner size={SpinnerSize.medium} />;
+                })
+        });
         this.componentProps = props;
 
         this.validationRules = [];
@@ -32,6 +43,8 @@ export class SingleValueInputElement<TValue, TComponentProps>
     /** @inheritdoc */
     protected setInternalValue(value: TValue): void {
         this.value = value;
+
+        this._componentRef.current.update(value);
         this.validate();
     }
 
@@ -66,20 +79,15 @@ export class SingleValueInputElement<TValue, TComponentProps>
         return (
             <div className={combineClasses('tas-input-element', this.configuration?.className)}>
                 <div className="tas-input-element-content">
-                    {this.isLoading ? (
-                        this.renderLoadingIndicator()
-                    ) : (
-                        <this.componentToRender
-                            {...this.componentProps}
-                            label={this.configuration?.label}
-                            value={this.value}
-                            isRequired={this.configuration?.renderRequiredIndicator && this.configuration?.isRequired}
-                            errorMessage={this.configuration?.renderErrors && this.errorMessage}
-                            onChange={(newValue: TValue): void => {
-                                this.setValue(newValue);
-                            }}
-                        />
-                    )}
+                    <this.componentToRender
+                        {...this.componentProps}
+                        label={this.configuration?.label}
+                        value={this.value}
+                        isRequired={this.configuration?.renderRequiredIndicator && this.configuration?.isRequired}
+                        errorMessage={this.configuration?.renderErrors && this.errorMessage}
+                        onChange={(newValue: TValue): void => this.setValue(newValue)}
+                        ref={this._componentRef}
+                    />
                 </div>
             </div>
         );
@@ -115,11 +123,5 @@ export class SingleValueInputElement<TValue, TComponentProps>
 
     protected validateNonRequiredValue(): string {
         return null;
-    }
-
-    private renderLoadingIndicator(): JSX.Element {
-        if (!!this.configuration?.renderLoadingComponent) return this.configuration.renderLoadingComponent();
-
-        return <Spinner size={SpinnerSize.medium} />;
     }
 }

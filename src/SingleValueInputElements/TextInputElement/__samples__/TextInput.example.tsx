@@ -1,9 +1,21 @@
 import * as React from 'react';
-import { ITextInputProps, IValueInputElement, SingleValueInputElement, TextInput } from '@try-at-software/input-elements';
+import { IChangingInputElement } from '../../../IChangingInputElement';
+import { ITextInputProps } from '../ITextInputProps';
+import { IValueInputElement } from '../../../IValueInputElement';
 import { PrimaryButton } from 'office-ui-fabric-react';
+import { SingleValueInputElement } from '../../SingleValueInputElement';
+import { TextInput } from '../TextInput';
 
-export default class TextInputSample extends React.Component {
-    private _textInput: IValueInputElement<string>;
+interface ITextInputSampleState {
+    isValid: boolean;
+}
+
+export default class TextInputSample extends React.Component<unknown, ITextInputSampleState> {
+    private _textInput: IValueInputElement<string> & IChangingInputElement<string>;
+
+    public state: ITextInputSampleState = {
+        isValid: false
+    };
 
     public constructor(props: unknown) {
         super(props);
@@ -12,7 +24,9 @@ export default class TextInputSample extends React.Component {
             { isRequired: true, label: 'Basic text input without validation (required, without error handling)' },
             TextInput,
             { placeholder: 'When you enter something, the button will become enabled.' },
-            (): void => this.forceUpdate()
+            (): void => {
+                if (this.state.isValid !== this._textInput.isValid) this.setState({ isValid: this._textInput.isValid });
+            }
         );
     }
 
