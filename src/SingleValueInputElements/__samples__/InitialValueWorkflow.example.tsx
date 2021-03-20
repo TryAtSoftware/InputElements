@@ -1,8 +1,13 @@
 import * as React from 'react';
-import { IChangingInputElement, ITextInputProps, SingleValueInputElement, TextInput } from '@try-at-software/input-elements';
+import {
+    IChangingInputElement,
+    ITextInputProps,
+    IValueInputElement,
+    SingleValueInputElement,
+    TextInput,
+    UpdateCallback
+} from '@try-at-software/input-elements';
 import { Checkbox } from 'office-ui-fabric-react';
-import { IValueInputElement } from '../../IValueInputElement';
-import { UpdateCallback } from '../../IInputElement';
 
 interface IInitialValueWorkflowSampleState {
     isValid: boolean;

@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { IInputElement, UpdateCallback } from '../../IInputElement';
-import { ITextInputProps, SingleValueInputElement, TextInput } from '@try-at-software/input-elements';
+import { IInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
 import { Checkbox } from 'office-ui-fabric-react';
 
-interface IBasicWorkflowSampleStateState {
+interface IBasicWorkflowSampleState {
     isValid: boolean;
     hasChanges: boolean;
 }
 
-export default class BasicWorkflowSample extends React.Component<unknown, IBasicWorkflowSampleStateState> {
+export default class BasicWorkflowSample extends React.Component<unknown, IBasicWorkflowSampleState> {
     private _inputElement: IInputElement;
 
     public constructor(props: unknown) {

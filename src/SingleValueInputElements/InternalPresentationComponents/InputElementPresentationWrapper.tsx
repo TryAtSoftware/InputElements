@@ -6,6 +6,7 @@ import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps'
 interface ICommonInputElementState<TValue> {
     value: TValue;
     isLoading: boolean;
+    isVisible: boolean;
 }
 
 export interface ICommonInputBehaviorConfiguration {
@@ -23,6 +24,7 @@ export function withCommonInputBehavior<TValue, TProps extends ISingleValueInput
 
             this.state = {
                 isLoading: false,
+                isVisible: true,
                 value: props.value
             };
         }
@@ -39,12 +41,24 @@ export function withCommonInputBehavior<TValue, TProps extends ISingleValueInput
             this.setState({ isLoading: false });
         };
 
+        public hide = (): void => {
+            if (!this.state.isVisible) return;
+
+            this.setState({ isVisible: false });
+        };
+
+        public show = (): void => {
+            if (this.state.isVisible) return;
+
+            this.setState({ isVisible: true });
+        };
+
         public update = (newValue: TValue): void => {
             this.setState({ value: newValue });
         };
 
         public render = (): JSX.Element => {
-            if (!InternalComponent) return null;
+            if (!InternalComponent || !this.state.isVisible) return null;
 
             if (this.state.isLoading) {
                 if (!configuration?.renderLoadingIndicator) return null;

@@ -1,22 +1,51 @@
 import * as React from 'react';
-import { INumberInputProps, IValueInputElement, NumberInput, SingleValueInputElement } from '@try-at-software/input-elements';
+import {
+    INumberInputProps,
+    IValueInputElement,
+    NumberInput,
+    SingleValueInputElement,
+    UpdateCallback
+} from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
 
-export default class NumberInputSample extends React.Component {
+interface INumberInputSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class NumberInputSample extends React.Component<unknown, INumberInputSampleState> {
     private _numberInput: IValueInputElement<number>;
 
     public constructor(props: unknown) {
         super(props);
 
         this._numberInput = new SingleValueInputElement<number, INumberInputProps>(
-            { isRequired: true, renderRequiredIndicator: true, label: 'Basic numeric input (required, without error handling)' },
+            {
+                isRequired: true,
+                renderRequiredIndicator: true,
+                label: 'Basic numeric input (required, without error handling)'
+            },
             NumberInput,
             {
                 placeholder: 'When you enter some number, the button will become enabled.'
             },
-            (): void => this.forceUpdate()
+            this.updateForm
         );
+
+        this.state = {
+            isValid: this._numberInput.isValid,
+            hasChanges: this._numberInput.hasChanges
+        };
     }
+
+    private updateForm: UpdateCallback = (): void => {
+        if (this._numberInput.isValid === this.state.isValid && this._numberInput.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: this._numberInput.isValid,
+            hasChanges: this._numberInput.hasChanges
+        });
+    };
 
     public render(): JSX.Element {
         return (
@@ -24,7 +53,7 @@ export default class NumberInputSample extends React.Component {
                 {this._numberInput.render()}
                 <PrimaryButton
                     text="Submit"
-                    disabled={!this._numberInput.isValid || !this._numberInput.hasChanges}
+                    disabled={!this.state.isValid || !this.state.hasChanges}
                     onClick={(): void => console.log(this._numberInput.value)}
                 />
             </div>

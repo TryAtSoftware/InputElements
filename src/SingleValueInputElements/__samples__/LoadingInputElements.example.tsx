@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { Checkbox, DefaultButton, Stack } from 'office-ui-fabric-react';
-import { ITextInputProps, TextInput } from '../TextInputElement';
-import { ILoadingInputElement } from '../../ILoadingInputElement';
-import { SingleValueInputElement } from '../SingleValueInputElement';
-import { UpdateCallback } from '../../IInputElement';
+import { ILoadingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
 
 interface ILoadingInputElementSampleState {
     isValid: boolean;
@@ -33,6 +30,12 @@ export default class LoadingInputElementsSample extends React.Component<unknown,
             },
             this.updateForm
         );
+
+        this.state = {
+            isValid: this._inputElement.isValid,
+            hasChanges: this._inputElement.hasChanges,
+            isLoading: this._inputElement.isLoading
+        };
     }
 
     private updateForm: UpdateCallback = (): void => {

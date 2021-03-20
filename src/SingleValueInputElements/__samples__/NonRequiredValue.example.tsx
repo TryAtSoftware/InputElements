@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { IInputElement, UpdateCallback } from '../../IInputElement';
-import { ITextInputProps, SingleValueInputElement, TextInput } from '@try-at-software/input-elements';
+import { IInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
 import { Checkbox } from 'office-ui-fabric-react';
 
 interface INonRequiredValueSample {

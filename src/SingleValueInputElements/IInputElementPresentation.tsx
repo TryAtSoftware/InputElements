@@ -3,6 +3,8 @@ import * as React from 'react';
 export interface IInputElementPresentation<TValue> {
     startLoading(): void;
     stopLoading(): void;
+    hide(): void;
+    show(): void;
     update(newValue: TValue): void;
 }
 

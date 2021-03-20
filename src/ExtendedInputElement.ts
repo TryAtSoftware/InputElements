@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { IChangingInputElement } from './IChangingInputElement';
 import { IConfigurableInputElement } from './IConfigurableInputElement';
 import { IHidingInputElement } from './IHidingInputElement';
@@ -6,6 +7,7 @@ import { ILoadingInputElement } from './ILoadingInputElement';
 import { ILoadingInputElementConfiguration } from './ILoadingInputElementConfiguration';
 import { InputElement } from './InputElement';
 import { UpdateCallback } from './IInputElement';
+import { IInputElementPresentation } from './SingleValueInputElements/IInputElementPresentation';
 
 export abstract class ExtendedInputElement<TValue, TConfiguration extends IInputElementConfiguration & ILoadingInputElementConfiguration>
     extends InputElement
@@ -13,6 +15,7 @@ export abstract class ExtendedInputElement<TValue, TConfiguration extends IInput
     protected initialValue: TValue;
     protected _valueIsSet = false;
     protected _initialValueIsSet = false;
+    protected _componentRef: React.RefObject<IInputElementPresentation<TValue>>;
 
     private _isVisible = true;
     private _isLoading = false;
@@ -20,6 +23,7 @@ export abstract class ExtendedInputElement<TValue, TConfiguration extends IInput
     protected constructor(configuration: TConfiguration, update: UpdateCallback) {
         super(update);
 
+        this._componentRef = React.createRef();
         this.configuration = configuration;
     }
 
@@ -62,13 +66,19 @@ export abstract class ExtendedInputElement<TValue, TConfiguration extends IInput
 
     /** @inheritdoc */
     public hide(): void {
+        if (!this._componentRef?.current) return;
+
         this._isVisible = false;
+        this._componentRef.current.hide();
         this.updateInternally();
     }
 
     /** @inheritdoc */
     public show(): void {
+        if (!this._componentRef?.current) return;
+
         this._isVisible = true;
+        this._componentRef.current.show();
         this.updateInternally();
     }
 
@@ -86,16 +96,18 @@ export abstract class ExtendedInputElement<TValue, TConfiguration extends IInput
 
     /** @inheritdoc */
     public load(action: (doneCallback: () => void) => void): void {
-        if (!action) return;
+        if (!this._componentRef?.current || !action) return;
 
         const callback = (): void => {
             this._isLoading = false;
+            this._componentRef.current.stopLoading();
             this.updateInternally();
         };
 
         try {
             // If a new value is provided, we should execute asynchronously the `onDependentValueChanged` callback to retrieve the requested selectable models.
             this._isLoading = true;
+            this._componentRef.current.startLoading();
             this.updateInternally();
 
             action(callback);

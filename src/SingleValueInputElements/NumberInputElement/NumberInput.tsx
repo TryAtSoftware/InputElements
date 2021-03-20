@@ -1,83 +1,115 @@
+import { MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
+import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
 import * as React from 'react';
-import { Label, MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
-import { INumberInputProps } from './INumberInputProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
+import { INumberInputProps } from './INumberInputProps';
 
-export class NumberInput extends React.Component<ISingleValueInputElementProps<number> & INumberInputProps> {
+interface INumberInputState {
+    intermediateValue: string;
+    customWarning: string;
+}
+
+const delimiter = '.';
+
+export class NumberInput extends React.Component<ISingleValueInputElementProps<number> & INumberInputProps, INumberInputState> {
+    public state: INumberInputState = {
+        intermediateValue: this.props.value?.toString(),
+        customWarning: ''
+    };
+
     public render(): JSX.Element {
         if (!this.props) return null;
 
         return (
             <>
-                {!!this.props.label && <Label required={this.props.isRequired}>{this.props.label}</Label>}
+                {/* For some reason the Fluent-UI styles for the placeholders in every other component differ from the SpinButton defaults so we should override them'. */}
                 <SpinButton
+                    styles={{
+                        input: {
+                            fontFamily: '"Segoe UI", "Segoe UI Web (West European)"',
+                            fontSize: 14,
+                            fontWeight: 400
+                        }
+                    }}
                     inputProps={{
                         autoFocus: this.props.autoFocus,
                         placeholder: this.props.placeholder,
                         disabled: this.props.isDisabled
                     }}
-                    value={this.getValue(this.props.value)}
-                    onValidate={(newValue: string): void => {
-                        this.processValue(newValue);
+                    label={this.props.label}
+                    value={this.state.intermediateValue ?? ''}
+                    labelPosition={Position.top}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                        const value = NumberInput.normalizeData(event?.target?.value);
+                        const changeResult = this.handleUserInput(value);
+
+                        this.setState({ intermediateValue: value, customWarning: changeResult.warning });
+                        this.props.onChange(changeResult.newValue);
                     }}
-                    onIncrement={(value: string): string => {
-                        let numericValue = this.removeSuffixFromNumber(value);
+                    // We should obligatorily define this function, because there will be a problem with incrementing/decrementing a newly typed value.
+                    onValidate={(): string => this.state.intermediateValue}
+                    onIncrement={(value: string): void => {
+                        let numericValue = this.getNumericValue(value);
                         numericValue += this.getStep();
 
-                        this.props.onChange(numericValue);
-                        return this.getValue(numericValue);
+                        const changeResult = this.ensureValueConsistency(numericValue);
+                        this.setState({ customWarning: changeResult.warning, intermediateValue: numericValue.toString() });
+                        this.props.onChange(changeResult.newValue);
                     }}
-                    onDecrement={(value: string): string => {
-                        let numericValue = this.removeSuffixFromNumber(value);
+                    onDecrement={(value: string): void => {
+                        let numericValue = this.getNumericValue(value);
                         numericValue -= this.getStep();
 
-                        this.props.onChange(numericValue);
-                        return this.getValue(numericValue);
+                        const changeResult = this.ensureValueConsistency(numericValue);
+                        this.setState({ customWarning: changeResult.warning, intermediateValue: numericValue.toString() });
+                        this.props.onChange(changeResult.newValue);
                     }}
                 />
                 {!!this.props?.errorMessage && <MessageBar messageBarType={MessageBarType.warning}>{this.props.errorMessage}</MessageBar>}
+                {!!this.state.customWarning && <MessageBar messageBarType={MessageBarType.warning}>{this.state.customWarning}</MessageBar>}
             </>
         );
     }
 
-    private getValue(value: number): string {
-        if (!!value === false) value = 0;
+    private handleUserInput(value: string): { warning: string; newValue: number } {
+        if (!value || isNaN(Number(value))) return { warning: '', newValue: undefined };
 
-        const stringifiedValue = value.toFixed(this.getPrecision());
-        return !!this.props.suffix ? stringifiedValue + ' ' + this.props.suffix : stringifiedValue.toString();
+        if (value.includes(delimiter)) {
+            if (!this.props.handleDecimalValues) return { warning: 'Decimal values are not allowed', newValue: undefined };
+
+            const maxPrecision = this.getPrecision();
+            if (value.substr(value.indexOf(delimiter) + 1).length > maxPrecision)
+                return { warning: `Maximum ${maxPrecision} decimal places are supported.`, newValue: undefined };
+        }
+
+        return this.ensureValueConsistency(this.getNumericValue(value));
     }
 
-    private removeSuffixFromNumber(value: string): number {
-        const numberValue = this.getNumericValue(this.removeSuffix(value));
-        return Number.isNaN(numberValue) ? 0 : numberValue;
-    }
+    private ensureValueConsistency(value: number): { warning: string; newValue: number } {
+        let customWarning: string = null;
 
-    private removeSuffix(value: string): string {
-        if (!!value === false) value = '0';
+        const maxValue = this.getMaxValue();
+        const minValue = this.getMinValue();
+        if (value > maxValue) customWarning = `The maximum value is ${maxValue}`;
+        else if (value < minValue) customWarning = `The minimum value is ${minValue}`;
 
-        if (!!this.props.suffix === false || value.length <= this.props.suffix.length) return value;
-
-        const valueSuffix = value.substr(value.length - this.props.suffix.length);
-        if (valueSuffix != this.props.suffix) return value;
-
-        return value.substr(0, value.length - this.props.suffix.length);
+        return { warning: customWarning, newValue: !!customWarning ? undefined : value };
     }
 
     private getNumericValue(value: string): number {
-        const numericValue = this.props.handleDecimalValues ? Number.parseFloat(value.replace(',', '.')) : Number.parseInt(value);
+        let normalizedValue = NumberInput.normalizeData(value);
 
-        const maxValue = this.getMaxValue();
-        if (numericValue > maxValue) return maxValue;
+        const delimiterIndex = normalizedValue.indexOf(delimiter);
+        if (delimiterIndex !== -1) {
+            const precision = this.getPrecision();
+            const decimalCharactersCount = precision === 0 ? 0 : 1 + precision;
+            normalizedValue = normalizedValue.substr(0, delimiterIndex + decimalCharactersCount);
+        }
 
-        const minValue = this.getMinValue();
-        if (numericValue < minValue) return minValue;
+        const number = this.props.handleDecimalValues ? Number.parseFloat(normalizedValue) : Number.parseInt(normalizedValue);
+        if (Number.isNaN(number)) return 0;
 
-        return numericValue;
-    }
-
-    private processValue(value: string): void {
-        const numericValue = this.removeSuffixFromNumber(value);
-        this.props.onChange(numericValue);
+        return number;
     }
 
     private getMaxValue(): number {
@@ -105,5 +137,9 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
         else if (precision > maxPrecision) precision = maxPrecision;
 
         return precision;
+    }
+
+    private static normalizeData(value: string): string {
+        return value?.replace(',', delimiter);
     }
 }

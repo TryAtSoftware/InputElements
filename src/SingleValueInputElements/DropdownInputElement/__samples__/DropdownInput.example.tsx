@@ -4,11 +4,17 @@ import {
     IDropdownInputOption,
     IDropdownInputProps,
     IValueInputElement,
-    SingleValueInputElement
+    SingleValueInputElement,
+    UpdateCallback
 } from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
 
-export default class DropdownInputSample extends React.Component {
+interface IDropdownInputSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class DropdownInputSample extends React.Component<unknown, IDropdownInputSampleState> {
     private _dropdownInput: IValueInputElement<string>;
 
     public constructor(props: unknown) {
@@ -31,9 +37,23 @@ export default class DropdownInputSample extends React.Component {
                 ),
                 placeholder: 'When you change the value, the button will become enabled and this message will disappear.'
             },
-            (): void => this.forceUpdate()
+            this.updateForm
         );
+
+        this.state = {
+            isValid: this._dropdownInput.isValid,
+            hasChanges: this._dropdownInput.hasChanges
+        };
     }
+
+    private updateForm: UpdateCallback = (): void => {
+        if (this._dropdownInput.isValid === this.state.isValid && this._dropdownInput.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: this._dropdownInput.isValid,
+            hasChanges: this._dropdownInput.hasChanges
+        });
+    };
 
     public render(): JSX.Element {
         return (
@@ -41,7 +61,7 @@ export default class DropdownInputSample extends React.Component {
                 {this._dropdownInput.render()}
                 <PrimaryButton
                     text="Submit"
-                    disabled={!this._dropdownInput.isValid || !this._dropdownInput.hasChanges}
+                    disabled={!this.state.isValid || !this.state.hasChanges}
                     onClick={(): void => console.log(this._dropdownInput.value)}
                 />
             </div>

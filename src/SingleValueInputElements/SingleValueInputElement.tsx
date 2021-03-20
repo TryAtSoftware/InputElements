@@ -4,7 +4,6 @@ import { ExtendedInputElement } from '../ExtendedInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
 import { combineClasses } from '../Utilities';
-import { InputElementPresentationType } from './IInputElementPresentation';
 import { withCommonInputBehavior } from './InternalPresentationComponents/InputElementPresentationWrapper';
 import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
 import { ISingleValueInputElement } from './ISingleValueInputElement';
@@ -13,8 +12,6 @@ import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 export class SingleValueInputElement<TValue, TComponentProps>
     extends ExtendedInputElement<TValue, ISingleValueInputElementConfiguration<TValue>>
     implements ISingleValueInputElement<TValue, TComponentProps> {
-    private _componentRef: React.RefObject<InputElementPresentationType<TValue, TComponentProps>>;
-
     public constructor(
         config: ISingleValueInputElementConfiguration<TValue>,
         component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
@@ -24,7 +21,6 @@ export class SingleValueInputElement<TValue, TComponentProps>
     ) {
         super(config, update);
 
-        this._componentRef = React.createRef();
         this.componentToRender = withCommonInputBehavior(component, {
             renderLoadingIndicator:
                 config?.renderLoadingComponent ??
