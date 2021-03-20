@@ -1,5 +1,3 @@
-import { UpdateType } from './UpdateType';
-
 export interface IInputElement {
     /**
      * A boolean indicating if the entered value is valid (all validation rules pass).
@@ -29,4 +27,4 @@ export interface IInputElement {
     update: UpdateCallback;
 }
 
-export type UpdateCallback = (updateType: UpdateType) => void;
+export type UpdateCallback = () => void;

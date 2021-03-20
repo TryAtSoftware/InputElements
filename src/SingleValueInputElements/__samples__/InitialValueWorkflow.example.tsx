@@ -1,10 +1,15 @@
 import * as React from 'react';
-import { IChangingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateType } from '@try-at-software/input-elements';
+import { IChangingInputElement, ITextInputProps, SingleValueInputElement, TextInput } from '@try-at-software/input-elements';
 import { Checkbox } from 'office-ui-fabric-react';
 import { IValueInputElement } from '../../IValueInputElement';
 import { UpdateCallback } from '../../IInputElement';
 
-export default class InitialValueWorkflowSample extends React.Component {
+interface IInitialValueWorkflowSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class InitialValueWorkflowSample extends React.Component<unknown, IInitialValueWorkflowSampleState> {
     private _inputElement: IValueInputElement<string> & IChangingInputElement<string>;
 
     public constructor(props: unknown) {
@@ -20,19 +25,28 @@ export default class InitialValueWorkflowSample extends React.Component {
         );
 
         this._inputElement.setInitialValue('This is my initial value.');
+
+        this.state = {
+            isValid: this._inputElement.isValid,
+            hasChanges: this._inputElement.hasChanges
+        };
     }
 
-    private updateForm: UpdateCallback = (updateType: UpdateType): void => {
-        if (updateType === UpdateType.Initial) return;
-        this.forceUpdate();
+    private updateForm: UpdateCallback = (): void => {
+        if (this._inputElement.isValid === this.state.isValid && this._inputElement.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: this._inputElement.isValid,
+            hasChanges: this._inputElement.hasChanges
+        });
     };
 
     public render(): JSX.Element {
         return (
             <div className="sample-group basic-workflow">
                 {this._inputElement.render()}
-                <Checkbox label="Is valid" checked={this._inputElement.isValid} disabled={true} />
-                <Checkbox label="Has changes" checked={this._inputElement.hasChanges} disabled={true} />
+                <Checkbox label="Is valid" checked={this.state.isValid} disabled={true} />
+                <Checkbox label="Has changes" checked={this.state.hasChanges} disabled={true} />
             </div>
         );
     }

@@ -18,16 +18,6 @@ module.exports = {
         '@typescript-eslint/no-empty-interface': ['off'],
         '@typescript-eslint/no-use-before-define': ['off'],
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-        'sort-imports': [
-            'error',
-            {
-                ignoreCase: true,
-                ignoreDeclarationSort: false,
-                ignoreMemberSort: false,
-                memberSyntaxSortOrder: ['all', 'multiple', 'single', 'none']
-            }
-        ],
-        'lines-between-class-members': ['error', 'always'],
         'react/display-name': ['off']
     },
     settings: {

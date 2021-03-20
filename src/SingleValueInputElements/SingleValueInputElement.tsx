@@ -1,17 +1,17 @@
-import * as React from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
-import { combineClasses } from '../Utilities';
-import { ExtendedConfigurableInputElement } from '../ExtendedConfigurableInputElement';
-import { InputElementPresentationType } from './IInputElementPresentation';
-import { ISingleValueInputElement } from './ISingleValueInputElement';
-import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
-import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
+import * as React from 'react';
+import { ExtendedInputElement } from '../ExtendedInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
+import { combineClasses } from '../Utilities';
+import { InputElementPresentationType } from './IInputElementPresentation';
 import { withCommonInputBehavior } from './InternalPresentationComponents/InputElementPresentationWrapper';
+import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
+import { ISingleValueInputElement } from './ISingleValueInputElement';
+import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 
 export class SingleValueInputElement<TValue, TComponentProps>
-    extends ExtendedConfigurableInputElement<ISingleValueInputElementConfiguration<TValue>, TValue>
+    extends ExtendedInputElement<TValue, ISingleValueInputElementConfiguration<TValue>>
     implements ISingleValueInputElement<TValue, TComponentProps> {
     private _componentRef: React.RefObject<InputElementPresentationType<TValue, TComponentProps>>;
 
@@ -44,7 +44,7 @@ export class SingleValueInputElement<TValue, TComponentProps>
     protected setInternalValue(value: TValue): void {
         this.value = value;
 
-        this._componentRef.current.update(value);
+        if (this._componentRef?.current) this._componentRef.current.update(value);
         this.validate();
     }
 

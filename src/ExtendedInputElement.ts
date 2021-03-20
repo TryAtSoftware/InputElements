@@ -1,43 +1,48 @@
 import { IChangingInputElement } from './IChangingInputElement';
+import { IConfigurableInputElement } from './IConfigurableInputElement';
 import { IHidingInputElement } from './IHidingInputElement';
+import { IInputElementConfiguration } from './IInputElementConfiguration';
 import { ILoadingInputElement } from './ILoadingInputElement';
+import { ILoadingInputElementConfiguration } from './ILoadingInputElementConfiguration';
 import { InputElement } from './InputElement';
 import { UpdateCallback } from './IInputElement';
-import { UpdateType } from './UpdateType';
 
-export abstract class ExtendedInputElement<TChangeValue> extends InputElement
-    implements IHidingInputElement, ILoadingInputElement, IChangingInputElement<TChangeValue> {
-    protected initialValue: TChangeValue;
-
+export abstract class ExtendedInputElement<TValue, TConfiguration extends IInputElementConfiguration & ILoadingInputElementConfiguration>
+    extends InputElement
+    implements IHidingInputElement, ILoadingInputElement, IChangingInputElement<TValue>, IConfigurableInputElement<TConfiguration> {
+    protected initialValue: TValue;
     protected _valueIsSet = false;
-
     protected _initialValueIsSet = false;
 
     private _isVisible = true;
-
     private _isLoading = false;
 
-    protected constructor(update: UpdateCallback) {
+    protected constructor(configuration: TConfiguration, update: UpdateCallback) {
         super(update);
+
+        this.configuration = configuration;
     }
 
     /** @inheritdoc */
-    public setInitialValue(value: TChangeValue): void {
+    public configuration: TConfiguration;
+
+    /** @inheritdoc */
+    public setInitialValue(value: TValue): void {
         if (this._valueIsSet || this._initialValueIsSet) return;
 
         this._initialValueIsSet = true;
         this.initialValue = value;
 
         this.setInternalValue(value, true);
-        this.updateInternally(UpdateType.Initial);
+        this.updateInternally();
     }
 
     /** @inheritdoc */
-    public setValue(value: TChangeValue): void {
+    public setValue(value: TValue): void {
         this._valueIsSet = true;
 
         this.setInternalValue(value, false);
-        this.updateInternally(UpdateType.NewValue);
+        this.updateInternally();
     }
 
     /** @inheritdoc */
@@ -45,10 +50,10 @@ export abstract class ExtendedInputElement<TChangeValue> extends InputElement
         if (!this._valueIsSet) return;
 
         this.setInternalValue(undefined, false);
-        this.updateInternally(UpdateType.NewValue);
+        this.updateInternally();
     }
 
-    protected abstract setInternalValue(value: TChangeValue, isInitial: boolean): void;
+    protected abstract setInternalValue(value: TValue, isInitial: boolean): void;
 
     /** @inheritdoc */
     public get isVisible(): boolean {
@@ -58,13 +63,13 @@ export abstract class ExtendedInputElement<TChangeValue> extends InputElement
     /** @inheritdoc */
     public hide(): void {
         this._isVisible = false;
-        this.updateInternally(UpdateType.System);
+        this.updateInternally();
     }
 
     /** @inheritdoc */
     public show(): void {
         this._isVisible = true;
-        this.updateInternally(UpdateType.System);
+        this.updateInternally();
     }
 
     /** @inheritdoc */
@@ -85,13 +90,13 @@ export abstract class ExtendedInputElement<TChangeValue> extends InputElement
 
         const callback = (): void => {
             this._isLoading = false;
-            this.updateInternally(UpdateType.System);
+            this.updateInternally();
         };
 
         try {
             // If a new value is provided, we should execute asynchronously the `onDependentValueChanged` callback to retrieve the requested selectable models.
             this._isLoading = true;
-            this.updateInternally(UpdateType.System);
+            this.updateInternally();
 
             action(callback);
         } catch (error) {

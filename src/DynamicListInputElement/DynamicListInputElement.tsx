@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { DragDropContext, Draggable, DraggableProvided, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
-import { IDynamicListInputElement, IDynamicValueChange, InternalDynamicInput } from './IDynamicListInputElement';
-import { combineClasses } from '../Utilities/StylingHelper';
-import { DynamicListMenu } from './Menu/DynamicListMenu';
-import { ExtendedConfigurableInputElement } from '../ExtendedConfigurableInputElement';
-import { IDynamicListInputElementConfiguration } from './IDynamicListInputElementConfiguration';
-import { IDynamicListMenuOption } from './Menu/IDynamicListMenuOption';
-import { ISingleValueInputElement } from '../SingleValueInputElements/ISingleValueInputElement';
+import { ExtendedInputElement } from '../ExtendedInputElement';
 import { UpdateCallback } from '../IInputElement';
-import { UpdateType } from '../UpdateType';
 import { ValidationRule } from '../IValueInputElement';
+import { ISingleValueInputElement } from '../SingleValueInputElements';
+import { combineClasses } from '../Utilities';
 import './DynamicListInputElement.less';
+import { IDynamicListInputElement, IDynamicValueChange, InternalDynamicInput } from './IDynamicListInputElement';
+import { IDynamicListInputElementConfiguration } from './IDynamicListInputElementConfiguration';
+import { DynamicListMenu, IDynamicListMenuOption } from './Menu';
 
 export interface IInputInformation<TValue> {
     uniqueId: number;
@@ -18,7 +16,7 @@ export interface IInputInformation<TValue> {
 }
 
 export class DynamicListInputElement<TValue>
-    extends ExtendedConfigurableInputElement<IDynamicListInputElementConfiguration, IDynamicValueChange<TValue>[]>
+    extends ExtendedInputElement<IDynamicValueChange<TValue>[], IDynamicListInputElementConfiguration>
     implements IDynamicListInputElement<TValue> {
     private static counter = 0;
 
@@ -137,11 +135,11 @@ export class DynamicListInputElement<TValue>
                 options={this.inputOptions}
                 onAddClicked={(createdInput): void => {
                     this._inputs.splice(index + 1, 0, this.convert(createdInput));
-                    this.updateInternally(UpdateType.System);
+                    this.updateInternally();
                 }}
                 onRemoveClicked={(): void => {
                     this._inputs.splice(index, 1);
-                    this.updateInternally(UpdateType.System);
+                    this.updateInternally();
                 }}
                 insertButtonConfig={{
                     ...this.configuration?.insertButtonConfig,
@@ -178,14 +176,14 @@ export class DynamicListInputElement<TValue>
 
     private onAddNewValue = (createdInput: ISingleValueInputElement<TValue>): void => {
         this._inputs.push(this.convert(createdInput));
-        this.updateInternally(UpdateType.System);
+        this.updateInternally();
     };
 
     private onDragEnd = (result: DropResult): void => {
         if (!result?.destination) return;
 
         this.reorder(result.source.index, result.destination.index);
-        this.update(UpdateType.System);
+        this.update();
     };
 
     private reorder(startIndex: number, endIndex: number): void {
