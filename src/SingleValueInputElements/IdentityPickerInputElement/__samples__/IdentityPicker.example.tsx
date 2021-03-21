@@ -4,12 +4,17 @@ import {
     IIdentityPickerProps,
     IValueInputElement,
     SingleValueInputElement,
-    UpdateType
+    UpdateCallback
 } from '@try-at-software/input-elements';
 import { IPersonaProps, PrimaryButton } from 'office-ui-fabric-react';
 import { people } from './ExampleData';
 
-export default class IdentityPickerSample extends React.Component {
+interface IIdentityPickerSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class IdentityPickerSample extends React.Component<unknown, IIdentityPickerSampleState> {
     private _identityPicker: IValueInputElement<IPersonaProps[]>;
 
     public constructor(props: unknown) {
@@ -24,9 +29,23 @@ export default class IdentityPickerSample extends React.Component {
                 onResolveSuggestions: this._onFilterChanged,
                 placeholder: 'Basic identity picker input (required, without error handling)'
             },
-            this._updateForm
+            this.updateForm
         );
+
+        this.state = {
+            isValid: this._identityPicker.isValid,
+            hasChanges: this._identityPicker.hasChanges
+        };
     }
+
+    private updateForm: UpdateCallback = (): void => {
+        if (this._identityPicker.isValid === this.state.isValid && this._identityPicker.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: this._identityPicker.isValid,
+            hasChanges: this._identityPicker.hasChanges
+        });
+    };
 
     public render(): JSX.Element {
         return (
@@ -74,11 +93,5 @@ export default class IdentityPickerSample extends React.Component {
 
     private _getTextFromItem = (item: IPersonaProps): string => {
         return item?.text;
-    };
-
-    private _updateForm = (updateType: UpdateType): void => {
-        if (updateType === UpdateType.Initial) return;
-
-        this.forceUpdate();
     };
 }

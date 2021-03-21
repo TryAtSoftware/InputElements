@@ -15,7 +15,7 @@ export class DropdownInput extends React.Component<ISingleValueInputElementProps
                     !!this.props?.onChange && this.props.onChange(option.key as string)
                 }
                 errorMessage={this.props?.errorMessage}
-                required={!!this.props?.isRequired}
+                required={!!this.props?.renderRequiredIndicator}
                 placeholder={this.props?.placeholder}
                 // This value should never be `undefined`.
                 defaultSelectedKey={this.props?.value || this.props?.defaultOption?.key || null}
@@ -35,16 +35,17 @@ export class DropdownInput extends React.Component<ISingleValueInputElementProps
             options.push(defaultOption);
         }
 
-        if (!!this.props?.options)
-            this.props.options.forEach((o): void => {
-                if (!o) return;
+        if (!this.props?.options || !Array.isArray(this.props.options)) return options;
 
-                const newOption: IDropdownOption = {
-                    ...o,
-                    selected: false
-                };
-                options.push(newOption);
-            });
+        this.props.options.forEach((o): void => {
+            if (!o) return;
+
+            const newOption: IDropdownOption = {
+                ...o,
+                selected: false
+            };
+            options.push(newOption);
+        });
 
         return options;
     }

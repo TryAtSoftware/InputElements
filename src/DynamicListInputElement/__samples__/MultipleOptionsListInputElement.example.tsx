@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
     DropdownInput,
     DynamicListInputElement,
@@ -13,8 +12,14 @@ import {
     UpdateCallback
 } from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
+import * as React from 'react';
 
-export default class MultipleOptionsListInputElementSample extends React.Component {
+interface IListInputElementSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class MultipleOptionsListInputElementSample extends React.Component<unknown, IListInputElementSampleState> {
     private _inputElement: IDynamicListInputElement<string>;
 
     public constructor(props: unknown) {
@@ -41,7 +46,21 @@ export default class MultipleOptionsListInputElementSample extends React.Compone
             ],
             this.updateForm
         );
+
+        this.state = {
+            isValid: this._inputElement.isValid,
+            hasChanges: this._inputElement.hasChanges
+        };
     }
+
+    private updateForm: UpdateCallback = (): void => {
+        if (this._inputElement.isValid === this.state.isValid && this._inputElement.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: this._inputElement.isValid,
+            hasChanges: this._inputElement.hasChanges
+        });
+    };
 
     public render(): JSX.Element {
         return (
@@ -82,10 +101,6 @@ export default class MultipleOptionsListInputElementSample extends React.Compone
             this.updateForm,
             restrictValidPath()
         );
-    };
-
-    private updateForm: UpdateCallback = (): void => {
-        this.forceUpdate();
     };
 
     private printValues = (): void => {

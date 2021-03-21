@@ -35,7 +35,7 @@ export class LongTextInput extends React.Component<ISingleValueInputElementProps
                     this.props.onChange(newValue);
                 }}
                 errorMessage={this.props.errorMessage}
-                required={this.props.isRequired}
+                required={this.props.renderRequiredIndicator}
                 type={this.props.contentType}
                 placeholder={this.props.placeholder}
                 multiline={this.state.isMultiline}

@@ -6,12 +6,17 @@ import {
     IIdentityPickerProps,
     IValueInputElement,
     SingleValueInputElement,
-    UpdateType
+    UpdateCallback
 } from '@try-at-software/input-elements';
 import { Checkbox, IPersonaProps, PrimaryButton } from 'office-ui-fabric-react';
 import { people } from './ExampleData';
 
-export default class IdentityPickerWithInitialValueSample extends React.Component {
+interface IIdentityPickerWithInitialValueSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class IdentityPickerWithInitialValueSample extends React.Component<unknown, IIdentityPickerWithInitialValueSampleState> {
     private _identityPicker: IValueInputElement<IPersonaProps[]> & IChangingInputElement<IPersonaProps[]>;
 
     public constructor(props: unknown) {
@@ -26,11 +31,26 @@ export default class IdentityPickerWithInitialValueSample extends React.Componen
                 onResolveSuggestions: this._onFilterChanged,
                 placeholder: 'Basic identity picker input with initial value (required, without error handling)'
             },
-            this._updateForm
+
+            this.updateForm
         );
 
         this._identityPicker.setInitialValue([people[0], people[7], people[16]]);
+
+        this.state = {
+            isValid: this._identityPicker.isValid,
+            hasChanges: this._identityPicker.hasChanges
+        };
     }
+
+    private updateForm: UpdateCallback = (): void => {
+        if (this._identityPicker.isValid === this.state.isValid && this._identityPicker.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: this._identityPicker.isValid,
+            hasChanges: this._identityPicker.hasChanges
+        });
+    };
 
     public render(): JSX.Element {
         return (
@@ -80,11 +100,5 @@ export default class IdentityPickerWithInitialValueSample extends React.Componen
 
     private _getTextFromItem = (item: IPersonaProps): string => {
         return item?.text;
-    };
-
-    private _updateForm = (updateType: UpdateType): void => {
-        if (updateType === UpdateType.Initial) return;
-
-        this.forceUpdate();
     };
 }

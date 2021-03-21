@@ -9,14 +9,14 @@ import {
     SingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { Checkbox, PrimaryButton } from 'office-ui-fabric-react';
 
-interface IListInputElementSampleState {
+interface IListInputElementWithInitialDataSampleState {
     isValid: boolean;
     hasChanges: boolean;
 }
 
-export default class ListInputElementSample extends React.Component<unknown, IListInputElementSampleState> {
+export default class ListInputElementWithInitialDataSample extends React.Component<unknown, IListInputElementWithInitialDataSampleState> {
     private _inputElement: IDynamicListInputElement<string>;
 
     public constructor(props: unknown) {
@@ -39,6 +39,8 @@ export default class ListInputElementSample extends React.Component<unknown, ILi
             this.updateForm
         );
 
+        this._inputElement.setInitialValue([{ value: 'unexisting data', inputCreationCallback: this.createDropdown }]);
+
         this.state = {
             isValid: this._inputElement.isValid,
             hasChanges: this._inputElement.hasChanges
@@ -50,6 +52,8 @@ export default class ListInputElementSample extends React.Component<unknown, ILi
             <div className="sample-group dynamic-list-input-element">
                 {this._inputElement.render()}
                 <PrimaryButton text="Submit" disabled={!this.state.isValid || !this.state.hasChanges} onClick={this.printValues} />
+                <Checkbox label="Is valid" checked={this.state.isValid} disabled={true} />
+                <Checkbox label="Has changes" checked={this.state.hasChanges} disabled={true} />
             </div>
         );
     }

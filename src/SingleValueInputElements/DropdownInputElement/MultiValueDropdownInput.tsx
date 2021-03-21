@@ -26,7 +26,7 @@ export class MultiValueDropdownInput extends React.Component<ISingleValueInputEl
                     !!this.props?.onChange && this.props.onChange(currentValues);
                 }}
                 errorMessage={this.props?.errorMessage}
-                required={!!this.props?.isRequired}
+                required={!!this.props?.renderRequiredIndicator}
                 placeholder={this.props?.placeholder}
                 // This value should never be `undefined`.
                 defaultSelectedKeys={this.props?.value || [this.props?.defaultOption?.key] || null}

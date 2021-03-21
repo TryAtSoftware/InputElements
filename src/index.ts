@@ -1,6 +1,5 @@
 export * from './ExtendedInputElement';
 export * from './IChangingInputElement';
-export * from './IConfigurableInputElement';
 export * from './IHidingInputElement';
 export * from './IInputElement';
 export * from './IInputElementConfiguration';

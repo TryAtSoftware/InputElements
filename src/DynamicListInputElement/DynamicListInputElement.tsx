@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { DragDropContext, Draggable, DraggableProvided, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
+import { DropResult } from 'react-beautiful-dnd';
 import { ExtendedInputElement } from '../ExtendedInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
 import { ISingleValueInputElement } from '../SingleValueInputElements';
-import { combineClasses } from '../Utilities';
-import './DynamicListInputElement.less';
 import { IDynamicListInputElement, IDynamicValueChange, InternalDynamicInput } from './IDynamicListInputElement';
 import { IDynamicListInputElementConfiguration } from './IDynamicListInputElementConfiguration';
+import { DynamicListInputElementWrapper } from './InternalPresentationComponents/DynamicListInputElementWrapper';
 import { DynamicListMenu, IDynamicListMenuOption } from './Menu';
 
 export interface IInputInformation<TValue> {
@@ -15,20 +14,22 @@ export interface IInputInformation<TValue> {
     input: InternalDynamicInput<TValue>;
 }
 
-export class DynamicListInputElement<TValue>
-    extends ExtendedInputElement<IDynamicValueChange<TValue>[], IDynamicListInputElementConfiguration>
+export class DynamicListInputElement<TValue, TComponentProps>
+    extends ExtendedInputElement<IDynamicValueChange<TValue>[], DynamicListInputElementWrapper<TValue>>
     implements IDynamicListInputElement<TValue> {
     private static counter = 0;
 
+    private readonly _configuration: IDynamicListInputElementConfiguration;
     private _inputs: IInputInformation<TValue>[];
 
     public constructor(
-        configuration: IDynamicListInputElementConfiguration,
+        config: IDynamicListInputElementConfiguration,
         inputOptions: IDynamicListMenuOption<TValue>[],
         update: UpdateCallback
     ) {
-        super(configuration, update);
+        super(update);
 
+        this._configuration = config;
         this._inputs = [];
         this.inputOptions = inputOptions;
     }
@@ -60,7 +61,7 @@ export class DynamicListInputElement<TValue>
     /** @inheritdoc */
     public get isValid(): boolean {
         return (
-            (!this.configuration?.isRequired && (!this.inputs || this.inputs.length <= 0)) ||
+            (!this._configuration?.isRequired && (!this.inputs || this.inputs.length <= 0)) ||
             (!!this.inputs && this.inputs.length > 0 && this.inputs?.every((i): boolean => i.isValid))
         );
     }
@@ -71,99 +72,58 @@ export class DynamicListInputElement<TValue>
     }
 
     /** @inheritdoc */
-    public renderComponent(): JSX.Element {
+    protected renderComponent(): JSX.Element {
         return (
-            <div className={combineClasses('tas-dynamic-list-input', this.configuration?.className)}>
-                <DragDropContext onDragEnd={this.onDragEnd}>
-                    <Droppable droppableId="default-inputs-list">
-                        {(provided: DroppableProvided): React.ReactElement => (
-                            <div ref={provided.innerRef} {...provided.droppableProps}>
-                                {this.renderInputsList()}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-
-                {this.renderFooterMenu()}
-            </div>
+            <DynamicListInputElementWrapper
+                className={this._configuration.className}
+                inputs={this.filterInputs()}
+                onDragEnd={this.onDragEnd}
+                renderMenu={this.renderMenu}
+                renderFooterMenu={this.renderFooterMenu}
+                renderLoadingIndicator={this._configuration?.renderLoadingComponent}
+                renderMoveGripper={this._configuration?.renderMoveGripper}
+                ref={this._componentRef}
+            />
         );
     }
 
-    private renderInputsList(): JSX.Element {
-        return (
-            <>
-                {this.filterInputs().map(
-                    (i, index): JSX.Element => {
-                        return (
-                            <Draggable key={i.uniqueId} draggableId={i.uniqueId.toString()} index={index}>
-                                {(provided: DraggableProvided): React.ReactElement => (
-                                    <div
-                                        className="tas-dynamic-input-element"
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                    >
-                                        {this.renderDynamicInput(i.input, index)}
-                                    </div>
-                                )}
-                            </Draggable>
-                        );
-                    }
-                )}
-            </>
-        );
-    }
-
-    private renderDynamicInput(input: InternalDynamicInput<TValue>, index: number): JSX.Element {
-        if (!input || index < 0) return null;
-
-        return (
-            <>
-                <div className="tas-move-gripper hidable">
-                    {!!this.configuration?.renderMoveGripper ? this.configuration.renderMoveGripper() : <span>#{index + 1}</span>}
-                </div>
-                <div className="tas-input-element-wrapper">{input.render()}</div>
-                <div className="tas-menu-wrapper">{this.renderMenu(index)}</div>
-            </>
-        );
-    }
-
-    private renderMenu(index: number): JSX.Element {
+    private renderMenu = (index: number): JSX.Element => {
         return (
             <DynamicListMenu
                 options={this.inputOptions}
                 onAddClicked={(createdInput): void => {
                     this._inputs.splice(index + 1, 0, this.convert(createdInput));
+                    this._componentRef.current?.update(this._inputs);
                     this.updateInternally();
                 }}
                 onRemoveClicked={(): void => {
                     this._inputs.splice(index, 1);
+                    this._componentRef.current?.update(this._inputs);
                     this.updateInternally();
                 }}
                 insertButtonConfig={{
-                    ...this.configuration?.insertButtonConfig,
+                    ...this._configuration?.insertButtonConfig,
                     isEnabled: true,
-                    show: this.configuration?.canInsertValues
+                    show: this._configuration?.canInsertValues
                 }}
                 removeButtonConfig={{
-                    ...this.configuration?.removeButtonConfig,
-                    isEnabled: this.inputs.length > 1 || this.configuration?.canRemoveAllInputs,
-                    show: this.configuration?.canRemoveValues
+                    ...this._configuration?.removeButtonConfig,
+                    isEnabled: this.inputs.length > 1 || this._configuration?.canRemoveAllInputs,
+                    show: this._configuration?.canRemoveValues
                 }}
             />
         );
-    }
+    };
 
-    private renderFooterMenu(): JSX.Element {
+    private renderFooterMenu = (): JSX.Element => {
         return (
             <DynamicListMenu
                 options={this.inputOptions}
                 onAddClicked={this.onAddNewValue}
                 insertButtonConfig={{
-                    className: this.configuration?.addButtonConfig?.className,
-                    iconName: this.configuration?.addButtonConfig?.iconName,
-                    label: this.configuration?.addButtonConfig?.label || 'Add new element',
+                    className: this._configuration?.addButtonConfig?.className,
+                    iconName: this._configuration?.addButtonConfig?.iconName,
+                    label: this._configuration?.addButtonConfig?.label || 'Add new element',
                     isEnabled: true,
                     show: true
                 }}
@@ -172,10 +132,11 @@ export class DynamicListInputElement<TValue>
                 }}
             />
         );
-    }
+    };
 
     private onAddNewValue = (createdInput: ISingleValueInputElement<TValue>): void => {
         this._inputs.push(this.convert(createdInput));
+        this._componentRef.current?.update(this._inputs);
         this.updateInternally();
     };
 
@@ -201,24 +162,25 @@ export class DynamicListInputElement<TValue>
     }
 
     protected setInternalValue(valueChange: IDynamicValueChange<TValue>[], isInitial: boolean): void {
+        if (!valueChange || !Array.isArray(valueChange)) return;
+
         const newInputs: IInputInformation<TValue>[] = [];
 
-        if (!!valueChange) {
-            valueChange
-                .filter((x): boolean => !!x?.inputCreationCallback)
-                .forEach((vc): void => {
-                    const createdInput = vc.inputCreationCallback();
+        valueChange
+            .filter((x): boolean => !!x?.inputCreationCallback)
+            .forEach((vc): void => {
+                const createdInput = vc.inputCreationCallback();
 
-                    if (!createdInput) return;
+                if (!createdInput) return;
 
-                    if (isInitial) createdInput.setInitialValue(vc.value);
-                    else createdInput.setValue(vc.value);
+                if (isInitial) createdInput.setInitialValue(vc.value);
+                else createdInput.setValue(vc.value);
 
-                    newInputs.push(this.convert(createdInput));
-                });
-        }
+                newInputs.push(this.convert(createdInput));
+            });
 
         this._inputs = newInputs;
+        this._componentRef.current?.update(this._inputs);
     }
 
     private filterInputs(): IInputInformation<TValue>[] {

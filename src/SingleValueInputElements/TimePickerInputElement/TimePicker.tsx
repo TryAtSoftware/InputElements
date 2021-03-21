@@ -11,7 +11,7 @@ export class TimePicker extends React.Component<ISingleValueInputElementProps<Da
             <>
                 <DatePicker
                     label={this.props.label}
-                    isRequired={this.props.isRequired}
+                    isRequired={this.props.renderRequiredIndicator}
                     placeholder={this.props.placeholder}
                     onSelectDate={this.onChange}
                     textField={{

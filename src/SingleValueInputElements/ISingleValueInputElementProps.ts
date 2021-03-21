@@ -1,7 +1,8 @@
 export interface ISingleValueInputElementProps<TValue> {
     value: TValue;
     label: string;
-    isRequired: boolean;
+    renderRequiredIndicator: boolean;
     errorMessage: string;
     onChange: (newValue: TValue) => void;
+    invalidateInput: () => void;
 }

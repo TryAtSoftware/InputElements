@@ -21,7 +21,7 @@ export class IdentityPicker extends React.Component<IIdentityPickerProps & ISing
                     disabled={this.props.isDisabled}
                     defaultSelectedItems={this.props.value}
                     inputProps={{
-                        required: this.props.isRequired,
+                        required: this.props.renderRequiredIndicator,
                         placeholder: !!this.props.value && this.props.value.length > 0 ? '' : this.props.placeholder
                     }}
                     onChange={(items?: IPersonaProps[]): void => {

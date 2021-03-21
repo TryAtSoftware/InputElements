@@ -22,7 +22,7 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
         return (
             <>
                 {/* For some reason the Fluent-UI styles for the placeholders in every other component differ from the SpinButton defaults so we should override them'. */}
-                {this.props.label && <Label required={this.props.isRequired}>{this.props.label}</Label>}
+                {this.props.label && <Label required={this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <SpinButton
                     styles={{
                         input: {
@@ -39,28 +39,26 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
                     value={this.state.intermediateValue ?? ''}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                         const value = NumberInput.normalizeData(event?.target?.value);
-                        const changeResult = this.handleUserInput(value);
+                        if (!value || isNaN(Number(value))) {
+                            this.setState({ intermediateValue: value });
+                            this.props.invalidateInput();
+                            return;
+                        }
 
-                        this.setState({ intermediateValue: value, customWarning: changeResult.warning });
-                        this.props.onChange(changeResult.newValue);
+                        const numericValue = NumberInput.getNumericValue(value);
+                        this.handleUserInput(numericValue, value);
                     }}
                     // We should obligatorily define this function, because there will be a problem with incrementing/decrementing a newly typed value.
                     onValidate={(): string => this.state.intermediateValue}
                     onIncrement={(value: string): void => {
                         let numericValue = NumberInput.getNumericValue(value);
                         numericValue += this.getStep();
-
-                        const changeResult = this.ensureValueConsistency(numericValue);
-                        this.setState({ customWarning: changeResult.warning, intermediateValue: numericValue.toString() });
-                        this.props.onChange(changeResult.newValue);
+                        this.handleUserInput(numericValue, numericValue.toString());
                     }}
                     onDecrement={(value: string): void => {
                         let numericValue = NumberInput.getNumericValue(value);
                         numericValue -= this.getStep();
-
-                        const changeResult = this.ensureValueConsistency(numericValue);
-                        this.setState({ customWarning: changeResult.warning, intermediateValue: numericValue.toString() });
-                        this.props.onChange(changeResult.newValue);
+                        this.handleUserInput(numericValue, numericValue.toString());
                     }}
                 />
                 {!!this.props?.errorMessage && <MessageBar messageBarType={MessageBarType.warning}>{this.props.errorMessage}</MessageBar>}
@@ -69,11 +67,12 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
         );
     }
 
-    private handleUserInput(value: string): { warning: string; newValue: number } {
-        if (!value || isNaN(Number(value))) return { warning: '', newValue: undefined };
+    private handleUserInput(value: number, intermediateValue: string): void {
+        const changeResult = this.ensureValueConsistency(value);
+        this.setState({ customWarning: changeResult.warning, intermediateValue: intermediateValue });
 
-        const numericValue = NumberInput.getNumericValue(value);
-        return this.ensureValueConsistency(numericValue);
+        if (changeResult.newValue !== undefined) this.props.onChange(changeResult.newValue);
+        else this.props.invalidateInput();
     }
 
     private ensureValueConsistency(value: number): { warning: string; newValue: number } {

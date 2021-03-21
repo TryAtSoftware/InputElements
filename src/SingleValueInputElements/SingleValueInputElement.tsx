@@ -1,53 +1,75 @@
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { ExtendedInputElement } from '../ExtendedInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
+import { InvalidValueChangeSubscription, ValueChangeSubscription } from '../Subscriptions';
 import { combineClasses } from '../Utilities';
-import { withCommonInputBehavior } from './InternalPresentationComponents/InputElementPresentationWrapper';
+import { SingleValueInputElementWrapper } from './InternalPresentationComponents/SingleValueInputElementWrapper';
 import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
 import { ISingleValueInputElement } from './ISingleValueInputElement';
 import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 
-export class SingleValueInputElement<TValue, TComponentProps>
-    extends ExtendedInputElement<TValue, ISingleValueInputElementConfiguration<TValue>>
-    implements ISingleValueInputElement<TValue, TComponentProps> {
+type WrapperType<TValue, TComponentProps, TRenderProps> = SingleValueInputElementWrapper<
+    TValue,
+    ISingleValueInputElementProps<TValue> & TComponentProps & TRenderProps
+>;
+
+export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unknown>
+    extends ExtendedInputElement<TValue, WrapperType<TValue, TComponentProps, TRenderData>>
+    implements ISingleValueInputElement<TValue, TComponentProps, TRenderData> {
+    private readonly _configuration: ISingleValueInputElementConfiguration<TValue>;
+    private readonly valueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
+    private readonly invalidValueChangeSubscriptions: InvalidValueChangeSubscription<TValue>[] = [];
+    private isInvalidated = false;
+
     public constructor(
         config: ISingleValueInputElementConfiguration<TValue>,
-        component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>,
+        component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TRenderData>,
         props: TComponentProps,
         update: UpdateCallback,
         ...validationRules: ValidationRule<TValue>[]
     ) {
-        super(config, update);
+        super(update);
 
-        this.componentToRender = withCommonInputBehavior(component, {
-            renderLoadingIndicator:
-                config?.renderLoadingComponent ??
-                ((): JSX.Element => {
-                    return <Spinner size={SpinnerSize.medium} />;
-                })
-        });
+        this._configuration = config;
+        this.componentToRender = component;
         this.componentProps = props;
 
         this.validationRules = [];
         validationRules.forEach((rule): void => {
+            if (!rule) return;
             this.validationRules.push(rule);
         });
     }
 
+    public subscribeToValueChange(subscription: ValueChangeSubscription<TValue>): void {
+        if (!subscription) return;
+
+        this.valueChangeSubscriptions.push(subscription);
+    }
+
+    public subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription<TValue>): void {
+        if (!subscription) return;
+
+        this.invalidValueChangeSubscriptions.push(subscription);
+    }
+
     /** @inheritdoc */
     protected setInternalValue(value: TValue): void {
+        if (this.isInvalidated) this.isInvalidated = false;
         this.value = value;
 
         if (this._componentRef?.current) this._componentRef.current.update(value);
         this.validate();
+
+        if (this.isValid) this.valueChangeSubscriptions.forEach((x): void => x?.(this.value));
+        else this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
     }
 
     /** @inheritdoc */
     public get hasChanges(): boolean {
-        return !!this.configuration?.comparator
-            ? !this.configuration.comparator.areEqual(this.value, this.initialValue)
+        return !!this._configuration?.comparator
+            ? !this._configuration.comparator.areEqual(this.value, this.initialValue)
             : this.value !== this.initialValue;
     }
 
@@ -59,29 +81,39 @@ export class SingleValueInputElement<TValue, TComponentProps>
 
     /** @inheritdoc */
     public get isValid(): boolean {
-        return (
-            ((!!this.configuration && !this.configuration.isRequired) || this._valueIsSet || this._initialValueIsSet) && !this.errorMessage
-        );
+        if (this.isInvalidated) return false;
+
+        if (this.errorMessage && this.errorMessage.length > 0) return false;
+
+        return (!!this._configuration && !this._configuration.isRequired) || this._valueIsSet || this._initialValueIsSet;
     }
 
     /** @inheritdoc */
-    public componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps>;
+    public readonly componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TRenderData>;
 
     /** @inheritdoc */
     public componentProps: TComponentProps;
 
     /** @inheritdoc */
-    protected renderComponent(): JSX.Element {
+    protected renderComponent(renderData?: TRenderData): JSX.Element {
         return (
-            <div className={combineClasses('tas-input-element', this.configuration?.className)}>
+            <div className={combineClasses('tas-input-element', this._configuration?.className)}>
                 <div className="tas-input-element-content">
-                    <this.componentToRender
-                        {...this.componentProps}
-                        label={this.configuration?.label}
-                        value={this.value}
-                        isRequired={this.configuration?.renderRequiredIndicator && this.configuration?.isRequired}
-                        errorMessage={this.configuration?.renderErrors && this.errorMessage}
-                        onChange={(newValue: TValue): void => this.setValue(newValue)}
+                    <SingleValueInputElementWrapper
+                        internalComponent={this.componentToRender}
+                        renderLoadingIndicator={this._configuration?.renderLoadingComponent}
+                        componentProps={{
+                            ...this.componentProps,
+                            ...renderData,
+                            label: this._configuration?.label,
+                            value: this.value,
+                            renderRequiredIndicator: this._configuration?.renderRequiredIndicator && this._configuration?.isRequired,
+                            errorMessage: this._configuration?.renderErrors && this.errorMessage,
+                            onChange: (newValue: TValue): void => this.setValue(newValue),
+                            invalidateInput: this.invalidateInput
+                        }}
+                        isInitiallyLoading={this.isLoading}
+                        isInitiallyVisible={this.isVisible}
                         ref={this._componentRef}
                     />
                 </div>
@@ -91,33 +123,33 @@ export class SingleValueInputElement<TValue, TComponentProps>
 
     /** @inheritdoc */
     public validate(): void {
-        if (!!this.configuration?.shouldExecuteValidation && this.configuration.shouldExecuteValidation() === false) return;
+        if (!!this._configuration?.shouldExecuteValidation && this._configuration.shouldExecuteValidation() === false) return;
 
-        let errorMessage = '';
+        let errorMessage: string = null;
 
-        if (this.configuration?.isRequired && !this.valueIsValid()) {
+        if (this._configuration?.isRequired && !this.valueIsValid()) {
             // If a value is required but the input field is empty.
-            errorMessage = this.configuration?.requiredValidationMessage || `The field is required`;
-        } else if (this.configuration?.isRequired || this.value || this.configuration?.executeAllValidations) {
+            errorMessage = this._configuration?.requiredValidationMessage || `The field is required`;
+        } else if (this._configuration?.isRequired || this.value || this._configuration?.executeAllValidations) {
             // If a value is provided.
             this.validationRules.forEach((rule): void => {
                 if (!errorMessage) errorMessage = rule(this.value);
             });
-        } else {
-            // If the input field is not required and no value is provided.
-            errorMessage = this.validateNonRequiredValue();
         }
 
         this.errorMessage = errorMessage;
+        if (this._componentRef.current) this._componentRef.current.setError(errorMessage);
     }
 
     private valueIsValid = (): boolean => {
-        if (!!this.configuration?.comparator) return this.configuration.comparator.isValid(this.value);
+        if (!!this._configuration?.comparator) return this._configuration.comparator.isValid(this.value);
 
         return !!this.value;
     };
 
-    protected validateNonRequiredValue(): string {
-        return null;
-    }
+    private invalidateInput = (): void => {
+        this.isInvalidated = true;
+        this.updateInternally();
+        this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
+    };
 }
