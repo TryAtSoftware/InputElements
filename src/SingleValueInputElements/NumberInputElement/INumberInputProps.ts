@@ -5,5 +5,4 @@ export interface INumberInputProps extends IBaseInputElementProps {
     min?: number;
     max?: number;
     step?: number;
-    precision?: number;
 }

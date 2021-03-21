@@ -1,5 +1,4 @@
-import { MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
-import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
+import { Label, MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { INumberInputProps } from './INumberInputProps';
@@ -23,6 +22,7 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
         return (
             <>
                 {/* For some reason the Fluent-UI styles for the placeholders in every other component differ from the SpinButton defaults so we should override them'. */}
+                {this.props.label && <Label required={this.props.isRequired}>{this.props.label}</Label>}
                 <SpinButton
                     styles={{
                         input: {
@@ -36,9 +36,7 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
                         placeholder: this.props.placeholder,
                         disabled: this.props.isDisabled
                     }}
-                    label={this.props.label}
                     value={this.state.intermediateValue ?? ''}
-                    labelPosition={Position.top}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                         const value = NumberInput.normalizeData(event?.target?.value);
                         const changeResult = this.handleUserInput(value);
@@ -49,7 +47,7 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
                     // We should obligatorily define this function, because there will be a problem with incrementing/decrementing a newly typed value.
                     onValidate={(): string => this.state.intermediateValue}
                     onIncrement={(value: string): void => {
-                        let numericValue = this.getNumericValue(value);
+                        let numericValue = NumberInput.getNumericValue(value);
                         numericValue += this.getStep();
 
                         const changeResult = this.ensureValueConsistency(numericValue);
@@ -57,7 +55,7 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
                         this.props.onChange(changeResult.newValue);
                     }}
                     onDecrement={(value: string): void => {
-                        let numericValue = this.getNumericValue(value);
+                        let numericValue = NumberInput.getNumericValue(value);
                         numericValue -= this.getStep();
 
                         const changeResult = this.ensureValueConsistency(numericValue);
@@ -74,42 +72,24 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
     private handleUserInput(value: string): { warning: string; newValue: number } {
         if (!value || isNaN(Number(value))) return { warning: '', newValue: undefined };
 
-        if (value.includes(delimiter)) {
-            if (!this.props.handleDecimalValues) return { warning: 'Decimal values are not allowed', newValue: undefined };
-
-            const maxPrecision = this.getPrecision();
-            if (value.substr(value.indexOf(delimiter) + 1).length > maxPrecision)
-                return { warning: `Maximum ${maxPrecision} decimal places are supported.`, newValue: undefined };
-        }
-
-        return this.ensureValueConsistency(this.getNumericValue(value));
+        const numericValue = NumberInput.getNumericValue(value);
+        return this.ensureValueConsistency(numericValue);
     }
 
     private ensureValueConsistency(value: number): { warning: string; newValue: number } {
-        let customWarning: string = null;
-
         const maxValue = this.getMaxValue();
+        if (value > maxValue) return { warning: `The maximum value is ${maxValue}`, newValue: undefined };
+
         const minValue = this.getMinValue();
-        if (value > maxValue) customWarning = `The maximum value is ${maxValue}`;
-        else if (value < minValue) customWarning = `The minimum value is ${minValue}`;
+        if (value < minValue) return { warning: `The minimum value is ${maxValue}`, newValue: undefined };
 
-        return { warning: customWarning, newValue: !!customWarning ? undefined : value };
-    }
+        if (!this.props.handleDecimalValues && value % 1 !== 0)
+            return {
+                warning: 'Decimal values are not allowed',
+                newValue: undefined
+            };
 
-    private getNumericValue(value: string): number {
-        let normalizedValue = NumberInput.normalizeData(value);
-
-        const delimiterIndex = normalizedValue.indexOf(delimiter);
-        if (delimiterIndex !== -1) {
-            const precision = this.getPrecision();
-            const decimalCharactersCount = precision === 0 ? 0 : 1 + precision;
-            normalizedValue = normalizedValue.substr(0, delimiterIndex + decimalCharactersCount);
-        }
-
-        const number = this.props.handleDecimalValues ? Number.parseFloat(normalizedValue) : Number.parseInt(normalizedValue);
-        if (Number.isNaN(number)) return 0;
-
-        return number;
+        return { warning: '', newValue: value };
     }
 
     private getMaxValue(): number {
@@ -124,19 +104,11 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
         return this.props?.step ?? 1;
     }
 
-    private getPrecision(): number {
-        // If decimal values are not allowed, we should render only whole numbers.
-        if (!this.props?.handleDecimalValues) return 0;
+    private static getNumericValue(value: string): number {
+        const number = Number(NumberInput.normalizeData(value));
+        if (Number.isNaN(number)) return 0;
 
-        const defaultPrecision = 2;
-        const minPrecision = 1;
-        const maxPrecision = 20;
-
-        let precision = this.props?.precision ?? defaultPrecision;
-        if (precision < minPrecision) precision = minPrecision;
-        else if (precision > maxPrecision) precision = maxPrecision;
-
-        return precision;
+        return number;
     }
 
     private static normalizeData(value: string): string {

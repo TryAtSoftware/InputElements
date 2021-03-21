@@ -23,6 +23,7 @@ export default class DecimalNumberInputSample extends React.Component<unknown, I
         this._numberInput = new SingleValueInputElement<number, INumberInputProps>(
             {
                 isRequired: true,
+                renderRequiredIndicator: true,
                 label: 'Decimal numeric input (required, without error handling)',
                 comparator: new ZeroIsValidComparator()
             },

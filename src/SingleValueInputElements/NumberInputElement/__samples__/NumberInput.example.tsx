@@ -4,7 +4,8 @@ import {
     IValueInputElement,
     NumberInput,
     SingleValueInputElement,
-    UpdateCallback
+    UpdateCallback,
+    ZeroIsValidComparator
 } from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
 
@@ -23,7 +24,8 @@ export default class NumberInputSample extends React.Component<unknown, INumberI
             {
                 isRequired: true,
                 renderRequiredIndicator: true,
-                label: 'Basic numeric input (required, without error handling)'
+                label: 'Basic numeric input (required, without error handling)',
+                comparator: new ZeroIsValidComparator()
             },
             NumberInput,
             {

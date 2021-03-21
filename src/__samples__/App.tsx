@@ -7,6 +7,7 @@ import LoadingInputElementsSample from '../SingleValueInputElements/__samples__/
 import NonRequiredValueSample from '../SingleValueInputElements/__samples__/NonRequiredValue.example';
 import DropdownInputSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInput.example';
 import DropdownInputWithDefaultValueSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInputWithDefaultValue.example';
+import CustomStepNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/CustomStepNumberInput.example';
 import DecimalNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/DecimalNumberInput.example';
 import NumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/NumberInput.example';
 import TextInputSample from '../SingleValueInputElements/TextInputElement/__samples__/TextInput.example';
@@ -42,9 +43,8 @@ export default class App extends React.Component {
                     <Link href="#number-input">Number input</Link>
                 </h2>
                 <NumberInputSample />
-                {/*<CustomStepNumberInputSample />*/}
+                <CustomStepNumberInputSample />
                 <DecimalNumberInputSample />
-                {/*<CustomPrecisionNumberInputSample />*/}
 
                 {/*<h2 id="time-picker">*/}
                 {/*    <Link href="#time-picker">Time picker</Link>*/}
