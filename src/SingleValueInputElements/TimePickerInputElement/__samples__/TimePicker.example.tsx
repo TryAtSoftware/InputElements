@@ -1,20 +1,43 @@
 import * as React from 'react';
-import { ITimePickerProps, IValueInputElement, SingleValueInputElement, TimePicker } from '@try-at-software/input-elements';
+import { ITimePickerProps, IValueInputElement, SingleValueInputElement, TimePicker, UpdateCallback } from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
 
-export default class TimePickerSample extends React.Component {
+interface ITimePickerSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class TimePickerSample extends React.Component<unknown, ITimePickerSampleState> {
     private _timePicker: IValueInputElement<Date>;
 
     public constructor(props: unknown) {
         super(props);
 
         this._timePicker = new SingleValueInputElement<Date, ITimePickerProps>(
-            { isRequired: true, label: 'Basic time picker input without validation (required, without error handling)' },
+            {
+                isRequired: true,
+                renderRequiredIndicator: true,
+                label: 'Basic time picker input without validation (required, without error handling)'
+            },
             TimePicker,
             { placeholder: 'When you select a date, the button will become enabled.' },
-            (): void => this.forceUpdate()
+            this.updateForm
         );
+
+        this.state = {
+            isValid: this._timePicker.isValid,
+            hasChanges: this._timePicker.hasChanges
+        };
     }
+
+    private updateForm: UpdateCallback = (): void => {
+        if (this._timePicker.isValid === this.state.isValid && this._timePicker.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: this._timePicker.isValid,
+            hasChanges: this._timePicker.hasChanges
+        });
+    };
 
     public render(): JSX.Element {
         return (
@@ -22,7 +45,7 @@ export default class TimePickerSample extends React.Component {
                 {this._timePicker.render()}
                 <PrimaryButton
                     text="Submit"
-                    disabled={!this._timePicker.isValid}
+                    disabled={!this.state.isValid || !this.state.hasChanges}
                     onClick={(): void => console.log(this._timePicker.value)}
                 />
             </div>

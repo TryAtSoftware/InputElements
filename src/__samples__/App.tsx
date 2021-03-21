@@ -11,6 +11,8 @@ import CustomStepNumberInputSample from '../SingleValueInputElements/NumberInput
 import DecimalNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/DecimalNumberInput.example';
 import NumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/NumberInput.example';
 import TextInputSample from '../SingleValueInputElements/TextInputElement/__samples__/TextInput.example';
+import TimePickerSample from '../SingleValueInputElements/TimePickerInputElement/__samples__/TimePicker.example';
+import TimePickerWithMonthsSample from '../SingleValueInputElements/TimePickerInputElement/__samples__/TimePickerWithMonths.example';
 import './App.less';
 import './styles.less';
 
@@ -46,11 +48,11 @@ export default class App extends React.Component {
                 <CustomStepNumberInputSample />
                 <DecimalNumberInputSample />
 
-                {/*<h2 id="time-picker">*/}
-                {/*    <Link href="#time-picker">Time picker</Link>*/}
-                {/*</h2>*/}
-                {/*<TimePickerSample />*/}
-                {/*<TimePickerWithMonthsSample />*/}
+                <h2 id="time-picker">
+                    <Link href="#time-picker">Time picker</Link>
+                </h2>
+                <TimePickerSample />
+                <TimePickerWithMonthsSample />
 
                 {/*<h2 id="identity-picker">*/}
                 {/*    <Link href="#identity-picker">Identity picker</Link>*/}
