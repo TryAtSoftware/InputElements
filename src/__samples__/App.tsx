@@ -11,6 +11,7 @@ import LoadingInputElementsSample from '../SingleValueInputElements/__samples__/
 import NonRequiredValueSample from '../SingleValueInputElements/__samples__/NonRequiredValue.example';
 import CustomVisualizationSequentialDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/CustomDependentVisualization.example';
 import DependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/DependentInput.example';
+import LoadingDependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/LoadingDependentInput.example';
 import MultipleDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/MultipleDependencies.example';
 import NonRequiredDependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/NonRequiredDependentInput.example';
 import SequentialDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/SequentialDependencies.example';
@@ -83,8 +84,7 @@ export default class App extends React.Component {
                 <MultipleDependenciesSample />
                 <SequentialDependenciesSample />
                 <CustomVisualizationSequentialDependenciesSample />
-                {/*<LoadingDependentInputSample />*/}
-                {/*<HidingDependentInputSample />*/}
+                <LoadingDependentInputSample />
 
                 <h2 id="dynamic-list-input-elements">
                     <Link href="#dynamic-list-input-elements">Dynamic list input elements</Link>
