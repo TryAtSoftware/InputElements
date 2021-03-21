@@ -1,34 +1,50 @@
 import * as React from 'react';
-import { IChangingPresentation, IPresentation, IRestrictedPresentation, PresentationRenderer } from '../../Presentations';
+import {
+    IChangingPresentation,
+    IDynamicPresentation,
+    IPresentation,
+    IRestrictedPresentation,
+    PresentationRenderer
+} from '../../Presentations';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 
-interface ISingleValueInputElementWrapperState<TValue> {
+interface ISingleValueInputElementWrapperState<TValue, TDynamicProps> {
     value: TValue;
     errorMessage: string;
     isLoading: boolean;
     isVisible: boolean;
+    dynamicProps: TDynamicProps;
 }
 
-export interface ISingleValueInputElementWrapperProps<TValue, TComponentProps extends ISingleValueInputElementProps<TValue>> {
-    internalComponent: React.ComponentType<TComponentProps>;
+export interface ISingleValueInputElementWrapperProps<
+    TValue,
+    TComponentProps extends ISingleValueInputElementProps<TValue>,
+    TDynamicProps
+> {
+    internalComponent: React.ComponentType<TComponentProps & TDynamicProps>;
     componentProps: TComponentProps;
-    // renderProps: TRenderProps;
+    initialDynamicProps: TDynamicProps;
     isInitiallyLoading: boolean;
     isInitiallyVisible: boolean;
+
     renderLoadingIndicator(): JSX.Element;
 }
 
-export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISingleValueInputElementProps<TValue>>
-    extends React.Component<ISingleValueInputElementWrapperProps<TValue, TComponentProps>, ISingleValueInputElementWrapperState<TValue>>
-    implements IPresentation, IChangingPresentation<TValue>, IRestrictedPresentation {
-    public constructor(props: ISingleValueInputElementWrapperProps<TValue, TComponentProps>) {
+export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISingleValueInputElementProps<TValue>, TDynamicProps = unknown>
+    extends React.Component<
+        ISingleValueInputElementWrapperProps<TValue, TComponentProps, TDynamicProps>,
+        ISingleValueInputElementWrapperState<TValue, TDynamicProps>
+    >
+    implements IPresentation, IChangingPresentation<TValue>, IRestrictedPresentation, IDynamicPresentation<TDynamicProps> {
+    public constructor(props: ISingleValueInputElementWrapperProps<TValue, TComponentProps, TDynamicProps>) {
         super(props);
 
         this.state = {
             isLoading: props.isInitiallyLoading,
             isVisible: props.isInitiallyVisible,
             errorMessage: props.componentProps?.errorMessage,
-            value: props.componentProps?.value
+            value: props.componentProps?.value,
+            dynamicProps: props.initialDynamicProps
         };
     }
 
@@ -64,6 +80,10 @@ export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISin
         this.setState({ errorMessage: errorMessage });
     };
 
+    public changeDynamicProps = (dynamicProps: TDynamicProps): void => {
+        this.setState({ dynamicProps: dynamicProps });
+    };
+
     public render = (): JSX.Element => {
         return (
             <PresentationRenderer
@@ -79,6 +99,8 @@ export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISin
         const { internalComponent: Component, componentProps } = this.props;
         if (!Component) return null;
 
-        return <Component {...componentProps} value={this.state.value} errorMessage={this.state.errorMessage} />;
+        return (
+            <Component {...this.state.dynamicProps} {...componentProps} value={this.state.value} errorMessage={this.state.errorMessage} />
+        );
     };
 }

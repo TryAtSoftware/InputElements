@@ -1,6 +1,6 @@
 import { IInputElement, UpdateCallback } from './IInputElement';
 
-export abstract class InputElement<TRenderData = never> implements IInputElement<TRenderData> {
+export abstract class InputElement implements IInputElement {
     private _isRendered = false;
 
     protected constructor(update: UpdateCallback) {
@@ -18,13 +18,13 @@ export abstract class InputElement<TRenderData = never> implements IInputElement
     public abstract hasChanges: boolean;
 
     /** @inheritdoc */
-    public render(renderData?: TRenderData): JSX.Element {
+    public render(): JSX.Element {
         this._isRendered = true;
 
-        return this.renderComponent(renderData);
+        return this.renderComponent();
     }
 
-    protected abstract renderComponent(renderData?: TRenderData): JSX.Element;
+    protected abstract renderComponent(): JSX.Element;
 
     /** @inheritdoc */
     public update: UpdateCallback = (): void => {

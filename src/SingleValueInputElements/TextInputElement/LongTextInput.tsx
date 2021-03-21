@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITextInputProps } from './ITextInputProps';
-import { TextField } from 'office-ui-fabric-react';
+import { Label, TextField } from 'office-ui-fabric-react';
 
 export interface ILongTextInputState {
     isMultiline: boolean;
@@ -21,28 +21,28 @@ export class LongTextInput extends React.Component<ISingleValueInputElementProps
         if (!this.props) return null;
 
         return (
-            <TextField
-                label={this.props.label}
-                underlined={true}
-                value={this.props.value || ''}
-                onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string): void => {
-                    // Dynamically change the 'isMultiline' state property.
-                    const isMultiline = newValue.length > this.multilineThreshold;
-                    if (this.state.isMultiline !== isMultiline) {
-                        this.setState({ isMultiline: isMultiline });
-                    }
+            <>
+                {!!this.props?.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
+                <TextField
+                    value={this.props.value || ''}
+                    onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string): void => {
+                        // Dynamically change the 'isMultiline' state property.
+                        const isMultiline = newValue.length > this.multilineThreshold;
+                        if (this.state.isMultiline !== isMultiline) {
+                            this.setState({ isMultiline: isMultiline });
+                        }
 
-                    this.props.onChange(newValue);
-                }}
-                errorMessage={this.props.errorMessage}
-                required={this.props.renderRequiredIndicator}
-                type={this.props.contentType}
-                placeholder={this.props.placeholder}
-                multiline={this.state.isMultiline}
-                autoAdjustHeight={this.state.isMultiline}
-                validateOnFocusOut={true}
-                disabled={this.props.isDisabled}
-            />
+                        this.props.onChange(newValue);
+                    }}
+                    errorMessage={this.props.errorMessage}
+                    type={this.props.contentType}
+                    placeholder={this.props.placeholder}
+                    multiline={this.state.isMultiline}
+                    autoAdjustHeight={this.state.isMultiline}
+                    validateOnFocusOut={true}
+                    disabled={this.props.isDisabled}
+                />
+            </>
         );
     }
 }

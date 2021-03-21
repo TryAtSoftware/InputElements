@@ -9,9 +9,14 @@ import HidingInputElementsSample from '../SingleValueInputElements/__samples__/H
 import InitialValueWorkflowSample from '../SingleValueInputElements/__samples__/InitialValueWorkflow.example';
 import LoadingInputElementsSample from '../SingleValueInputElements/__samples__/LoadingInputElements.example';
 import NonRequiredValueSample from '../SingleValueInputElements/__samples__/NonRequiredValue.example';
+import CustomVisualizationSequentialDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/CustomDependentVisualization.example';
 import DependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/DependentInput.example';
+import MultipleDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/MultipleDependencies.example';
+import NonRequiredDependentInputSample from '../SingleValueInputElements/DependentInputElement/__samples__/NonRequiredDependentInput.example';
+import SequentialDependenciesSample from '../SingleValueInputElements/DependentInputElement/__samples__/SequentialDependencies.example';
 import DropdownInputSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInput.example';
 import DropdownInputWithDefaultValueSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInputWithDefaultValue.example';
+import DropdownInputWithInvalidOptionSample from '../SingleValueInputElements/DropdownInputElement/__samples__/DropdownInputWithInvalidOption.example';
 import IdentityPickerSample from '../SingleValueInputElements/IdentityPickerInputElement/__samples__/IdentityPicker.example';
 import IdentityPickerWithInitialValueSample from '../SingleValueInputElements/IdentityPickerInputElement/__samples__/IdentityPickerWithInitialValue.example';
 import CustomStepNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/CustomStepNumberInput.example';
@@ -49,6 +54,7 @@ export default class App extends React.Component {
                 </h2>
                 <DropdownInputSample />
                 <DropdownInputWithDefaultValueSample />
+                <DropdownInputWithInvalidOptionSample />
 
                 <h2 id="number-input">
                     <Link href="#number-input">Number input</Link>
@@ -73,10 +79,10 @@ export default class App extends React.Component {
                     <Link href="#dependent-input">Dependent input</Link>
                 </h2>
                 <DependentInputSample />
-                {/*<NonRequiredDependentInputSample />*/}
-                {/*<MultipleDependenciesSample />*/}
-                {/*<SequentialDependenciesSample />*/}
-                {/*<CustomVisualizationSequentialDependenciesSample />*/}
+                <NonRequiredDependentInputSample />
+                <MultipleDependenciesSample />
+                <SequentialDependenciesSample />
+                <CustomVisualizationSequentialDependenciesSample />
                 {/*<LoadingDependentInputSample />*/}
                 {/*<HidingDependentInputSample />*/}
 

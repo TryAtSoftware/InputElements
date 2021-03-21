@@ -1,18 +1,13 @@
-import * as React from 'react';
-// import {
-//     DropdownInput,
-//     IDropdownInputOption,
-//     IDropdownInputProps,
-//     ISingleValueInputElement,
-//     SingleValueInputElement,
-//     UpdateCallback
-// } from '@try-at-software/input-elements';
+import {
+    DropdownInputElement,
+    DropdownHelper,
+    IInputElement,
+    ISingleValueInputElement,
+    UpdateCallback,
+    getFormState
+} from '@try-at-software/input-elements';
 import { Checkbox, PrimaryButton } from 'office-ui-fabric-react';
-import { IInputElement, UpdateCallback } from '../../../IInputElement';
-import { getFormState } from '../../../Utilities/FormHelper';
-import { DropdownInput, IDropdownInputOption, IDropdownInputProps } from '../../DropdownInputElement';
-import { ISingleValueInputElement } from '../../ISingleValueInputElement';
-import { SingleValueInputElement } from '../../SingleValueInputElement';
+import * as React from 'react';
 
 interface IDependentInputSampleState {
     isValid: boolean;
@@ -20,8 +15,8 @@ interface IDependentInputSampleState {
 }
 
 export default class DependentInputSample extends React.Component<unknown, IDependentInputSampleState> {
-    private readonly _principalInput: ISingleValueInputElement<string, IDropdownInputProps>;
-    private readonly _dependentInput: ISingleValueInputElement<string, IDropdownInputProps>;
+    private readonly _principalInput: ISingleValueInputElement<string>;
+    private readonly _dependentInput: ISingleValueInputElement<string>;
     private readonly _allInputs: IInputElement[];
 
     public constructor(props: unknown) {
@@ -30,42 +25,40 @@ export default class DependentInputSample extends React.Component<unknown, IDepe
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        const x = new SingleValueInputElement<string, IDropdownInputProps>(
+        this._principalInput = new DropdownInputElement(
             { isRequired: true, label: 'Principal dropdown (required, without error handling)' },
-            DropdownInput,
-            {
-                options: this.mapToDropdownOptions(options),
-                placeholder: 'When you change the value, the dependent dropdown will appear.'
-            },
+            { placeholder: 'When you change the value, the dependent dropdown will appear.' },
             this.updateForm
         );
-        this._principalInput = x;
+        this._principalInput.changeDynamicProps({
+            options: DropdownHelper.mapToDropdownOptions(options)
+        });
 
-        const y = new SingleValueInputElement<string, IDropdownInputProps>(
+        this._dependentInput = new DropdownInputElement(
             { isRequired: true, label: 'Dependent dropdown (required, without error handling)' },
-            DropdownInput,
-            {
-                placeholder: 'When you change the value, the button will become enabled and this message will disappear.'
-            },
+            { placeholder: 'When you change the value, the button will become enabled and this message will disappear.' },
             this.updateForm
         );
-        this._dependentInput = y;
 
         this._allInputs = [this._principalInput, this._dependentInput];
 
-        x.subscribeToValueChange((newPrincipalValue: string): void => {
-            if (!y.isVisible) y.show();
+        this._principalInput.subscribeToValueChange((newPrincipalValue: string): void => {
+            if (!this._dependentInput.isVisible) this._dependentInput.show();
 
             const dependentOptions: string[] = [];
             for (let i = 0; i < 10; i++) dependentOptions.push(newPrincipalValue + i);
 
-            y.componentProps.options = this.mapToDropdownOptions(dependentOptions);
-            y.resetValue();
+            this._dependentInput.changeDynamicProps({
+                options: DropdownHelper.mapToDropdownOptions(dependentOptions)
+            });
+
+            // Here you have several options - reset the dependent value or revalidate it.
+            this._dependentInput.resetValue();
         });
-        x.subscribeToInvalidValueChange((): void => {
-            if (y.isVisible) y.hide();
+        this._principalInput.subscribeToInvalidValueChange((): void => {
+            if (this._dependentInput.isVisible) this._dependentInput.hide();
         });
-        y.hide();
+        this._dependentInput.hide();
 
         const initialFormStatus = getFormState(this._allInputs);
         this.state = {
@@ -99,19 +92,4 @@ export default class DependentInputSample extends React.Component<unknown, IDepe
         console.log('Principal value: ' + this._principalInput.value);
         console.log('Dependent value: ' + this._dependentInput.value);
     };
-
-    private mapToDropdownOptions(values: string[]): IDropdownInputOption[] {
-        if (!values || !Array.isArray(values)) return [];
-
-        return values
-            .filter((x): boolean => !!x)
-            .map(
-                (o): IDropdownInputOption => {
-                    return {
-                        key: o,
-                        text: o
-                    };
-                }
-            );
-    }
 }

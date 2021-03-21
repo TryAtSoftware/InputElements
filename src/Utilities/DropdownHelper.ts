@@ -1,5 +1,5 @@
-import { DropdownOptionType, IDropdownInputOption } from '../SingleValueInputElements/DropdownInputElement/IDropdownInputOption';
 import { IDropdownOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react';
+import { DropdownOptionType, IDropdownInputOption } from '../SingleValueInputElements';
 
 export class DropdownHelper {
     public static getNormalizedOptions(defaultOption: IDropdownInputOption, allOptions: IDropdownInputOption[]): IDropdownOption[] {
@@ -51,4 +51,19 @@ export class DropdownHelper {
             itemType: itemType
         };
     };
+
+    public static mapToDropdownOptions(values: string[]): IDropdownInputOption[] {
+        if (!values || !Array.isArray(values)) return [];
+
+        return values
+            .filter((x): boolean => !!x)
+            .map(
+                (o): IDropdownInputOption => {
+                    return {
+                        key: o,
+                        text: o
+                    };
+                }
+            );
+    }
 }

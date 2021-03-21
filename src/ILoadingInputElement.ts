@@ -1,6 +1,6 @@
 import { IInputElement } from './IInputElement';
 
-export interface ILoadingInputElement<TRenderData = never> extends IInputElement<TRenderData> {
+export interface ILoadingInputElement extends IInputElement {
     /**
      * A value indicating whether the input element is currently loading. It should not be changed from the outside.
      * To modify this value, use the @see load method.

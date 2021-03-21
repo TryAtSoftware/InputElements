@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DatePicker, DayOfWeek } from 'office-ui-fabric-react';
+import { DatePicker, DayOfWeek, Label } from 'office-ui-fabric-react';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITimePickerProps } from './ITimePickerProps';
 
@@ -9,13 +9,13 @@ export class TimePicker extends React.Component<ISingleValueInputElementProps<Da
 
         return (
             <>
+                {!!this.props?.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <DatePicker
-                    label={this.props.label}
-                    isRequired={this.props.renderRequiredIndicator}
                     placeholder={this.props.placeholder}
                     onSelectDate={this.onChange}
                     textField={{
-                        errorMessage: this.props.errorMessage
+                        errorMessage: this.props.errorMessage,
+                        disabled: this.props.isDisabled
                     }}
                     showGoToToday={!!this.props.showGoToToday}
                     formatDate={this.props.formatDate}

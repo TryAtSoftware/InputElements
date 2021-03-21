@@ -1,18 +1,7 @@
-import {
-    DropdownInput,
-    DynamicListInputElement,
-    IDropdownInputOption,
-    IDropdownInputProps,
-    IDynamicListInputElement,
-    ISingleValueInputElement,
-    ITextInputProps,
-    restrictValidPath,
-    SingleValueInputElement,
-    TextInput,
-    UpdateCallback
-} from '@try-at-software/input-elements';
+import { DynamicListInputElement, IDynamicListInputElement, UpdateCallback } from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import * as React from 'react';
+import { createDropdown, createTextField } from './DynamicListInputElementSamplesHelper';
 
 interface IListInputElementSampleState {
     isValid: boolean;
@@ -36,12 +25,12 @@ export default class MultipleOptionsListInputElementSample extends React.Compone
                 {
                     name: 'Dropdown',
                     icon: 'Dropdown',
-                    createInput: this.createDropdown
+                    createInput: createDropdown(this.updateForm)
                 },
                 {
                     name: 'Text field',
                     icon: 'TextField',
-                    createInput: this.createTextField
+                    createInput: createTextField(this.updateForm)
                 }
             ],
             this.updateForm
@@ -70,38 +59,6 @@ export default class MultipleOptionsListInputElementSample extends React.Compone
             </div>
         );
     }
-
-    private createDropdown = (): ISingleValueInputElement<string> => {
-        const options: string[] = [];
-
-        for (let i = 0; i < 15; i++) options.push(i.toString());
-
-        return new SingleValueInputElement<string, IDropdownInputProps>(
-            { isRequired: true },
-            DropdownInput,
-            {
-                options: options.map(
-                    (o): IDropdownInputOption => {
-                        return { key: o, text: o };
-                    }
-                ),
-                placeholder: 'Choose any value'
-            },
-            this.updateForm
-        );
-    };
-
-    private createTextField = (): ISingleValueInputElement<string> => {
-        return new SingleValueInputElement<string, ITextInputProps>(
-            { isRequired: true, renderErrors: true },
-            TextInput,
-            {
-                placeholder: 'Write any value'
-            },
-            this.updateForm,
-            restrictValidPath()
-        );
-    };
 
     private printValues = (): void => {
         console.log(this._inputElement.value);

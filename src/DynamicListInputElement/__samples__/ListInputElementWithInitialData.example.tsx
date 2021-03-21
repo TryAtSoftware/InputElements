@@ -1,15 +1,7 @@
-import * as React from 'react';
-import {
-    DropdownInput,
-    DynamicListInputElement,
-    IDropdownInputOption,
-    IDropdownInputProps,
-    IDynamicListInputElement,
-    ISingleValueInputElement,
-    SingleValueInputElement,
-    UpdateCallback
-} from '@try-at-software/input-elements';
+import { DynamicListInputElement, IDynamicListInputElement, UpdateCallback } from '@try-at-software/input-elements';
 import { Checkbox, PrimaryButton } from 'office-ui-fabric-react';
+import * as React from 'react';
+import { createDropdown } from './DynamicListInputElementSamplesHelper';
 
 interface IListInputElementWithInitialDataSampleState {
     isValid: boolean;
@@ -33,13 +25,13 @@ export default class ListInputElementWithInitialDataSample extends React.Compone
                 {
                     name: 'Dropdown',
                     icon: 'Dropdown',
-                    createInput: this.createDropdown
+                    createInput: createDropdown(this.updateForm)
                 }
             ],
             this.updateForm
         );
 
-        this._inputElement.setInitialValue([{ value: 'unexisting data', inputCreationCallback: this.createDropdown }]);
+        this._inputElement.setInitialValue([{ value: 'unexisting data', inputCreationCallback: createDropdown(this.updateForm) }]);
 
         this.state = {
             isValid: this._inputElement.isValid,
@@ -65,26 +57,6 @@ export default class ListInputElementWithInitialDataSample extends React.Compone
             isValid: this._inputElement.isValid,
             hasChanges: this._inputElement.hasChanges
         });
-    };
-
-    private createDropdown = (): ISingleValueInputElement<string> => {
-        const options: string[] = [];
-
-        for (let i = 0; i < 15; i++) options.push(i.toString());
-
-        return new SingleValueInputElement<string, IDropdownInputProps>(
-            { isRequired: true },
-            DropdownInput,
-            {
-                options: options.map(
-                    (o): IDropdownInputOption => {
-                        return { key: o, text: o };
-                    }
-                ),
-                placeholder: 'Choose any value'
-            },
-            this.updateForm
-        );
     };
 
     private printValues = (): void => {

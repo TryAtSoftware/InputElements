@@ -1,15 +1,9 @@
 import { Checkbox, DefaultButton, PrimaryButton, Stack } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { UpdateCallback } from '../../IInputElement';
-import {
-    DropdownInput,
-    IDropdownInputOption,
-    IDropdownInputProps,
-    ISingleValueInputElement,
-    SingleValueInputElement
-} from '../../SingleValueInputElements';
 import { DynamicListInputElement } from '../DynamicListInputElement';
 import { IDynamicListInputElement } from '../IDynamicListInputElement';
+import { createDropdown } from './DynamicListInputElementSamplesHelper';
 
 interface IMultifunctionalListInputElementSampleState {
     isValid: boolean;
@@ -36,7 +30,7 @@ export class MultifunctionalListInputElementSample extends React.Component<unkno
                 {
                     name: 'Dropdown',
                     icon: 'Dropdown',
-                    createInput: this.createDropdown
+                    createInput: createDropdown(this.updateForm)
                 }
             ],
             this.updateForm
@@ -106,26 +100,6 @@ export class MultifunctionalListInputElementSample extends React.Component<unkno
     private finishLoading = (): void => {
         this.loadingFinishedCallback();
         this.loadingFinishedCallback = null;
-    };
-
-    private createDropdown = (): ISingleValueInputElement<string> => {
-        const options: string[] = [];
-
-        for (let i = 0; i < 15; i++) options.push(i.toString());
-
-        return new SingleValueInputElement<string, IDropdownInputProps>(
-            { isRequired: true },
-            DropdownInput,
-            {
-                options: options.map(
-                    (o): IDropdownInputOption => {
-                        return { key: o, text: o };
-                    }
-                ),
-                placeholder: 'Choose any value'
-            },
-            this.updateForm
-        );
     };
 
     private printValues = (): void => {

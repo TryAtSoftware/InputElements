@@ -1,7 +1,7 @@
-import { IBaseInputElementProps } from '../IBaseInputElementProps';
+import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { IDropdownInputOption } from './IDropdownInputOption';
 
-export interface IDropdownInputProps extends IBaseInputElementProps {
+export interface IDropdownInputProps extends IBaseInputElementDynamicProps {
     options?: IDropdownInputOption[];
 
     /**

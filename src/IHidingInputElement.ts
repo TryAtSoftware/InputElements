@@ -1,6 +1,6 @@
 import { IInputElement } from './IInputElement';
 
-export interface IHidingInputElement<TRenderData = never> extends IInputElement<TRenderData> {
+export interface IHidingInputElement extends IInputElement {
     /**
      * A value indicating whether the input element iss visible. It should not be changed from the outside.
      * To modify this value, use the @see hide and @see show methods.

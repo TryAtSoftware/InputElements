@@ -12,3 +12,7 @@ export interface IChangingPresentation<TValue> {
 export interface IRestrictedPresentation {
     setError(errorMessage: string): void;
 }
+
+export interface IDynamicPresentation<TDynamicProps> {
+    changeDynamicProps(dynamicProps: TDynamicProps): void;
+}

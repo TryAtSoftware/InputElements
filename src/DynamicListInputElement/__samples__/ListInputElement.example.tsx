@@ -1,15 +1,7 @@
-import * as React from 'react';
-import {
-    DropdownInput,
-    DynamicListInputElement,
-    IDropdownInputOption,
-    IDropdownInputProps,
-    IDynamicListInputElement,
-    ISingleValueInputElement,
-    SingleValueInputElement,
-    UpdateCallback
-} from '@try-at-software/input-elements';
+import { DynamicListInputElement, IDynamicListInputElement, UpdateCallback } from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
+import * as React from 'react';
+import { createDropdown } from './DynamicListInputElementSamplesHelper';
 
 interface IListInputElementSampleState {
     isValid: boolean;
@@ -33,7 +25,7 @@ export default class ListInputElementSample extends React.Component<unknown, ILi
                 {
                     name: 'Dropdown',
                     icon: 'Dropdown',
-                    createInput: this.createDropdown
+                    createInput: createDropdown(this.updateForm)
                 }
             ],
             this.updateForm
@@ -61,26 +53,6 @@ export default class ListInputElementSample extends React.Component<unknown, ILi
             isValid: this._inputElement.isValid,
             hasChanges: this._inputElement.hasChanges
         });
-    };
-
-    private createDropdown = (): ISingleValueInputElement<string> => {
-        const options: string[] = [];
-
-        for (let i = 0; i < 15; i++) options.push(i.toString());
-
-        return new SingleValueInputElement<string, IDropdownInputProps>(
-            { isRequired: true },
-            DropdownInput,
-            {
-                options: options.map(
-                    (o): IDropdownInputOption => {
-                        return { key: o, text: o };
-                    }
-                ),
-                placeholder: 'Choose any value'
-            },
-            this.updateForm
-        );
     };
 
     private printValues = (): void => {

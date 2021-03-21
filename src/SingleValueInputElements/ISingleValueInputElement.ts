@@ -3,13 +3,14 @@ import { IChangingInputElement } from '../IChangingInputElement';
 import { IHidingInputElement } from '../IHidingInputElement';
 import { ILoadingInputElement } from '../ILoadingInputElement';
 import { IValueInputElement } from '../IValueInputElement';
+import { InvalidValueChangeSubscription, ValueChangeSubscription } from '../Subscriptions';
 import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 
-export interface ISingleValueInputElement<TValue, TComponentProps = unknown, TRenderData = never>
-    extends IValueInputElement<TValue, TRenderData>,
-        IChangingInputElement<TValue, TRenderData>,
-        IHidingInputElement<TRenderData>,
-        ILoadingInputElement<TRenderData> {
+export interface ISingleValueInputElement<TValue, TComponentProps = unknown, TDynamicProps = unknown>
+    extends IValueInputElement<TValue>,
+        IChangingInputElement<TValue>,
+        IHidingInputElement,
+        ILoadingInputElement {
     /**
      * A component containing the front-end part of the input element (all that is visible to the end user).
      * It should accept all necessary props for realizing the communication between the visual and the logical part of the input element.
@@ -17,11 +18,19 @@ export interface ISingleValueInputElement<TValue, TComponentProps = unknown, TRe
      *
      * @see React.Component
      */
-    readonly componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TRenderData>;
+    readonly componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TDynamicProps>;
 
     /**
      * A property containing all additional props that the rendered component needs.
      * They should be initialized before the 'render' method is ever called (the best way of doing that is by passing them into the constructor).
      */
     readonly componentProps: TComponentProps;
+
+    getDynamicProps(): TDynamicProps;
+
+    changeDynamicProps<K extends keyof TDynamicProps>(dynamicProps: Pick<TDynamicProps, K>): void;
+
+    subscribeToValueChange(subscription: ValueChangeSubscription<TValue>): void;
+
+    subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription<TValue>): void;
 }

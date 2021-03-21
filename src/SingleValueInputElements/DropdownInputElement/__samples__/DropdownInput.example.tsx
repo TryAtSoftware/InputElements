@@ -1,13 +1,13 @@
-import * as React from 'react';
 import {
-    DropdownInput,
+    DropdownInputElement,
+    IBaseInputElementProps,
     IDropdownInputOption,
     IDropdownInputProps,
-    IValueInputElement,
-    SingleValueInputElement,
+    ISingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
+import * as React from 'react';
 
 interface IDropdownInputSampleState {
     isValid: boolean;
@@ -15,7 +15,7 @@ interface IDropdownInputSampleState {
 }
 
 export default class DropdownInputSample extends React.Component<unknown, IDropdownInputSampleState> {
-    private _dropdownInput: IValueInputElement<string>;
+    private _dropdownInput: ISingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>;
 
     public constructor(props: unknown) {
         super(props);
@@ -23,22 +23,24 @@ export default class DropdownInputSample extends React.Component<unknown, IDropd
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._dropdownInput = new SingleValueInputElement<string, IDropdownInputProps>(
-            { isRequired: true, label: 'Basic dropdown input (required, without error handling)' },
-            DropdownInput,
+        this._dropdownInput = new DropdownInputElement(
+            { isRequired: true, renderRequiredIndicator: true, label: 'Basic dropdown input (required, without error handling)' },
             {
-                options: options.map(
-                    (o): IDropdownInputOption => {
-                        return {
-                            key: o,
-                            text: o
-                        };
-                    }
-                ),
                 placeholder: 'When you change the value, the button will become enabled and this message will disappear.'
             },
             this.updateForm
         );
+
+        this._dropdownInput.changeDynamicProps({
+            options: options.map(
+                (o): IDropdownInputOption => {
+                    return {
+                        key: o,
+                        text: o
+                    };
+                }
+            )
+        });
 
         this.state = {
             isValid: this._dropdownInput.isValid,

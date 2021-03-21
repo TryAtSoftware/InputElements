@@ -14,17 +14,18 @@ type WrapperType<TValue, TComponentProps, TRenderProps> = SingleValueInputElemen
     ISingleValueInputElementProps<TValue> & TComponentProps & TRenderProps
 >;
 
-export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unknown>
-    extends ExtendedInputElement<TValue, WrapperType<TValue, TComponentProps, TRenderData>>
-    implements ISingleValueInputElement<TValue, TComponentProps, TRenderData> {
+export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = unknown>
+    extends ExtendedInputElement<TValue, WrapperType<TValue, TComponentProps, TDynamicProps>>
+    implements ISingleValueInputElement<TValue, TComponentProps, TDynamicProps> {
     private readonly _configuration: ISingleValueInputElementConfiguration<TValue>;
     private readonly valueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
     private readonly invalidValueChangeSubscriptions: InvalidValueChangeSubscription<TValue>[] = [];
-    private isInvalidated = false;
+    private _dynamicProps: TDynamicProps;
+    private _isInvalidated = false;
 
     public constructor(
         config: ISingleValueInputElementConfiguration<TValue>,
-        component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TRenderData>,
+        component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TDynamicProps>,
         props: TComponentProps,
         update: UpdateCallback,
         ...validationRules: ValidationRule<TValue>[]
@@ -42,12 +43,14 @@ export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unkn
         });
     }
 
+    /** @inheritdoc */
     public subscribeToValueChange(subscription: ValueChangeSubscription<TValue>): void {
         if (!subscription) return;
 
         this.valueChangeSubscriptions.push(subscription);
     }
 
+    /** @inheritdoc */
     public subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription<TValue>): void {
         if (!subscription) return;
 
@@ -56,7 +59,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unkn
 
     /** @inheritdoc */
     protected setInternalValue(value: TValue): void {
-        if (this.isInvalidated) this.isInvalidated = false;
+        if (this._isInvalidated) this._isInvalidated = false;
         this.value = value;
 
         if (this._componentRef?.current) this._componentRef.current.update(value);
@@ -81,7 +84,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unkn
 
     /** @inheritdoc */
     public get isValid(): boolean {
-        if (this.isInvalidated) return false;
+        if (this._isInvalidated) return false;
 
         if (this.errorMessage && this.errorMessage.length > 0) return false;
 
@@ -89,13 +92,18 @@ export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unkn
     }
 
     /** @inheritdoc */
-    public readonly componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TRenderData>;
+    public readonly componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TDynamicProps>;
 
     /** @inheritdoc */
     public componentProps: TComponentProps;
 
     /** @inheritdoc */
-    protected renderComponent(renderData?: TRenderData): JSX.Element {
+    public getDynamicProps(): TDynamicProps {
+        return this._dynamicProps;
+    }
+
+    /** @inheritdoc */
+    protected renderComponent(renderData?: TDynamicProps): JSX.Element {
         return (
             <div className={combineClasses('tas-input-element', this._configuration?.className)}>
                 <div className="tas-input-element-content">
@@ -112,6 +120,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unkn
                             onChange: (newValue: TValue): void => this.setValue(newValue),
                             invalidateInput: this.invalidateInput
                         }}
+                        initialDynamicProps={this._dynamicProps}
                         isInitiallyLoading={this.isLoading}
                         isInitiallyVisible={this.isVisible}
                         ref={this._componentRef}
@@ -119,6 +128,18 @@ export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unkn
                 </div>
             </div>
         );
+    }
+
+    /** @inheritdoc */
+    public changeDynamicProps<K extends keyof TDynamicProps>(dynamicProps: Pick<TDynamicProps, K>): void {
+        if (!dynamicProps) return;
+        this._dynamicProps = {
+            ...this._dynamicProps,
+            ...dynamicProps
+        };
+
+        if (!this._componentRef?.current) return;
+        this._componentRef.current.changeDynamicProps(this._dynamicProps);
     }
 
     /** @inheritdoc */
@@ -148,7 +169,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TRenderData = unkn
     };
 
     private invalidateInput = (): void => {
-        this.isInvalidated = true;
+        this._isInvalidated = true;
         this.updateInternally();
         this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
     };

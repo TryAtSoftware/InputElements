@@ -1,6 +1,6 @@
 import { IInputElement } from './IInputElement';
 
-export interface IValueInputElement<TValue, TRenderData = never> extends IInputElement<TRenderData> {
+export interface IValueInputElement<TValue> extends IInputElement {
     /**
      * The value entered into the input element.
      */

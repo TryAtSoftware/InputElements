@@ -1,4 +1,4 @@
-export interface IInputElement<TRenderData = never> {
+export interface IInputElement {
     /**
      * A boolean indicating if the entered value is valid (all validation rules pass).
      */
@@ -17,7 +17,7 @@ export interface IInputElement<TRenderData = never> {
     /**
      * This method should render the 'componentToRender' with all necessary props.
      */
-    render(renderData?: TRenderData): JSX.Element;
+    render(): JSX.Element;
 
     /**
      * This method should be called every time after the input element has changed.
