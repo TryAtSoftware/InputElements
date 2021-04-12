@@ -14,7 +14,7 @@ export interface IInputInformation<TValue> {
     input: InternalDynamicInput<TValue>;
 }
 
-export class DynamicListInputElement<TValue, TComponentProps>
+export class DynamicListInputElement<TValue>
     extends ExtendedInputElement<IDynamicValueChange<TValue>[], DynamicListInputElementWrapper<TValue>>
     implements IDynamicListInputElement<TValue> {
     private static counter = 0;
