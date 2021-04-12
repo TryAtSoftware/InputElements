@@ -6,7 +6,7 @@ export interface IIdentityPickerProps<TIdentity extends IPersonaProps = IPersona
     extends IBaseInputElementProps,
         IBaseInputElementDynamicProps {
     onResolveSuggestions: (query: string, selectedItems?: TIdentity[]) => Promise<TIdentity[]>;
-    getTextFromItem: (item: TIdentity, currentValue?: string) => string;
+    getTextFromItem?: (item: TIdentity, currentValue?: string) => string;
     onEmptyResolveSuggestions?: (currentPersonas?: TIdentity[]) => Promise<TIdentity[]>;
     suggestionProps?: IBasePickerSuggestionsProps;
     onRemoveSuggestion?: (item: TIdentity) => void;
