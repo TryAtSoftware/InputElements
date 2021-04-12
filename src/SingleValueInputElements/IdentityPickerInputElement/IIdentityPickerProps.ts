@@ -2,12 +2,14 @@ import { IBasePickerSuggestionsProps, IPersonaProps } from 'office-ui-fabric-rea
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 
-export interface IIdentityPickerProps extends IBaseInputElementProps, IBaseInputElementDynamicProps {
-    onResolveSuggestions: (query: string, selectedItems?: IPersonaProps[]) => Promise<IPersonaProps[]>;
-    getTextFromItem: (item: IPersonaProps, currentValue?: string) => string;
-    onEmptyResolveSuggestions?: (currentPersonas?: IPersonaProps[]) => Promise<IPersonaProps[]>;
+export interface IIdentityPickerProps<TIdentity extends IPersonaProps = IPersonaProps>
+    extends IBaseInputElementProps,
+        IBaseInputElementDynamicProps {
+    onResolveSuggestions: (query: string, selectedItems?: TIdentity[]) => Promise<TIdentity[]>;
+    getTextFromItem: (item: TIdentity, currentValue?: string) => string;
+    onEmptyResolveSuggestions?: (currentPersonas?: TIdentity[]) => Promise<TIdentity[]>;
     suggestionProps?: IBasePickerSuggestionsProps;
-    onRemoveSuggestion?: (item: IPersonaProps) => void;
+    onRemoveSuggestion?: (item: TIdentity) => void;
     onInputChange?: (input: string) => string;
     resolveDelay?: number;
     itemLimit?: number;

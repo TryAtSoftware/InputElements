@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { IPersonaProps, MessageBar, MessageBarType, NormalPeoplePicker } from 'office-ui-fabric-react';
+import { IPersonaProps, Label, MessageBar, MessageBarType, NormalPeoplePicker } from 'office-ui-fabric-react';
 import { IIdentityPickerProps } from './IIdentityPickerProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 
-export class IdentityPicker extends React.Component<IIdentityPickerProps & ISingleValueInputElementProps<IPersonaProps[]>> {
+export class IdentityPicker<TIdentity extends IPersonaProps = IPersonaProps> extends React.Component<
+    IIdentityPickerProps<TIdentity> & ISingleValueInputElementProps<TIdentity[]>
+> {
     public render(): JSX.Element {
         if (!this.props) return null;
 
         return (
             <>
+                {this.props.label && <Label required={this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <NormalPeoplePicker
                     onResolveSuggestions={this.props.onResolveSuggestions}
                     onEmptyResolveSuggestions={this.props.onEmptyResolveSuggestions}
@@ -24,7 +27,7 @@ export class IdentityPicker extends React.Component<IIdentityPickerProps & ISing
                         required: this.props.renderRequiredIndicator,
                         placeholder: !!this.props.value && this.props.value.length > 0 ? '' : this.props.placeholder
                     }}
-                    onChange={(items?: IPersonaProps[]): void => {
+                    onChange={(items?: TIdentity[]): void => {
                         this.props.onChange(items);
                     }}
                 />
