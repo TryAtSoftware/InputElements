@@ -2,6 +2,7 @@ export interface IDropdownInputOption {
     key: string;
     text: string;
     type?: DropdownOptionType;
+    disabled?: boolean;
 }
 
 export enum DropdownOptionType {
