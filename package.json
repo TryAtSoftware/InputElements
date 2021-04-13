@@ -70,8 +70,8 @@
         "webpack-dev-server": "^3.11.0"
     },
     "dependencies": {
-        "office-ui-fabric-react": "^7.124.1",
-        "react": "^16.13.1",
-        "react-beautiful-dnd": "^13.0.0"
+        "office-ui-fabric-react": "7.165.0",
+        "react": "16.13.1",
+        "react-beautiful-dnd": "13.0.0"
     }
 }
