@@ -32,5 +32,7 @@ export interface ISingleValueInputElement<TValue, TComponentProps = unknown, TDy
 
     subscribeToValueChange(subscription: ValueChangeSubscription<TValue>): void;
 
+    subscribeToInitialValueChange(subscription: ValueChangeSubscription<TValue>): void;
+
     subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription<TValue>): void;
 }
