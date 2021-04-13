@@ -58,15 +58,16 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     }
 
     /** @inheritdoc */
-    protected setInternalValue(value: TValue): void {
+    protected setInternalValue(value: TValue, isInitial: boolean): void {
         if (this._isInvalidated) this._isInvalidated = false;
         this.value = value;
 
         if (this._componentRef?.current) this._componentRef.current.update(value);
         this.validate();
 
-        if (this.isValid) this.valueChangeSubscriptions.forEach((x): void => x?.(this.value));
-        else this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
+        if (this.isValid) {
+            if (!isInitial) this.valueChangeSubscriptions.forEach((x): void => x?.(this.value));
+        } else this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
     }
 
     /** @inheritdoc */
