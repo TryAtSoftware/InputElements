@@ -119,6 +119,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
                 <div className="tas-input-element-content">
                     <SingleValueInputElementWrapper
                         internalComponent={this.componentToRender}
+                        renderErrors={this._configuration?.renderErrors}
                         renderLoadingIndicator={this._configuration?.renderLoadingComponent}
                         componentProps={{
                             ...this.componentProps,
@@ -126,7 +127,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
                             label: this._configuration?.label,
                             value: this.value,
                             renderRequiredIndicator: this._configuration?.renderRequiredIndicator && this._configuration?.isRequired,
-                            errorMessage: this._configuration?.renderErrors && this.errorMessage,
+                            errorMessage: this.errorMessage,
                             onChange: (newValue: TValue): void => this.setValue(newValue),
                             invalidateInput: this.invalidateInput
                         }}

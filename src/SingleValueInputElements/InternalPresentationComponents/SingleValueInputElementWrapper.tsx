@@ -28,6 +28,8 @@ export interface ISingleValueInputElementWrapperProps<
     isInitiallyVisible: boolean;
 
     renderLoadingIndicator(): JSX.Element;
+
+    renderErrors: boolean;
 }
 
 export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISingleValueInputElementProps<TValue>, TDynamicProps = unknown>
@@ -99,8 +101,7 @@ export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISin
         const { internalComponent: Component, componentProps } = this.props;
         if (!Component) return null;
 
-        return (
-            <Component {...this.state.dynamicProps} {...componentProps} value={this.state.value} errorMessage={this.state.errorMessage} />
-        );
+        const errorMessages: string = this.props?.renderErrors ? this.state.errorMessage : null;
+        return <Component {...this.state.dynamicProps} {...componentProps} value={this.state.value} errorMessage={errorMessages} />;
     };
 }
