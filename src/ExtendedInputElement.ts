@@ -43,7 +43,7 @@ export abstract class ExtendedInputElement<TValue, TPresentation extends IPresen
 
     /** @inheritdoc */
     public resetValue(): void {
-        if (!this._valueIsSet) return;
+        if (!this._valueIsSet && !this._initialValueIsSet) return;
 
         this.setInternalValue(undefined, false);
         this.updateInternally();
