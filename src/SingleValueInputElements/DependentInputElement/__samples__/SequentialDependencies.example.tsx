@@ -1,7 +1,10 @@
 import * as React from 'react';
 import {
+    DropdownInput,
     DropdownInputElement,
     DropdownHelper,
+    IBaseInputElementProps,
+    IDropdownInputProps,
     ISingleValueInputElement,
     UpdateCallback,
     getFormState
@@ -23,8 +26,9 @@ export default class SequentialDependenciesSample extends React.Component<unknow
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        const principalInput = new DropdownInputElement(
+        const principalInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, label: 'Principal dropdown with sequential dependencies (required, without error handling)' },
+            DropdownInput,
             { placeholder: 'When you change the value, the dependent dropdown will appear.' },
             this.updateForm
         );
@@ -36,8 +40,9 @@ export default class SequentialDependenciesSample extends React.Component<unknow
 
         let previousElement: ISingleValueInputElement<string> = principalInput;
         for (let i = 0; i < dependentElementsCount; i++) {
-            const dependentInput = new DropdownInputElement(
+            const dependentInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
                 { isRequired: true, label: `Dependent dropdown #${i + 1} (required, without error handling)` },
+                DropdownInput,
                 { placeholder: 'The next sequentially dependent input element will appear after you enter some value here.' },
                 this.updateForm
             );

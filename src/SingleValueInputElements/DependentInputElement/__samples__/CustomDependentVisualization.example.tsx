@@ -1,16 +1,15 @@
-// import {
-//     DropdownHelper,
-//     DropdownInputElement,
-//     getFormState,
-//     ISingleValueInputElement,
-//     UpdateCallback
-// } from '@try-at-software/input-elements';
+import {
+    DropdownHelper,
+    DropdownInput,
+    DropdownInputElement,
+    getFormState,
+    IBaseInputElementProps,
+    IDropdownInputProps,
+    ISingleValueInputElement,
+    UpdateCallback
+} from '@try-at-software/input-elements';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import * as React from 'react';
-import { UpdateCallback } from '../../../IInputElement';
-import { DropdownHelper, getFormState } from '../../../Utilities';
-import { DropdownInputElement } from '../../DropdownInputElement';
-import { ISingleValueInputElement } from '../../ISingleValueInputElement';
 
 interface ICustomVisualizationSequentialDependenciesSampleState {
     isValid: boolean;
@@ -30,12 +29,13 @@ export default class CustomVisualizationSequentialDependenciesSample extends Rea
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        const principalInput = new DropdownInputElement(
+        const principalInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             {
                 isRequired: true,
                 renderErrors: true,
                 label: 'Principal dropdown with sequential dependencies (required, without error handling)'
             },
+            DropdownInput,
             { placeholder: 'When you change the value, the dependent dropdown will appear.' },
             this.updateForm
         );
@@ -47,8 +47,9 @@ export default class CustomVisualizationSequentialDependenciesSample extends Rea
 
         let previousElement: ISingleValueInputElement<string> = principalInput;
         for (let i = 0; i < dependentElementsCount; i++) {
-            const dependentInput = new DropdownInputElement(
+            const dependentInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
                 { isRequired: true, label: `Dependent dropdown #${i + 1} (required, without error handling)` },
+                DropdownInput,
                 { placeholder: 'The next sequentially dependent input element will appear after you enter some value here.' },
                 this.updateForm
             );

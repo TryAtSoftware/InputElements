@@ -2,8 +2,11 @@ import * as React from 'react';
 import { Checkbox, PrimaryButton, Stack } from 'office-ui-fabric-react';
 import {
     DropdownHelper,
+    DropdownInput,
     DropdownInputElement,
     IInputElement,
+    IBaseInputElementProps,
+    IDropdownInputProps,
     ISingleValueInputElement,
     UpdateCallback,
     getFormState
@@ -18,7 +21,6 @@ export default class LoadingDependentInputSample extends React.Component<unknown
     private readonly _principalInput: ISingleValueInputElement<string>;
     private readonly _dependentInput: ISingleValueInputElement<string>;
     private readonly _allInputs: IInputElement[];
-    private loadingFinishedCallback: () => void;
 
     public constructor(props: unknown) {
         super(props);
@@ -26,8 +28,9 @@ export default class LoadingDependentInputSample extends React.Component<unknown
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._principalInput = new DropdownInputElement(
+        this._principalInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, label: 'Loading principal dropdown (required, without error handling)' },
+            DropdownInput,
             { placeholder: 'When you change the value, the dependent dropdown will appear.' },
             this.updateForm
         );
@@ -35,8 +38,9 @@ export default class LoadingDependentInputSample extends React.Component<unknown
             options: DropdownHelper.mapToDropdownOptions(options)
         });
 
-        this._dependentInput = new DropdownInputElement(
+        this._dependentInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, label: 'Dependent dropdown (required, without error handling)' },
+            DropdownInput,
             { placeholder: 'When you change the value, the button will become enabled and this message will disappear.' },
             this.updateForm
         );
@@ -99,16 +103,5 @@ export default class LoadingDependentInputSample extends React.Component<unknown
     private printValues = (): void => {
         console.log('Principal value: ' + this._principalInput.value);
         console.log('Dependent value: ' + this._dependentInput.value);
-    };
-
-    private startLoading = (): void => {
-        this._principalInput.load((doneCallback: () => void): void => {
-            this.loadingFinishedCallback = doneCallback;
-        });
-    };
-
-    private finishLoading = (): void => {
-        this.loadingFinishedCallback();
-        this.loadingFinishedCallback = null;
     };
 }

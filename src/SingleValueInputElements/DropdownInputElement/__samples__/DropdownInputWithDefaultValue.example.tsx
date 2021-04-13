@@ -1,5 +1,6 @@
 import {
     DropdownInputElement,
+    DropdownInput,
     IBaseInputElementProps,
     IDropdownInputOption,
     IDropdownInputProps,
@@ -27,12 +28,13 @@ export default class DropdownInputWithDefaultValueSample extends React.Component
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._dropdownInput = new DropdownInputElement(
+        this._dropdownInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             {
                 isRequired: true,
                 renderRequiredIndicator: true,
                 label: 'Dropdown input with default selected value (required, without error handling)'
             },
+            DropdownInput,
             {
                 placeholder: 'When you change the value, the button will become enabled and this message will disappear.'
             },

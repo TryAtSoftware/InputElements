@@ -1,4 +1,5 @@
 import {
+    DropdownInput,
     DropdownInputElement,
     IBaseInputElementProps,
     IDropdownInputOption,
@@ -23,8 +24,9 @@ export default class DropdownInputSample extends React.Component<unknown, IDropd
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._dropdownInput = new DropdownInputElement(
+        this._dropdownInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, renderRequiredIndicator: true, label: 'Basic dropdown input (required, without error handling)' },
+            DropdownInput,
             {
                 placeholder: 'When you change the value, the button will become enabled and this message will disappear.'
             },

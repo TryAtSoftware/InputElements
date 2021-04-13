@@ -1,20 +1,25 @@
+import * as React from 'react';
 import { UpdateCallback } from '../../IInputElement';
 import { ValidationRule } from '../../IValueInputElement';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 import { ISingleValueInputElementConfiguration } from '../ISingleInputElementConfiguration';
+import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { SingleValueInputElement } from '../SingleValueInputElement';
-import { DropdownInput } from './DropdownInput';
 import { IDropdownInputOption } from './IDropdownInputOption';
 import { IDropdownInputProps } from './IDropdownInputProps';
 
-export class DropdownInputElement extends SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps> {
+export class DropdownInputElement<
+    TComponentProps extends IBaseInputElementProps,
+    TDynamicProps extends IDropdownInputProps
+> extends SingleValueInputElement<string, TComponentProps, TDynamicProps> {
     constructor(
         config: ISingleValueInputElementConfiguration<string>,
-        props: IBaseInputElementProps,
+        component: React.ComponentType<ISingleValueInputElementProps<string> & TComponentProps & TDynamicProps>,
+        props: TComponentProps,
         update: UpdateCallback,
         ...validationRules: ValidationRule<string>[]
     ) {
-        super(config, DropdownInput, props, update, ...validationRules);
+        super(config, component, props, update, ...validationRules);
 
         this.validationRules.push(this.getConsistencyValidationRule());
     }

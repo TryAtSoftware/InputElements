@@ -1,4 +1,5 @@
 import {
+    DropdownInput,
     DropdownInputElement,
     IBaseInputElementProps,
     IDropdownInputOption,
@@ -23,13 +24,14 @@ export default class DropdownInputWithInvalidOptionSample extends React.Componen
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._dropdownInput = new DropdownInputElement(
+        this._dropdownInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             {
                 isRequired: true,
                 renderRequiredIndicator: true,
                 label: 'Dropdown input with invalid initial value (required, with error handling)',
                 renderErrors: true
             },
+            DropdownInput,
             { placeholder: 'Choose any value' },
             this.updateForm
         );

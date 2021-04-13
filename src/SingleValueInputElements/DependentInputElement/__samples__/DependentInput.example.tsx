@@ -1,6 +1,9 @@
 import {
+    DropdownInput,
     DropdownInputElement,
     DropdownHelper,
+    IBaseInputElementProps,
+    IDropdownInputProps,
     IInputElement,
     ISingleValueInputElement,
     UpdateCallback,
@@ -25,8 +28,9 @@ export default class DependentInputSample extends React.Component<unknown, IDepe
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._principalInput = new DropdownInputElement(
+        this._principalInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, label: 'Principal dropdown (required, without error handling)' },
+            DropdownInput,
             { placeholder: 'When you change the value, the dependent dropdown will appear.' },
             this.updateForm
         );
@@ -34,8 +38,9 @@ export default class DependentInputSample extends React.Component<unknown, IDepe
             options: DropdownHelper.mapToDropdownOptions(options)
         });
 
-        this._dependentInput = new DropdownInputElement(
+        this._dependentInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, label: 'Dependent dropdown (required, without error handling)' },
+            DropdownInput,
             { placeholder: 'When you change the value, the button will become enabled and this message will disappear.' },
             this.updateForm
         );
