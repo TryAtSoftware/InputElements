@@ -17,10 +17,7 @@ export class DropdownHelper {
             allOptions.forEach((o): void => {
                 if (!o) return;
 
-                const newOption: IDropdownOption = {
-                    ...DropdownHelper.toNormalizedDropdownOption(o),
-                    selected: false
-                };
+                const newOption = this.toNormalizedDropdownOption(o);
                 options.push(newOption);
             });
 
@@ -51,19 +48,4 @@ export class DropdownHelper {
             itemType: itemType
         };
     };
-
-    public static mapToDropdownOptions(values: string[]): IDropdownInputOption[] {
-        if (!values || !Array.isArray(values)) return [];
-
-        return values
-            .filter((x): boolean => !!x)
-            .map(
-                (o): IDropdownInputOption => {
-                    return {
-                        key: o,
-                        text: o
-                    };
-                }
-            );
-    }
 }
