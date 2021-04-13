@@ -48,4 +48,19 @@ export class DropdownHelper {
             itemType: itemType
         };
     };
+
+    public static mapToDropdownOptions(values: string[]): IDropdownInputOption[] {
+        if (!values || !Array.isArray(values)) return [];
+
+        return values
+            .filter((x): boolean => !!x)
+            .map(
+                (o): IDropdownInputOption => {
+                    return {
+                        key: o,
+                        text: o
+                    };
+                }
+            );
+    }
 }

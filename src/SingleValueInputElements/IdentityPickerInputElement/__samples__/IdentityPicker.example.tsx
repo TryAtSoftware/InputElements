@@ -21,7 +21,7 @@ export default class IdentityPickerSample extends React.Component<unknown, IIden
         super(props);
 
         this._identityPicker = new SingleValueInputElement<IPersonaProps[], IIdentityPickerProps>(
-            { isRequired: true },
+            { isRequired: true, label: 'Basic identity picker' },
             IdentityPicker,
             {
                 getTextFromItem: this._getTextFromItem,
