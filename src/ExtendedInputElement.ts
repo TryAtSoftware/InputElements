@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { IChangingInputElement } from './IChangingInputElement';
+import { ChangingInputElement } from './ChangingInputElement';
 import { IHidingInputElement } from './IHidingInputElement';
 import { UpdateCallback } from './IInputElement';
 import { ILoadingInputElement } from './ILoadingInputElement';
-import { InputElement } from './InputElement';
 import { IPresentation } from './Presentations';
 
-export abstract class ExtendedInputElement<TValue, TPresentation extends IPresentation> extends InputElement
-    implements IHidingInputElement, ILoadingInputElement, IChangingInputElement<TValue> {
-    protected initialValue: TValue;
-    protected _valueIsSet = false;
-    protected _initialValueIsSet = false;
+export abstract class ExtendedInputElement<TValue, TPresentation extends IPresentation> extends ChangingInputElement<TValue>
+    implements IHidingInputElement, ILoadingInputElement {
     protected _componentRef: React.RefObject<TPresentation>;
 
     private _isVisible = true;
@@ -21,35 +17,6 @@ export abstract class ExtendedInputElement<TValue, TPresentation extends IPresen
 
         this._componentRef = React.createRef();
     }
-
-    /** @inheritdoc */
-    public setInitialValue(value: TValue): void {
-        if (this._valueIsSet || this._initialValueIsSet) return;
-
-        this._initialValueIsSet = true;
-        this.initialValue = value;
-
-        this.setInternalValue(value, true);
-        this.updateInternally();
-    }
-
-    /** @inheritdoc */
-    public setValue(value: TValue): void {
-        this._valueIsSet = true;
-
-        this.setInternalValue(value, false);
-        this.updateInternally();
-    }
-
-    /** @inheritdoc */
-    public resetValue(): void {
-        if (!this._valueIsSet && !this._initialValueIsSet) return;
-
-        this.setInternalValue(undefined, false);
-        this.updateInternally();
-    }
-
-    protected abstract setInternalValue(value: TValue, isInitial: boolean): void;
 
     /** @inheritdoc */
     public get isVisible(): boolean {
