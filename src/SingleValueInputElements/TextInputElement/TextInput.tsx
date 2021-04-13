@@ -11,6 +11,7 @@ export class TextInput extends React.Component<ISingleValueInputElementProps<str
             <>
                 {!!this.props?.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <TextField
+                    data-automationid="input-singlevalue"
                     value={this.props.value || ''}
                     onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string): void => {
                         this.props.onChange(newValue);
