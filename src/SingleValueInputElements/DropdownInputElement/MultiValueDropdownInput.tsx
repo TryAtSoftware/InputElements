@@ -19,7 +19,9 @@ export class MultiValueDropdownInput extends React.Component<
                     const optionKey = option?.key?.toString();
                     if (!optionKey) return;
 
-                    let currentValues = this.props?.value ?? [];
+                    // We have to re-iterate the passed collection of values here in order to detect changes between the initial and the current values.
+                    let currentValues: string[] = [];
+                    if (this.props?.value) currentValues.push(...this.props.value);
 
                     // If the current option is selected, add it to the list.
                     // Else, remove it.
