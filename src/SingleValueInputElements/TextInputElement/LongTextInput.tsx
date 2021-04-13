@@ -24,6 +24,7 @@ export class LongTextInput extends React.Component<ISingleValueInputElementProps
             <>
                 {!!this.props?.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <TextField
+                    data-automationid="long-text-input"
                     value={this.props.value || ''}
                     onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string): void => {
                         // Dynamically change the 'isMultiline' state property.

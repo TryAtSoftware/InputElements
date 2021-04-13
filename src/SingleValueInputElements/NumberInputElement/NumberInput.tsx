@@ -24,6 +24,7 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
                 {/* For some reason the Fluent-UI styles for the placeholders in every other component differ from the SpinButton defaults so we should override them'. */}
                 {this.props.label && <Label required={this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <SpinButton
+                    data-automationid="number-input"
                     styles={{
                         input: {
                             fontFamily: '"Segoe UI", "Segoe UI Web (West European)"',
@@ -75,7 +76,12 @@ export class NumberInput extends React.Component<ISingleValueInputElementProps<n
         else this.props.invalidateInput();
     }
 
-    private ensureValueConsistency(value: number): { warning: string; newValue: number } {
+    private ensureValueConsistency(
+        value: number
+    ): {
+        warning: string;
+        newValue: number;
+    } {
         const maxValue = this.getMaxValue();
         if (value > maxValue) return { warning: `The maximum value is ${maxValue}`, newValue: undefined };
 

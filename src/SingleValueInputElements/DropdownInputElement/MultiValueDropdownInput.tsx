@@ -13,6 +13,7 @@ export class MultiValueDropdownInput extends React.Component<
 
         return (
             <Dropdown
+                data-automationid="multi-value-dropdown-input"
                 label={this.props?.label}
                 options={normalizedOptions}
                 onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void => {

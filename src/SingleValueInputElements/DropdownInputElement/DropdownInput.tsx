@@ -14,7 +14,7 @@ export class DropdownInput extends React.Component<ISingleValueInputElementProps
             <>
                 {!!this.props?.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <Dropdown
-                    data-automationid="input-dropdown"
+                    data-automationid="dropdown-input"
                     options={normalizedOptions}
                     onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
                         !!this.props?.onChange && this.props.onChange(option.key as string)
