@@ -1,7 +1,6 @@
-import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 
-export interface INumberInputProps extends IBaseInputElementProps, IBaseInputElementDynamicProps {
+export interface INumberInputProps extends IBaseInputElementProps {
     handleDecimalValues?: boolean;
     min?: number;
     max?: number;

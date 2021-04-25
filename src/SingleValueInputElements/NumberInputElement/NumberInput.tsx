@@ -1,5 +1,6 @@
 import { Label, MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
 import * as React from 'react';
+import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { INumberInputProps } from './INumberInputProps';
 
@@ -10,7 +11,10 @@ interface INumberInputState {
 
 const delimiter = '.';
 
-export class NumberInput extends React.Component<ISingleValueInputElementProps<number> & INumberInputProps, INumberInputState> {
+export class NumberInput extends React.Component<
+    ISingleValueInputElementProps<number> & INumberInputProps & IBaseInputElementDynamicProps,
+    INumberInputState
+> {
     public state: INumberInputState = {
         intermediateValue: this.props.value?.toString(),
         customWarning: ''

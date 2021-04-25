@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITextInputProps } from './ITextInputProps';
 import { Label, TextField } from 'office-ui-fabric-react';
 
-export class TextInput extends React.Component<ISingleValueInputElementProps<string> & ITextInputProps> {
+export class TextInput extends React.Component<ISingleValueInputElementProps<string> & ITextInputProps & IBaseInputElementDynamicProps> {
     public render(): JSX.Element {
         if (!this.props) return null;
 

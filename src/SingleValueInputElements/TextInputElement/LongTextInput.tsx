@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITextInputProps } from './ITextInputProps';
 import { Label, TextField } from 'office-ui-fabric-react';
@@ -7,7 +8,10 @@ export interface ILongTextInputState {
     isMultiline: boolean;
 }
 
-export class LongTextInput extends React.Component<ISingleValueInputElementProps<string> & ITextInputProps, ILongTextInputState> {
+export class LongTextInput extends React.Component<
+    ISingleValueInputElementProps<string> & ITextInputProps & IBaseInputElementDynamicProps,
+    ILongTextInputState
+> {
     /**
      * The number of characters after which the text input is changed to a multiline textbox.
      */

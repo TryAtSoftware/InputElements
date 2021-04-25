@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { IPersonaProps, Label, MessageBar, MessageBarType, NormalPeoplePicker } from 'office-ui-fabric-react';
+import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { IIdentityPickerProps } from './IIdentityPickerProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 
 export class IdentityPicker<TIdentity extends IPersonaProps = IPersonaProps> extends React.Component<
-    IIdentityPickerProps<TIdentity> & ISingleValueInputElementProps<TIdentity[]>
+    ISingleValueInputElementProps<TIdentity[]> & IIdentityPickerProps<TIdentity> & IBaseInputElementDynamicProps
 > {
     public render(): JSX.Element {
         if (!this.props) return null;

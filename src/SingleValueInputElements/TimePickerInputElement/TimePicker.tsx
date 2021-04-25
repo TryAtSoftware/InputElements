@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { DatePicker, DayOfWeek, Label } from 'office-ui-fabric-react';
+import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITimePickerProps } from './ITimePickerProps';
 
-export class TimePicker extends React.Component<ISingleValueInputElementProps<Date> & ITimePickerProps> {
+export class TimePicker extends React.Component<ISingleValueInputElementProps<Date> & ITimePickerProps & IBaseInputElementDynamicProps> {
     public render(): JSX.Element {
         if (!this.props) return null;
 
