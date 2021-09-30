@@ -1,5 +1,5 @@
 export interface IDropdownInputOption {
-    key: string;
+    key: string | number;
     text: string;
     type?: DropdownOptionType;
     disabled?: boolean;

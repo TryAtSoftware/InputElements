@@ -16,7 +16,8 @@ type WrapperType<TValue, TComponentProps, TRenderProps> = SingleValueInputElemen
 
 export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = unknown>
     extends ExtendedInputElement<TValue, WrapperType<TValue, TComponentProps, TDynamicProps>>
-    implements ISingleValueInputElement<TValue, TComponentProps, TDynamicProps> {
+    implements ISingleValueInputElement<TValue, TComponentProps, TDynamicProps>
+{
     private readonly _configuration: ISingleValueInputElementConfiguration<TValue>;
     private readonly valueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
     private readonly initialValueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
@@ -113,7 +114,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     }
 
     /** @inheritdoc */
-    protected renderComponent(renderData?: TDynamicProps): JSX.Element {
+    protected renderComponent(): JSX.Element {
         return (
             <div className={combineClasses('tas-input-element', this._configuration?.className)}>
                 <div className="tas-input-element-content">
@@ -123,7 +124,6 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
                         renderLoadingIndicator={this._configuration?.renderLoadingComponent}
                         componentProps={{
                             ...this.componentProps,
-                            ...renderData,
                             label: this._configuration?.label,
                             value: this.value,
                             renderRequiredIndicator: this._configuration?.renderRequiredIndicator && this._configuration?.isRequired,
