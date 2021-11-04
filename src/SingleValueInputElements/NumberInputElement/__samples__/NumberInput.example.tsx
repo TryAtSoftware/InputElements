@@ -24,7 +24,8 @@ export default class NumberInputSample extends React.Component<unknown, INumberI
             {
                 isRequired: true,
                 renderRequiredIndicator: true,
-                label: 'Basic numeric input (required, without error handling)',
+                label: 'Basic numeric input (required, with error handling)',
+                renderErrors: true,
                 comparator: new ZeroIsValidComparator()
             },
             NumberInput,

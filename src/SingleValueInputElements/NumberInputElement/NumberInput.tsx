@@ -25,36 +25,28 @@ export class NumberInput extends React.Component<
 
         return (
             <>
-                {/* For some reason the Fluent-UI styles for the placeholders in every other component differ from the SpinButton defaults so we should override them'. */}
                 {this.props.label && <Label required={this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <SpinButton
                     data-automationid="number-input"
-                    styles={{
-                        input: {
-                            fontFamily: '"Segoe UI", "Segoe UI Web (West European)"',
-                            fontSize: 14,
-                            fontWeight: 400
-                        }
-                    }}
                     inputProps={{
                         autoFocus: this.props.autoFocus,
                         placeholder: this.props.placeholder,
-                        disabled: this.props.isDisabled
+                        disabled: this.props.isDisabled,
+                        onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+                            const newValue = event.target.value;
+                            console.log(newValue);
+                            const value = NumberInput.normalizeData(newValue);
+                            if (!value || isNaN(Number(value))) {
+                                this.setState({ intermediateValue: value, customWarning: 'The provided value is not a valid number.' });
+                                this.props.invalidateInput();
+                                return;
+                            }
+
+                            const numericValue = NumberInput.getNumericValue(value);
+                            this.handleUserInput(numericValue, value);
+                        }
                     }}
                     value={this.state.intermediateValue ?? ''}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                        const value = NumberInput.normalizeData(event?.target?.value);
-                        if (!value || isNaN(Number(value))) {
-                            this.setState({ intermediateValue: value });
-                            this.props.invalidateInput();
-                            return;
-                        }
-
-                        const numericValue = NumberInput.getNumericValue(value);
-                        this.handleUserInput(numericValue, value);
-                    }}
-                    // We should obligatorily define this function, because there will be a problem with incrementing/decrementing a newly typed value.
-                    onValidate={(): string => this.state.intermediateValue}
                     onIncrement={(value: string): void => {
                         let numericValue = NumberInput.getNumericValue(value);
                         numericValue += this.getStep();
@@ -88,7 +80,7 @@ export class NumberInput extends React.Component<
         if (value > maxValue) return { warning: `The maximum value is ${maxValue}`, newValue: undefined };
 
         const minValue = this.getMinValue();
-        if (value < minValue) return { warning: `The minimum value is ${maxValue}`, newValue: undefined };
+        if (value < minValue) return { warning: `The minimum value is ${minValue}`, newValue: undefined };
 
         if (!this.props.handleDecimalValues && value % 1 !== 0)
             return {

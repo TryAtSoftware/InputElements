@@ -1,12 +1,13 @@
-import * as React from 'react';
+import { IPersonaProps, PrimaryButton } from '@fluentui/react';
 import {
+    ArrayComparator,
     IdentityPicker,
     IIdentityPickerProps,
     IValueInputElement,
     SingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
-import { IPersonaProps, PrimaryButton } from '@fluentui/react';
+import * as React from 'react';
 import { people } from './ExampleData';
 
 interface IIdentityPickerSampleState {
@@ -21,7 +22,7 @@ export default class IdentityPickerSample extends React.Component<unknown, IIden
         super(props);
 
         this._identityPicker = new SingleValueInputElement<IPersonaProps[], IIdentityPickerProps>(
-            { isRequired: true, label: 'Basic identity picker' },
+            { isRequired: true, label: 'Basic identity picker', comparator: new ArrayComparator<IPersonaProps>() },
             IdentityPicker,
             {
                 getTextFromItem: this._getTextFromItem,

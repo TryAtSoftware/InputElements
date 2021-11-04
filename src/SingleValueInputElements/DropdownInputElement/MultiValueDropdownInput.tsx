@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dropdown, IDropdownOption } from '@fluentui/react';
+import { Dropdown, IDropdownOption, Label } from '@fluentui/react';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 import { IDropdownInputProps } from './IDropdownInputProps';
@@ -12,33 +12,35 @@ export class MultiValueDropdownInput extends React.Component<
         const normalizedOptions = DropdownHelper.getNormalizedOptions(this.props?.defaultOption, this.props?.options);
 
         return (
-            <Dropdown
-                data-automationid="multi-value-dropdown-input"
-                label={this.props?.label}
-                options={normalizedOptions}
-                onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void => {
-                    const optionKey = option?.key?.toString();
-                    if (!optionKey) return;
+            <>
+                {this.props.label && <Label required={this.props.renderRequiredIndicator}>{this.props.label}</Label>}
+                <Dropdown
+                    data-automationid="multi-value-dropdown-input"
+                    options={normalizedOptions}
+                    onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void => {
+                        const optionKey = option?.key?.toString();
+                        if (!optionKey) return;
 
-                    // We have to re-iterate the passed collection of values here in order to detect changes between the initial and the current values.
-                    let currentValues: string[] = [];
-                    if (this.props?.value) currentValues.push(...this.props.value);
+                        // We have to re-iterate the passed collection of values here in order to detect changes between the initial and the current values.
+                        let currentValues: string[] = [];
+                        if (this.props?.value) currentValues.push(...this.props.value);
 
-                    // If the current option is selected, add it to the list.
-                    // Else, remove it.
-                    if (option.selected) currentValues.push(optionKey);
-                    else currentValues = currentValues.filter((x): boolean => x !== optionKey);
+                        // If the current option is selected, add it to the list.
+                        // Else, remove it.
+                        if (option.selected) currentValues.push(optionKey);
+                        else currentValues = currentValues.filter((x): boolean => x !== optionKey);
 
-                    !!this.props?.onChange && this.props.onChange(currentValues);
-                }}
-                errorMessage={this.props?.errorMessage}
-                required={!!this.props?.renderRequiredIndicator}
-                placeholder={this.props?.placeholder}
-                // This value should never be `undefined`.
-                defaultSelectedKeys={this.props?.value || [this.props?.defaultOption?.key] || null}
-                disabled={this.props?.isDisabled}
-                multiSelect
-            />
+                        !!this.props?.onChange && this.props.onChange(currentValues);
+                    }}
+                    errorMessage={this.props?.errorMessage}
+                    required={!!this.props?.renderRequiredIndicator}
+                    placeholder={this.props?.placeholder}
+                    // This value should never be `undefined`.
+                    defaultSelectedKeys={this.props?.value || [this.props?.defaultOption?.key] || null}
+                    disabled={this.props?.isDisabled}
+                    multiSelect
+                />
+            </>
         );
     }
 }
