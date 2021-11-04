@@ -48,14 +48,12 @@ export default class DropdownInputWithDefaultValueSample extends React.Component
 
         this._dropdownInput.changeDynamicProps({
             defaultOption: this._defaultOption,
-            options: options.map(
-                (o): IDropdownInputOption => {
-                    return {
-                        key: o,
-                        text: o
-                    };
-                }
-            )
+            options: options.map((o): IDropdownInputOption => {
+                return {
+                    key: o,
+                    text: o
+                };
+            })
         });
 
         this.state = {

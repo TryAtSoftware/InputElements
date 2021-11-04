@@ -38,24 +38,22 @@ export class DynamicInputsList<TValue> extends React.Component<IDynamicInputList
     private renderInputsList(): JSX.Element {
         return (
             <>
-                {this.props.inputs.map(
-                    (i, index): JSX.Element => {
-                        return (
-                            <Draggable key={i.uniqueId} draggableId={i.uniqueId.toString()} index={index}>
-                                {(provided: DraggableProvided): React.ReactElement => (
-                                    <div
-                                        className="tas-dynamic-input-element"
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                    >
-                                        {this.renderDynamicInput(i.input, index)}
-                                    </div>
-                                )}
-                            </Draggable>
-                        );
-                    }
-                )}
+                {this.props.inputs.map((i, index): JSX.Element => {
+                    return (
+                        <Draggable key={i.uniqueId} draggableId={i.uniqueId.toString()} index={index}>
+                            {(provided: DraggableProvided): React.ReactElement => (
+                                <div
+                                    className="tas-dynamic-input-element"
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                >
+                                    {this.renderDynamicInput(i.input, index)}
+                                </div>
+                            )}
+                        </Draggable>
+                    );
+                })}
             </>
         );
     }

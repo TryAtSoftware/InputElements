@@ -37,7 +37,8 @@ export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISin
         ISingleValueInputElementWrapperProps<TValue, TComponentProps, TDynamicProps>,
         ISingleValueInputElementWrapperState<TValue, TDynamicProps>
     >
-    implements IPresentation, IChangingPresentation<TValue>, IRestrictedPresentation, IDynamicPresentation<TDynamicProps> {
+    implements IPresentation, IChangingPresentation<TValue>, IRestrictedPresentation, IDynamicPresentation<TDynamicProps>
+{
     public constructor(props: ISingleValueInputElementWrapperProps<TValue, TComponentProps, TDynamicProps>) {
         super(props);
 

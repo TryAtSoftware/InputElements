@@ -19,8 +19,7 @@ module.exports = {
     devtool: 'source-map',
     devServer: {
         port: 5000,
-        contentBase: './src/__samples__',
-        inline: true,
+        static: './src/__samples__',
         hot: true
     },
     resolve: {
@@ -30,8 +29,7 @@ module.exports = {
 
     module: {
         rules: [
-            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+            { test: /\.tsx?$/, loader: 'ts-loader' },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },

@@ -17,8 +17,7 @@ export default class TimePickerWithMonthsSample extends React.Component<unknown,
             {
                 isRequired: true,
                 renderRequiredIndicator: true,
-                label:
-                    'Time picker input without validation that allows you more easily to select a month (required, without error handling)'
+                label: 'Time picker input without validation that allows you more easily to select a month (required, without error handling)'
             },
             TimePicker,
             {

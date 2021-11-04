@@ -5,8 +5,10 @@ import { UpdateCallback } from './IInputElement';
 import { ILoadingInputElement } from './ILoadingInputElement';
 import { IPresentation } from './Presentations';
 
-export abstract class ExtendedInputElement<TValue, TPresentation extends IPresentation> extends ChangingInputElement<TValue>
-    implements IHidingInputElement, ILoadingInputElement {
+export abstract class ExtendedInputElement<TValue, TPresentation extends IPresentation>
+    extends ChangingInputElement<TValue>
+    implements IHidingInputElement, ILoadingInputElement
+{
     protected _componentRef: React.RefObject<TPresentation>;
 
     private _isVisible = true;

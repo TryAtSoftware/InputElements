@@ -54,13 +54,11 @@ export class DropdownHelper {
 
         return values
             .filter((x): boolean => !!x)
-            .map(
-                (o): IDropdownInputOption => {
-                    return {
-                        key: o,
-                        text: o
-                    };
-                }
-            );
+            .map((o): IDropdownInputOption => {
+                return {
+                    key: o,
+                    text: o
+                };
+            });
     }
 }

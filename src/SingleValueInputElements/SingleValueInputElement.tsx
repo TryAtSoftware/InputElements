@@ -21,7 +21,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     private readonly _configuration: ISingleValueInputElementConfiguration<TValue>;
     private readonly valueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
     private readonly initialValueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
-    private readonly invalidValueChangeSubscriptions: InvalidValueChangeSubscription<TValue>[] = [];
+    private readonly invalidValueChangeSubscriptions: InvalidValueChangeSubscription[] = [];
     private _dynamicProps: TDynamicProps;
     private _isInvalidated = false;
 
@@ -60,7 +60,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     }
 
     /** @inheritdoc */
-    public subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription<TValue>): void {
+    public subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription): void {
         if (!subscription) return;
 
         this.invalidValueChangeSubscriptions.push(subscription);

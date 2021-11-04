@@ -37,14 +37,12 @@ export default class DropdownInputWithInvalidOptionSample extends React.Componen
         );
 
         this._dropdownInput.changeDynamicProps({
-            options: options.map(
-                (o): IDropdownInputOption => {
-                    return {
-                        key: o,
-                        text: o
-                    };
-                }
-            )
+            options: options.map((o): IDropdownInputOption => {
+                return {
+                    key: o,
+                    text: o
+                };
+            })
         });
 
         this._dropdownInput.setInitialValue('invalid_value');

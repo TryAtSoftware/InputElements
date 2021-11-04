@@ -46,16 +46,14 @@ export class DynamicListMenu<TValue> extends React.Component<IDynamicListMenuPro
 
     private getItems(): IContextualMenuProps {
         return {
-            items: this.props.options.map(
-                (option, index): IContextualMenuItem => {
-                    return {
-                        key: index.toString(),
-                        iconProps: { iconName: option.icon },
-                        name: option.name,
-                        onClick: (): void => !!this.props.onAddClicked && this.props.onAddClicked(option.createInput())
-                    };
-                }
-            )
+            items: this.props.options.map((option, index): IContextualMenuItem => {
+                return {
+                    key: index.toString(),
+                    iconProps: { iconName: option.icon },
+                    name: option.name,
+                    onClick: (): void => !!this.props.onAddClicked && this.props.onAddClicked(option.createInput())
+                };
+            })
         };
     }
 }

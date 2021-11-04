@@ -27,11 +27,9 @@ export function createDropdown(updateForm: UpdateCallback): () => ISingleValueIn
         );
 
         dropdownInput.changeDynamicProps({
-            options: options.map(
-                (o): IDropdownInputOption => {
-                    return { key: o, text: o };
-                }
-            )
+            options: options.map((o): IDropdownInputOption => {
+                return { key: o, text: o };
+            })
         });
 
         return dropdownInput;

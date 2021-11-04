@@ -25,7 +25,11 @@ export default class DropdownInputSample extends React.Component<unknown, IDropd
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
         this._dropdownInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
-            { isRequired: true, renderRequiredIndicator: true, label: 'Basic dropdown input (required, without error handling)' },
+            {
+                isRequired: true,
+                renderRequiredIndicator: true,
+                label: 'Basic dropdown input (required, without error handling)'
+            },
             DropdownInput,
             {
                 placeholder: 'When you change the value, the button will become enabled and this message will disappear.'
@@ -34,14 +38,12 @@ export default class DropdownInputSample extends React.Component<unknown, IDropd
         );
 
         this._dropdownInput.changeDynamicProps({
-            options: options.map(
-                (o): IDropdownInputOption => {
-                    return {
-                        key: o,
-                        text: o
-                    };
-                }
-            )
+            options: options.map((o): IDropdownInputOption => {
+                return {
+                    key: o,
+                    text: o
+                };
+            })
         });
 
         this.state = {

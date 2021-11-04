@@ -16,7 +16,8 @@ export interface IInputInformation<TValue> {
 
 export class DynamicListInputElement<TValue>
     extends ExtendedInputElement<IDynamicValueChange<TValue>[], DynamicListInputElementWrapper<TValue>>
-    implements IDynamicListInputElement<TValue> {
+    implements IDynamicListInputElement<TValue>
+{
     private static counter = 0;
 
     private readonly _configuration: IDynamicListInputElementConfiguration;

@@ -80,9 +80,7 @@ export class NumberInput extends React.Component<
         else this.props.invalidateInput();
     }
 
-    private ensureValueConsistency(
-        value: number
-    ): {
+    private ensureValueConsistency(value: number): {
         warning: string;
         newValue: number;
     } {

@@ -18,7 +18,8 @@ export class DynamicListInputElementWrapper<TValue>
         IDynamicInputListProps<TValue> & ICommonInputBehaviorConfiguration,
         IDynamicListInputElementWrapperState<TValue>
     >
-    implements IChangingPresentation<IInputInformation<TValue>[]> {
+    implements IChangingPresentation<IInputInformation<TValue>[]>
+{
     public constructor(props: IDynamicInputListProps<TValue> & ICommonInputBehaviorConfiguration) {
         super(props);
 
