@@ -1,4 +1,4 @@
-import { Label, MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
+import { Label, MessageBar, MessageBarType, SpinButton } from '@fluentui/react';
 import * as React from 'react';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';

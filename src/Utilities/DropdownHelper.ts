@@ -1,4 +1,4 @@
-import { IDropdownOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react';
+import { IDropdownOption, SelectableOptionMenuItemType } from '@fluentui/react';
 import { DropdownOptionType, IDropdownInputOption } from '../SingleValueInputElements';
 
 export class DropdownHelper {

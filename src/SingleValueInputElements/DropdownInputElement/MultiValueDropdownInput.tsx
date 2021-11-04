@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react';
+import { Dropdown, IDropdownOption } from '@fluentui/react';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 import { IDropdownInputProps } from './IDropdownInputProps';

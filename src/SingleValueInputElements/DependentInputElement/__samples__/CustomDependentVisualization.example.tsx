@@ -8,7 +8,7 @@ import {
     ISingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from '@fluentui/react';
 import * as React from 'react';
 
 interface ICustomVisualizationSequentialDependenciesSampleState {

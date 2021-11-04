@@ -6,7 +6,7 @@ import {
     SingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
-import { IPersonaProps, PrimaryButton } from 'office-ui-fabric-react';
+import { IPersonaProps, PrimaryButton } from '@fluentui/react';
 import { people } from './ExampleData';
 
 interface IIdentityPickerSampleState {

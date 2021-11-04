@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Checkbox, PrimaryButton, Stack } from 'office-ui-fabric-react';
+import { Checkbox, PrimaryButton, Stack } from '@fluentui/react';
 import {
     DropdownHelper,
     DropdownInput,

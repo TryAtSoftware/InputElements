@@ -1,4 +1,4 @@
-import { Link } from 'office-ui-fabric-react';
+import { Link } from '@fluentui/react';
 import * as React from 'react';
 import ListInputElementSample from '../DynamicListInputElement/__samples__/ListInputElement.example';
 import ListInputElementWithInitialDataSample from '../DynamicListInputElement/__samples__/ListInputElementWithInitialData.example';

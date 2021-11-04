@@ -1,5 +1,5 @@
 import { IHidingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
-import { Checkbox, DefaultButton, Stack } from 'office-ui-fabric-react';
+import { Checkbox, DefaultButton, Stack } from '@fluentui/react';
 import * as React from 'react';
 
 interface IHidingInputElementSampleState {

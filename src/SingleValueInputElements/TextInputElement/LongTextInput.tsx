@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITextInputProps } from './ITextInputProps';
-import { Label, TextField } from 'office-ui-fabric-react';
+import { Label, TextField } from '@fluentui/react';
 
 export interface ILongTextInputState {
     isMultiline: boolean;

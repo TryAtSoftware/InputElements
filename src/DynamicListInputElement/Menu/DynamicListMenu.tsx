@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CommandButton, IContextualMenuItem, IContextualMenuProps, PrimaryButton } from 'office-ui-fabric-react';
+import { CommandButton, IContextualMenuItem, IContextualMenuProps, PrimaryButton } from '@fluentui/react';
 import { IDynamicListMenuProps } from './IDynamicListMenuProps';
 
 export class DynamicListMenu<TValue> extends React.Component<IDynamicListMenuProps<TValue>> {

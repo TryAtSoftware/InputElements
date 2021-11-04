@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IChangingInputElement } from '../../../IChangingInputElement';
 import { ITextInputProps } from '../ITextInputProps';
 import { IValueInputElement } from '../../../IValueInputElement';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from '@fluentui/react';
 import { SingleValueInputElement } from '../../SingleValueInputElement';
 import { TextInput } from '../TextInput';
 

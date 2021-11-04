@@ -1,4 +1,4 @@
-import { IBasePickerSuggestionsProps, IPersonaProps } from 'office-ui-fabric-react';
+import { IBasePickerSuggestionsProps, IPersonaProps } from '@fluentui/react';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 
 export interface IIdentityPickerProps<TIdentity extends IPersonaProps = IPersonaProps> extends IBaseInputElementProps {

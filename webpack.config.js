@@ -87,5 +87,6 @@ module.exports = {
             template: './src/__samples__/index.html',
             favicon: './src/__samples__/favicon.ico'
         })
-    ]
+    ],
+    ignoreWarnings: [{ module: /@fluentui\/react/ }]
 };

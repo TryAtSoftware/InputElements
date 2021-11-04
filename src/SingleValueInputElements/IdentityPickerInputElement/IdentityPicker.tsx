@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IPersonaProps, Label, MessageBar, MessageBarType, NormalPeoplePicker } from 'office-ui-fabric-react';
+import { IPersonaProps, Label, MessageBar, MessageBarType, NormalPeoplePicker } from '@fluentui/react';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { IIdentityPickerProps } from './IIdentityPickerProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';

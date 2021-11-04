@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Checkbox, DefaultButton, Stack } from 'office-ui-fabric-react';
+import { Checkbox, DefaultButton, Stack } from '@fluentui/react';
 import { ILoadingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
 
 interface ILoadingInputElementSampleState {

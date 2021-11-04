@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DatePicker, DayOfWeek, Label } from 'office-ui-fabric-react';
+import { DatePicker, DayOfWeek, Label } from '@fluentui/react';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITimePickerProps } from './ITimePickerProps';

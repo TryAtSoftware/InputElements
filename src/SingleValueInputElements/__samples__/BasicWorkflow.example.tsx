@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
-import { Checkbox } from 'office-ui-fabric-react';
+import { Checkbox } from '@fluentui/react';
 
 interface IBasicWorkflowSampleState {
     isValid: boolean;

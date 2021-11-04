@@ -7,7 +7,7 @@ import {
     TextInput,
     UpdateCallback
 } from '@try-at-software/input-elements';
-import { Checkbox } from 'office-ui-fabric-react';
+import { Checkbox } from '@fluentui/react';
 
 interface IInitialValueWorkflowSampleState {
     isValid: boolean;

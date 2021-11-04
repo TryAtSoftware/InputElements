@@ -9,7 +9,7 @@ import {
     UpdateCallback,
     getFormState
 } from '@try-at-software/input-elements';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from '@fluentui/react';
 
 interface ISequentialDependenciesSampleState {
     isValid: boolean;

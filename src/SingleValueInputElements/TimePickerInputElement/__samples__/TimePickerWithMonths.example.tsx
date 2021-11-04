@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ITimePickerProps, IValueInputElement, SingleValueInputElement, TimePicker, UpdateCallback } from '@try-at-software/input-elements';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from '@fluentui/react';
 
 interface ITimePickerWithMonthsSampleState {
     isValid: boolean;

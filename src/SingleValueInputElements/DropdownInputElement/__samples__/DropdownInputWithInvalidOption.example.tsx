@@ -7,7 +7,7 @@ import {
     ISingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
-import { Checkbox, PrimaryButton } from 'office-ui-fabric-react';
+import { Checkbox, PrimaryButton } from '@fluentui/react';
 import * as React from 'react';
 
 interface IDropdownInputWithInvalidOptionSampleState {
