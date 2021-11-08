@@ -34,7 +34,6 @@ export class NumberInput extends React.Component<
                         disabled: this.props.isDisabled,
                         onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
                             const newValue = event.target.value;
-                            console.log(newValue);
                             const value = NumberInput.normalizeData(newValue);
                             if (!value || isNaN(Number(value))) {
                                 this.setState({ intermediateValue: value, customWarning: 'The provided value is not a valid number.' });
