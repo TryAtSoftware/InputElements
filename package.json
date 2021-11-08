@@ -76,7 +76,7 @@
         "react-beautiful-dnd": "13.1.0"
     },
     "peerDependencies": {
-        "@fluentui/react": "8.x",
+        "@fluentui/react": ">=7.179.1",
         "react": ">=16.8.0"
     }
 }
