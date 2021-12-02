@@ -1,8 +1,6 @@
 import { IInputElement } from './IInputElement';
-import { IValueInputElement } from './IValueInputElement';
-import { InvalidValueChangeSubscription, ValueChangeSubscription } from './Subscriptions';
 
-export interface IChangingInputElement<TValue> extends IValueInputElement<TValue>, IInputElement {
+export interface IChangingInputElement<TValue> extends IInputElement {
     /**
      * A method used to set new value, validate it and update the form.
      *
@@ -20,10 +18,4 @@ export interface IChangingInputElement<TValue> extends IValueInputElement<TValue
      * This method will reset the current value of the input element.
      */
     resetValue(): void;
-
-    subscribeToValueChange(subscription: ValueChangeSubscription<TValue>): void;
-
-    subscribeToInitialValueChange(subscription: ValueChangeSubscription<TValue>): void;
-
-    subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription): void;
 }

@@ -3,7 +3,6 @@ import { ChangingInputElement } from './ChangingInputElement';
 import { IHidingInputElement } from './IHidingInputElement';
 import { UpdateCallback } from './IInputElement';
 import { ILoadingInputElement } from './ILoadingInputElement';
-import { ValidationRule } from './IValueInputElement';
 import { IPresentation } from './Presentations';
 
 export abstract class ExtendedInputElement<TValue, TPresentation extends IPresentation>
@@ -15,8 +14,8 @@ export abstract class ExtendedInputElement<TValue, TPresentation extends IPresen
     private _isVisible = true;
     private _isLoading = false;
 
-    protected constructor(update: UpdateCallback, ...validationRules: ValidationRule<TValue>[]) {
-        super(update, ...validationRules);
+    protected constructor(update: UpdateCallback) {
+        super(update);
 
         this._componentRef = React.createRef();
     }

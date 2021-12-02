@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ExtendedInputElement } from '../ExtendedInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
+import { InvalidValueChangeSubscription, ValueChangeSubscription } from '../Subscriptions';
 import { combineClasses } from '../Utilities';
 import { SingleValueInputElementWrapper } from './InternalPresentationComponents/SingleValueInputElementWrapper';
 import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
@@ -18,6 +19,9 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     implements ISingleValueInputElement<TValue, TComponentProps, TDynamicProps>
 {
     private readonly _configuration: ISingleValueInputElementConfiguration<TValue>;
+    private readonly valueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
+    private readonly initialValueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
+    private readonly invalidValueChangeSubscriptions: InvalidValueChangeSubscription[] = [];
     private _dynamicProps: TDynamicProps;
     private _isInvalidated = false;
 
@@ -28,17 +32,52 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
         update: UpdateCallback,
         ...validationRules: ValidationRule<TValue>[]
     ) {
-        super(update, ...validationRules);
+        super(update);
 
         this._configuration = config;
         this.componentToRender = component;
         this.componentProps = props;
+
+        this.validationRules = [];
+        validationRules.forEach((rule): void => {
+            if (!rule) return;
+            this.validationRules.push(rule);
+        });
     }
 
     /** @inheritdoc */
-    protected setInternalValue(value: TValue): void {
+    public subscribeToValueChange(subscription: ValueChangeSubscription<TValue>): void {
+        if (!subscription) return;
+
+        this.valueChangeSubscriptions.push(subscription);
+    }
+
+    /** @inheritdoc */
+    public subscribeToInitialValueChange(subscription: ValueChangeSubscription<TValue>): void {
+        if (!subscription) return;
+
+        this.initialValueChangeSubscriptions.push(subscription);
+    }
+
+    /** @inheritdoc */
+    public subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription): void {
+        if (!subscription) return;
+
+        this.invalidValueChangeSubscriptions.push(subscription);
+    }
+
+    /** @inheritdoc */
+    protected setInternalValue(value: TValue, isInitial: boolean): void {
         if (this._isInvalidated) this._isInvalidated = false;
+        this.value = value;
+
         if (this._componentRef?.current) this._componentRef.current.update(value);
+        this.validate();
+
+        if (this.isValid) {
+            if (isInitial) this.initialValueChangeSubscriptions.forEach((x): void => x?.(this.value));
+            else this.valueChangeSubscriptions.forEach((x): void => x?.(this.value));
+        } else this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
     }
 
     /** @inheritdoc */
@@ -47,6 +86,12 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
             ? !this._configuration.comparator.areEqual(this.value, this.initialValue)
             : this.value !== this.initialValue;
     }
+
+    /** @inheritdoc */
+    public value: TValue;
+
+    /** @inheritdoc */
+    public validationRules: ValidationRule<TValue>[];
 
     /** @inheritdoc */
     public get isValid(): boolean {
@@ -137,6 +182,6 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     private invalidateInput = (): void => {
         this._isInvalidated = true;
         this.updateInternally();
-        this._invalidValueChangeSubscriptions.forEach((x): void => x?.());
+        this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
     };
 }

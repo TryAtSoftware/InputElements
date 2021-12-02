@@ -3,6 +3,7 @@ import { IChangingInputElement } from '../IChangingInputElement';
 import { IHidingInputElement } from '../IHidingInputElement';
 import { ILoadingInputElement } from '../ILoadingInputElement';
 import { IValueInputElement } from '../IValueInputElement';
+import { InvalidValueChangeSubscription, ValueChangeSubscription } from '../Subscriptions';
 import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 
 export interface ISingleValueInputElement<TValue, TComponentProps = unknown, TDynamicProps = unknown>
@@ -28,4 +29,10 @@ export interface ISingleValueInputElement<TValue, TComponentProps = unknown, TDy
     getDynamicProps(): TDynamicProps;
 
     changeDynamicProps<K extends keyof TDynamicProps>(dynamicProps: Pick<TDynamicProps, K>): void;
+
+    subscribeToValueChange(subscription: ValueChangeSubscription<TValue>): void;
+
+    subscribeToInitialValueChange(subscription: ValueChangeSubscription<TValue>): void;
+
+    subscribeToInvalidValueChange(subscription: InvalidValueChangeSubscription): void;
 }
