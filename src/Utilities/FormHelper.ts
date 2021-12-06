@@ -8,8 +8,14 @@ export function getFormState(inputs: IInputElement[]): { isValid: boolean; hasCh
     let index = 0;
 
     while ((isValid || !hasChanges) && index < inputs.length) {
-        isValid = isValid && inputs[index].isValid;
-        hasChanges = hasChanges || inputs[index].hasChanges;
+        const currentInput = inputs[index];
+        if (!currentInput) {
+            isValid = false;
+        } else {
+            isValid = isValid && currentInput.isValid;
+            hasChanges = hasChanges || currentInput.hasChanges;
+        }
+
         index++;
     }
 
