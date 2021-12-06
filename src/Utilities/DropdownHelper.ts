@@ -45,7 +45,8 @@ export class DropdownHelper {
         return {
             text: inputOption.text,
             key: inputOption.key,
-            itemType: itemType
+            itemType: itemType,
+            disabled: !!inputOption.disabled
         };
     };
 
