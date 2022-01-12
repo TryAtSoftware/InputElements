@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { DatePicker, DayOfWeek, Label } from '@fluentui/react';
+import { ClearButton } from '../../Components/Buttons/ClearButton';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITimePickerProps } from './ITimePickerProps';
@@ -16,6 +17,10 @@ export class TimePicker extends React.Component<ISingleValueInputElementProps<Da
                     placeholder={this.props.placeholder}
                     onSelectDate={this.onChange}
                     textField={{
+                        onRenderSuffix: (): JSX.Element => (
+                            <ClearButton onClick={this.clearDate} className={this.props.clearButtonClassName} />
+                        ),
+                        inputClassName: this.props.inputClassName,
                         errorMessage: this.props.errorMessage,
                         disabled: this.props.isDisabled
                     }}
@@ -32,5 +37,9 @@ export class TimePicker extends React.Component<ISingleValueInputElementProps<Da
 
     private onChange = (newValue: Date): void => {
         this.props?.onChange(newValue);
+    };
+
+    private clearDate = (): void => {
+        this.onChange(null);
     };
 }

@@ -1,3 +1,5 @@
+export * from './Components';
+
 export * from './ExtendedInputElement';
 export * from './IChangingInputElement';
 export * from './IHidingInputElement';
