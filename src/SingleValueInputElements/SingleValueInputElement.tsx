@@ -96,7 +96,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     /** @inheritdoc */
     public get isValid(): boolean {
         if (this._isInvalidated) return false;
-        if (this.isLoading || !this.isVisible) return false;
+        if (this.isLoading) return false;
         if (this.errorMessage && this.errorMessage.length > 0) return false;
 
         return (!!this._configuration && !this._configuration.isRequired) || this._valueIsSet || this._initialValueIsSet;
