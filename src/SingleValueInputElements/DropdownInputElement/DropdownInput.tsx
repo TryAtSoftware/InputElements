@@ -4,16 +4,20 @@ import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 import { IDropdownInputProps } from './IDropdownInputProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
+import { IFluentUiDropdownInputProps } from './IFluentUiDropdownInputProps';
 
-export class DropdownInput extends React.Component<ISingleValueInputElementProps<string> & IBaseInputElementProps & IDropdownInputProps> {
+export class DropdownInput extends React.Component<
+    ISingleValueInputElementProps<string> & IBaseInputElementProps & IDropdownInputProps & IFluentUiDropdownInputProps
+> {
     public render(): JSX.Element {
         if (!this.props) return null;
 
         const normalizedOptions = DropdownHelper.getNormalizedOptions(this.props.defaultOption, this.props.options);
+        const DropdownComponent = this.props.dropdownComponent ?? Dropdown;
         return (
             <>
                 {!!this.props.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
-                <Dropdown
+                <DropdownComponent
                     data-automationid="dropdown-input"
                     options={normalizedOptions}
                     onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
@@ -24,10 +28,6 @@ export class DropdownInput extends React.Component<ISingleValueInputElementProps
                     // This value should never be `undefined`.
                     defaultSelectedKey={this.props.value || this.props.defaultOption?.key || null}
                     disabled={this.props.isDisabled}
-                    calloutProps={{
-                        directionalHintFixed: !this.props.renderProps?.allowPositionChanges,
-                        minPagePadding: this.props.renderProps?.pagePadding
-                    }}
                 />
             </>
         );
