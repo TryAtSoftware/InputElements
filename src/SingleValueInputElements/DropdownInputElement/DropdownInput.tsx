@@ -12,18 +12,22 @@ export class DropdownInput extends React.Component<ISingleValueInputElementProps
         const normalizedOptions = DropdownHelper.getNormalizedOptions(this.props.defaultOption, this.props.options);
         return (
             <>
-                {!!this.props?.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
+                {!!this.props.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
                 <Dropdown
                     data-automationid="dropdown-input"
                     options={normalizedOptions}
                     onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
-                        !!this.props?.onChange && this.props.onChange(option.key as string)
+                        !!this.props.onChange && this.props.onChange(option.key as string)
                     }
-                    errorMessage={this.props?.errorMessage}
-                    placeholder={this.props?.placeholder}
+                    errorMessage={this.props.errorMessage}
+                    placeholder={this.props.placeholder}
                     // This value should never be `undefined`.
-                    defaultSelectedKey={this.props?.value || this.props?.defaultOption?.key || null}
-                    disabled={this.props?.isDisabled}
+                    defaultSelectedKey={this.props.value || this.props.defaultOption?.key || null}
+                    disabled={this.props.isDisabled}
+                    calloutProps={{
+                        directionalHintFixed: this.props.renderProps?.allowPositionChanges,
+                        minPagePadding: this.props.renderProps?.pagePadding
+                    }}
                 />
             </>
         );

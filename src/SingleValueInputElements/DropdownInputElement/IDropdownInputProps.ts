@@ -8,4 +8,10 @@ export interface IDropdownInputProps extends IBaseInputElementDynamicProps {
      * The default option for the dropdown.
      */
     defaultOption?: IDropdownInputOption;
+    renderProps: IDropdownInputRenderingProps;
+}
+
+export interface IDropdownInputRenderingProps {
+    pagePadding?: number;
+    allowPositionChanges?: boolean;
 }
