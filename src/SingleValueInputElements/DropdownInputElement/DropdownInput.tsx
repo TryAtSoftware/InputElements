@@ -25,7 +25,7 @@ export class DropdownInput extends React.Component<ISingleValueInputElementProps
                     defaultSelectedKey={this.props.value || this.props.defaultOption?.key || null}
                     disabled={this.props.isDisabled}
                     calloutProps={{
-                        directionalHintFixed: this.props.renderProps?.allowPositionChanges,
+                        directionalHintFixed: !this.props.renderProps?.allowPositionChanges,
                         minPagePadding: this.props.renderProps?.pagePadding
                     }}
                 />
