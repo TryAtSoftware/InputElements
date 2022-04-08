@@ -1,7 +1,7 @@
 import { TextField } from '@fluentui/react';
 import * as React from 'react';
 import { materializeErrorMessage } from '../../Components';
-import { LabelRenderer } from '../../Components/Text/LabelRenderer';
+import { LabelRenderer } from '../../Components';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITextInputProps } from './ITextInputProps';

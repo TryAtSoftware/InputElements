@@ -1,7 +1,6 @@
 import { IPersonaProps, MessageBarType, NormalPeoplePicker } from '@fluentui/react';
 import * as React from 'react';
-import { ErrorRenderer } from '../../Components/Text/ErrorRenderer';
-import { LabelRenderer } from '../../Components/Text/LabelRenderer';
+import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { IIdentityPickerProps } from './IIdentityPickerProps';

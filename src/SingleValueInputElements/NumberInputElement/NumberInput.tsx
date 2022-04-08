@@ -1,8 +1,7 @@
 import { MessageBarType, SpinButton } from '@fluentui/react';
 import * as React from 'react';
 import { FormText } from '../../Components';
-import { ErrorRenderer } from '../../Components/Text/ErrorRenderer';
-import { LabelRenderer } from '../../Components/Text/LabelRenderer';
+import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { INumberInputProps } from './INumberInputProps';

@@ -1,7 +1,6 @@
 import { Dropdown, IDropdownOption, MessageBarType } from '@fluentui/react';
 import * as React from 'react';
-import { ErrorRenderer } from '../../Components/Text/ErrorRenderer';
-import { LabelRenderer } from '../../Components/Text/LabelRenderer';
+import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
