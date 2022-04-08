@@ -1,10 +1,12 @@
+import { FormText } from './Components';
+
 export interface IInputElementConfiguration {
     /**
      * The label associated with the input element.
      * It should not be too long and should give enough information for the end user.
      * Some input elements may not use this value if tey should not.
      */
-    label?: string;
+    label?: FormText;
 
     /**
      * A class name that should be used while rendering the input element.
@@ -22,5 +24,5 @@ export interface IInputElementConfiguration {
     /**
      * A message that should be rendered instead of the default one whenever a required input element is empty.
      */
-    requiredValidationMessage?: string;
+    requiredValidationMessage?: FormText;
 }

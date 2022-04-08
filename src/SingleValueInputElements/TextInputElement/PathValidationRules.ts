@@ -1,10 +1,11 @@
+import { FormText } from '../../Components';
 import { ValidationRule } from '../../IValueInputElement';
 
 export const invalidCharacters = ['<', '>', ':', '"', '/', '\\', '|', '?', '*'];
 
-export function restrictValidPath(errorMessage?: string): ValidationRule<string> {
-    return (newValue: string): string => {
-        let error = '';
+export function restrictValidPath(errorMessage?: FormText): ValidationRule<string> {
+    return (newValue: string): FormText => {
+        let error: FormText = '';
 
         for (let i = 0; i < invalidCharacters.length; i++) {
             const currentChar = invalidCharacters[i];

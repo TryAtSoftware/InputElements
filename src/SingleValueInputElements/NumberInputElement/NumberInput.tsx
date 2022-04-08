@@ -1,12 +1,15 @@
-import { Label, MessageBar, MessageBarType, SpinButton } from '@fluentui/react';
+import { MessageBarType, SpinButton } from '@fluentui/react';
 import * as React from 'react';
+import { FormText } from '../../Components';
+import { ErrorRenderer } from '../../Components/Text/ErrorRenderer';
+import { LabelRenderer } from '../../Components/Text/LabelRenderer';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { INumberInputProps } from './INumberInputProps';
 
 interface INumberInputState {
     intermediateValue: string;
-    customWarning: string;
+    customWarning: FormText;
 }
 
 const delimiter = '.';
@@ -25,7 +28,7 @@ export class NumberInput extends React.Component<
 
         return (
             <>
-                {this.props.label && <Label required={this.props.renderRequiredIndicator}>{this.props.label}</Label>}
+                <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <SpinButton
                     data-automationid="number-input"
                     inputProps={{
@@ -57,8 +60,8 @@ export class NumberInput extends React.Component<
                         this.handleUserInput(numericValue, numericValue.toString());
                     }}
                 />
-                {!!this.props?.errorMessage && <MessageBar messageBarType={MessageBarType.warning}>{this.props.errorMessage}</MessageBar>}
-                {!!this.state.customWarning && <MessageBar messageBarType={MessageBarType.warning}>{this.state.customWarning}</MessageBar>}
+                <ErrorRenderer error={this.props.errorMessage} messageBarType={MessageBarType.warning} />
+                <ErrorRenderer error={this.state.customWarning} messageBarType={MessageBarType.warning} />
             </>
         );
     }

@@ -1,3 +1,5 @@
+import { FormText } from '../Components';
+
 export interface IPresentation {
     startLoading(): void;
     stopLoading(): void;
@@ -10,7 +12,7 @@ export interface IChangingPresentation<TValue> {
 }
 
 export interface IRestrictedPresentation {
-    setError(errorMessage: string): void;
+    setError(errorMessage: FormText): void;
 }
 
 export interface IDynamicPresentation<TDynamicProps> {

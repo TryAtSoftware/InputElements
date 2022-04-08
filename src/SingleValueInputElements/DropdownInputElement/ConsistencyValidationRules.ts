@@ -1,9 +1,10 @@
+import { FormText } from '../../Components';
 import { ValidationRule } from '../../IValueInputElement';
 import { invalidCharacters } from '../TextInputElement';
 
-export function ensureConsistency(errorMessage?: string): ValidationRule<string> {
-    return (newValue: string): string => {
-        let error = '';
+export function ensureConsistency(errorMessage?: FormText): ValidationRule<string> {
+    return (newValue: string): FormText => {
+        let error: FormText = '';
 
         for (let i = 0; i < invalidCharacters.length; i++) {
             const currentChar = invalidCharacters[i];

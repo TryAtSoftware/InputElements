@@ -81,7 +81,7 @@ export class DynamicListInputElement<TValue>
                 onDragEnd={this.onDragEnd}
                 renderMenu={this.renderMenu}
                 renderFooterMenu={this.renderFooterMenu}
-                renderLoadingIndicator={this._configuration?.renderLoadingComponent}
+                loadingComponent={this._configuration?.loadingComponent}
                 renderMoveGripper={this._configuration?.renderMoveGripper}
                 ref={this._componentRef}
             />

@@ -4,21 +4,25 @@ import * as React from 'react';
 interface IPresentationRendererProps {
     isVisible: boolean;
     isLoading: boolean;
-    renderLoadingIndicator?: () => JSX.Element;
+    loadingIndicator?: React.ComponentType;
     renderInternalContent: () => JSX.Element;
 }
 
 export class PresentationRenderer extends React.Component<IPresentationRendererProps> {
     public render(): JSX.Element {
-        if (!this.props?.isVisible) return null;
+        const { isVisible } = this.props;
+        if (!isVisible) return null;
 
-        if (this.props.isLoading) {
-            if (this.props.renderLoadingIndicator) return this.props.renderLoadingIndicator();
+        const { isLoading } = this.props;
+        if (isLoading) {
+            const { loadingIndicator: LoadingIndicator } = this.props;
+            if (LoadingIndicator) return <LoadingIndicator />;
 
             return <Spinner size={SpinnerSize.medium} />;
         }
 
-        if (!this.props.renderInternalContent) return null;
-        return this.props.renderInternalContent();
+        const { renderInternalContent } = this.props;
+        if (!renderInternalContent) return null;
+        return renderInternalContent();
     }
 }

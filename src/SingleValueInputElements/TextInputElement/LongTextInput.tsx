@@ -1,8 +1,10 @@
+import { TextField } from '@fluentui/react';
 import * as React from 'react';
+import { materializeErrorMessage } from '../../Components';
+import { LabelRenderer } from '../../Components/Text/LabelRenderer';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITextInputProps } from './ITextInputProps';
-import { Label, TextField } from '@fluentui/react';
 
 export interface ILongTextInputState {
     isMultiline: boolean;
@@ -26,7 +28,7 @@ export class LongTextInput extends React.Component<
 
         return (
             <>
-                {!!this.props?.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
+                <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <TextField
                     data-automationid="long-text-input"
                     value={this.props.value || ''}
@@ -39,7 +41,7 @@ export class LongTextInput extends React.Component<
 
                         this.props.onChange(newValue);
                     }}
-                    errorMessage={this.props.errorMessage}
+                    errorMessage={materializeErrorMessage(this.props.errorMessage)}
                     type={this.props.contentType}
                     placeholder={this.props.placeholder}
                     multiline={this.state.isMultiline}

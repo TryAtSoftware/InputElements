@@ -10,7 +10,7 @@ interface IDynamicListInputElementWrapperState<TValue> {
 }
 
 export interface ICommonInputBehaviorConfiguration {
-    renderLoadingIndicator(): JSX.Element;
+    loadingComponent?: React.ComponentType;
 }
 
 export class DynamicListInputElementWrapper<TValue>
@@ -64,7 +64,7 @@ export class DynamicListInputElementWrapper<TValue>
                 isVisible={this.state.isVisible}
                 isLoading={this.state.isLoading}
                 renderInternalContent={this.renderInternalContent}
-                renderLoadingIndicator={this.props.renderLoadingIndicator}
+                loadingIndicator={this.props.loadingComponent}
             />
         );
     };

@@ -1,5 +1,7 @@
+import { FormText } from '../Components';
+
 export interface IBasicMenuButtonConfiguration {
     className?: string;
-    label?: string;
+    label?: FormText;
     iconName?: string;
 }

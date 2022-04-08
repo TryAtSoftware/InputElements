@@ -1,8 +1,10 @@
+import { TextField } from '@fluentui/react';
 import * as React from 'react';
+import { materializeErrorMessage } from '../../Components';
+import { LabelRenderer } from '../../Components/Text/LabelRenderer';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITextInputProps } from './ITextInputProps';
-import { Label, TextField } from '@fluentui/react';
 
 export class TextInput extends React.Component<ISingleValueInputElementProps<string> & ITextInputProps & IBaseInputElementDynamicProps> {
     public render(): JSX.Element {
@@ -10,14 +12,14 @@ export class TextInput extends React.Component<ISingleValueInputElementProps<str
 
         return (
             <>
-                {!!this.props?.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
+                <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <TextField
                     data-automationid="text-input"
                     value={this.props.value || ''}
                     onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string): void => {
                         this.props.onChange(newValue);
                     }}
-                    errorMessage={this.props.errorMessage}
+                    errorMessage={materializeErrorMessage(this.props.errorMessage)}
                     type={this.props.contentType}
                     placeholder={this.props.placeholder}
                     validateOnFocusOut={true}

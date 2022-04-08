@@ -1,3 +1,4 @@
+import { FormText } from './Components';
 import { IInputElement, UpdateCallback } from './IInputElement';
 
 export abstract class InputElement implements IInputElement {
@@ -12,7 +13,7 @@ export abstract class InputElement implements IInputElement {
     public abstract isValid: boolean;
 
     /** @inheritdoc */
-    public errorMessage: string;
+    public errorMessage: FormText;
 
     /** @inheritdoc */
     public abstract hasChanges: boolean;
@@ -29,7 +30,7 @@ export abstract class InputElement implements IInputElement {
     /** @inheritdoc */
     public update: UpdateCallback = (): void => {
         // This function should never ever be called in such a manner.
-        // Instead a custom function should be passed to the constructor and immediately after that - assigned to this property.
+        // Instead, a custom function should be passed to the constructor and immediately after that - assigned to this property.
         throw new Error('This function should never be called!');
     };
 

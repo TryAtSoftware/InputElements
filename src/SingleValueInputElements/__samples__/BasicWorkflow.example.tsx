@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { IInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
 import { Checkbox } from '@fluentui/react';
+import { IInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
+import * as React from 'react';
 
 interface IBasicWorkflowSampleState {
     isValid: boolean;

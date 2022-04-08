@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Dropdown, IDropdownOption, Label } from '@fluentui/react';
+import { Dropdown, IDropdownOption, MessageBarType } from '@fluentui/react';
+import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 import { IDropdownInputProps } from './IDropdownInputProps';
@@ -16,19 +17,19 @@ export class DropdownInput extends React.Component<
         const DropdownComponent = this.props.dropdownComponent ?? Dropdown;
         return (
             <>
-                {!!this.props.label && <Label required={!!this.props.renderRequiredIndicator}>{this.props.label}</Label>}
+                <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <DropdownComponent
                     data-automationid="dropdown-input"
                     options={normalizedOptions}
                     onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
                         !!this.props.onChange && this.props.onChange(option.key as string)
                     }
-                    errorMessage={this.props.errorMessage}
                     placeholder={this.props.placeholder}
                     // This value should never be `undefined`.
                     defaultSelectedKey={this.props.value || this.props.defaultOption?.key || null}
                     disabled={this.props.isDisabled}
                 />
+                <ErrorRenderer error={this.props.errorMessage} messageBarType={MessageBarType.error} />
             </>
         );
     }

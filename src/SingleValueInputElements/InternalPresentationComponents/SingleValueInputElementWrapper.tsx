@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormText } from '../../Components';
 import {
     IChangingPresentation,
     IDynamicPresentation,
@@ -10,7 +11,7 @@ import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps'
 
 interface ISingleValueInputElementWrapperState<TValue, TDynamicProps> {
     value: TValue;
-    errorMessage: string;
+    errorMessage: FormText;
     isLoading: boolean;
     isVisible: boolean;
     dynamicProps: TDynamicProps;
@@ -27,7 +28,7 @@ export interface ISingleValueInputElementWrapperProps<
     isInitiallyLoading: boolean;
     isInitiallyVisible: boolean;
 
-    renderLoadingIndicator(): JSX.Element;
+    loadingIndicator: React.ComponentType;
 
     renderErrors: boolean;
 }
@@ -79,7 +80,7 @@ export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISin
         this.setState({ value: newValue });
     };
 
-    public setError = (errorMessage: string): void => {
+    public setError = (errorMessage: FormText): void => {
         this.setState({ errorMessage: errorMessage });
     };
 
@@ -88,12 +89,15 @@ export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISin
     };
 
     public render = (): JSX.Element => {
+        const { isVisible, isLoading } = this.state;
+        const { loadingIndicator } = this.props;
+
         return (
             <PresentationRenderer
-                isVisible={this.state.isVisible}
-                isLoading={this.state.isLoading}
+                isVisible={isVisible}
+                isLoading={isLoading}
                 renderInternalContent={this.renderInternalContent}
-                renderLoadingIndicator={this.props.renderLoadingIndicator}
+                loadingIndicator={loadingIndicator}
             />
         );
     };
@@ -102,7 +106,8 @@ export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISin
         const { internalComponent: Component, componentProps } = this.props;
         if (!Component) return null;
 
-        const errorMessages: string = this.props?.renderErrors ? this.state.errorMessage : null;
+        const { renderErrors } = this.props;
+        const errorMessages = renderErrors ? this.state.errorMessage : null;
         return <Component {...this.state.dynamicProps} {...componentProps} value={this.state.value} errorMessage={errorMessages} />;
     };
 }

@@ -1,8 +1,10 @@
+import { IPersonaProps, MessageBarType, NormalPeoplePicker } from '@fluentui/react';
 import * as React from 'react';
-import { IPersonaProps, Label, MessageBar, MessageBarType, NormalPeoplePicker } from '@fluentui/react';
+import { ErrorRenderer } from '../../Components/Text/ErrorRenderer';
+import { LabelRenderer } from '../../Components/Text/LabelRenderer';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
-import { IIdentityPickerProps } from './IIdentityPickerProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
+import { IIdentityPickerProps } from './IIdentityPickerProps';
 
 export class IdentityPicker<TIdentity extends IPersonaProps = IPersonaProps> extends React.Component<
     ISingleValueInputElementProps<TIdentity[]> & IIdentityPickerProps<TIdentity> & IBaseInputElementDynamicProps
@@ -12,7 +14,7 @@ export class IdentityPicker<TIdentity extends IPersonaProps = IPersonaProps> ext
 
         return (
             <>
-                {this.props.label && <Label required={this.props.renderRequiredIndicator}>{this.props.label}</Label>}
+                <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <div data-automationid="identity-picker">
                     <NormalPeoplePicker
                         onResolveSuggestions={this.props.onResolveSuggestions}
@@ -34,7 +36,7 @@ export class IdentityPicker<TIdentity extends IPersonaProps = IPersonaProps> ext
                         }}
                     />
                 </div>
-                {!!this.props?.errorMessage && <MessageBar messageBarType={MessageBarType.warning}>{this.props.errorMessage}</MessageBar>}
+                <ErrorRenderer error={this.props.errorMessage} messageBarType={MessageBarType.warning} />
             </>
         );
     }

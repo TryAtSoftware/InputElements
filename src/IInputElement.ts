@@ -1,3 +1,5 @@
+import { FormText } from './Components';
+
 export interface IInputElement {
     /**
      * A boolean indicating if the entered value is valid (all validation rules pass).
@@ -7,7 +9,7 @@ export interface IInputElement {
     /**
      * The message of the first validation error that occurred if any.
      */
-    errorMessage: string;
+    errorMessage: FormText;
 
     /**
      * Gets or sets a value indicating whether the input element has any changes made.

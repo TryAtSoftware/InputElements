@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormText } from '../Components';
 import { ExtendedInputElement } from '../ExtendedInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
@@ -121,7 +122,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
                     <SingleValueInputElementWrapper
                         internalComponent={this.componentToRender}
                         renderErrors={this._configuration?.renderErrors}
-                        renderLoadingIndicator={this._configuration?.renderLoadingComponent}
+                        loadingIndicator={this._configuration?.loadingComponent}
                         componentProps={{
                             ...this.componentProps,
                             label: this._configuration?.label,
@@ -157,7 +158,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     public validate(): void {
         if (!!this._configuration?.shouldExecuteValidation && this._configuration.shouldExecuteValidation() === false) return;
 
-        let errorMessage: string = null;
+        let errorMessage: FormText = null;
 
         if (this._configuration?.isRequired && !this.valueIsValid()) {
             // If a value is required but the input field is empty.

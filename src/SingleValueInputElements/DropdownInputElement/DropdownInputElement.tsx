@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormText } from '../../Components';
 import { UpdateCallback } from '../../IInputElement';
 import { ValidationRule } from '../../IValueInputElement';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
@@ -27,7 +28,7 @@ export class DropdownInputElement<
     private static consistencyErrorMessage = 'The value is not present within the specified options.';
 
     private getConsistencyValidationRule(): ValidationRule<string> {
-        return (newValue: string): string => {
+        return (newValue: string): FormText => {
             const dynamicProps = this.getDynamicProps();
             if (!dynamicProps) return DropdownInputElement.consistencyErrorMessage;
 
