@@ -1,12 +1,12 @@
 import {
     DropdownHelper,
     DropdownInput,
-    DropdownInputElement,
     getFormState,
     IInputElement,
     IBaseInputElementProps,
     IDropdownInputProps,
     ISingleValueInputElement,
+    SingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
 import { PrimaryButton } from '@fluentui/react';
@@ -29,7 +29,7 @@ export default class MultipleDependenciesSample extends React.Component<unknown,
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._principalInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        this._principalInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, label: 'Principal dropdown with multiple dependencies (required, without error handling)' },
             DropdownInput,
             { placeholder: 'When you change the value, the dependent dropdown will appear.' },
@@ -40,7 +40,7 @@ export default class MultipleDependenciesSample extends React.Component<unknown,
         });
 
         for (let i = 0; i < dependentElementsCount; i++) {
-            const dependentInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+            const dependentInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
                 { isRequired: false, label: `Dependent dropdown #${i + 1} (not required, without error handling)` },
                 DropdownInput,
                 { placeholder: 'None of all dependent input elements is required, so the button is already enabled.' },

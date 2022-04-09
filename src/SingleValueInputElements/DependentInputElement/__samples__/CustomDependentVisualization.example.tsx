@@ -1,11 +1,11 @@
 import {
     DropdownHelper,
     DropdownInput,
-    DropdownInputElement,
     getFormState,
     IBaseInputElementProps,
     IDropdownInputProps,
     ISingleValueInputElement,
+    SingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
 import { PrimaryButton } from '@fluentui/react';
@@ -29,7 +29,7 @@ export default class CustomVisualizationSequentialDependenciesSample extends Rea
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        const principalInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        const principalInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             {
                 isRequired: true,
                 renderErrors: true,
@@ -47,7 +47,7 @@ export default class CustomVisualizationSequentialDependenciesSample extends Rea
 
         let previousElement: ISingleValueInputElement<string> = principalInput;
         for (let i = 0; i < dependentElementsCount; i++) {
-            const dependentInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+            const dependentInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
                 { isRequired: true, label: `Dependent dropdown #${i + 1} (required, without error handling)` },
                 DropdownInput,
                 { placeholder: 'The next sequentially dependent input element will appear after you enter some value here.' },

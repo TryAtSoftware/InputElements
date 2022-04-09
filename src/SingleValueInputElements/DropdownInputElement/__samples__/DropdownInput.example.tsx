@@ -1,10 +1,10 @@
 import {
     DropdownInput,
-    DropdownInputElement,
     IBaseInputElementProps,
     IDropdownInputOption,
     IDropdownInputProps,
     ISingleValueInputElement,
+    SingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
 import { PrimaryButton } from '@fluentui/react';
@@ -24,7 +24,7 @@ export default class DropdownInputSample extends React.Component<unknown, IDropd
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._dropdownInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        this._dropdownInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             {
                 isRequired: true,
                 renderRequiredIndicator: true,

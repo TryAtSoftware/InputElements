@@ -1,36 +1,54 @@
-import * as React from 'react';
 import { Dropdown, IDropdownOption, MessageBarType } from '@fluentui/react';
-import { ErrorRenderer, LabelRenderer } from '../../Components';
+import * as React from 'react';
+import { useEffect, useMemo } from 'react';
+import { ErrorRenderer, FormText, LabelRenderer } from '../../Components';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
+import { IInvalidationOptions, ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { IDropdownInputProps } from './IDropdownInputProps';
-import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { IFluentUiDropdownInputProps } from './IFluentUiDropdownInputProps';
 
-export class DropdownInput extends React.Component<
-    ISingleValueInputElementProps<string> & IBaseInputElementProps & IDropdownInputProps & IFluentUiDropdownInputProps
-> {
-    public render(): JSX.Element {
-        if (!this.props) return null;
-
-        const normalizedOptions = DropdownHelper.getNormalizedOptions(this.props.defaultOption, this.props.options);
-        const DropdownComponent = this.props.dropdownComponent ?? Dropdown;
-        return (
-            <>
-                <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
-                <DropdownComponent
-                    data-automationid="dropdown-input"
-                    options={normalizedOptions}
-                    onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
-                        !!this.props.onChange && this.props.onChange(option.key as string)
-                    }
-                    placeholder={this.props.placeholder}
-                    // This value should never be `undefined`.
-                    defaultSelectedKey={this.props.value || this.props.defaultOption?.key || null}
-                    disabled={this.props.isDisabled}
-                />
-                <ErrorRenderer error={this.props.errorMessage} messageBarType={MessageBarType.error} />
-            </>
-        );
-    }
+interface ISingleValueDropdownInputProps
+    extends ISingleValueInputElementProps<string>,
+        IBaseInputElementProps,
+        IDropdownInputProps,
+        IFluentUiDropdownInputProps {
+    consistencyErrorMessage?: FormText;
 }
+
+const ConsistencyErrorMessage = 'The value is not present within the specified options.';
+
+const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Element => {
+    const normalizedOptions = useMemo(
+        () => DropdownHelper.getNormalizedOptions(props.defaultOption, props.options),
+        [props.defaultOption, props.options]
+    );
+
+    useEffect(() => {
+        if (!props.value || normalizedOptions.some((o) => o.key === props.value)) return;
+
+        const invalidationOptions: IInvalidationOptions = { errorMessage: props.consistencyErrorMessage || ConsistencyErrorMessage };
+        props.invalidateInput(invalidationOptions);
+    }, [props.value, normalizedOptions, props.consistencyErrorMessage, props.invalidateInput]);
+    const DropdownComponent = useMemo(() => props.dropdownComponent ?? Dropdown, [props.dropdownComponent]);
+
+    return (
+        <>
+            <LabelRenderer label={props.label} required={!!props.renderRequiredIndicator} />
+            <DropdownComponent
+                data-automationid="dropdown-input"
+                options={normalizedOptions}
+                onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
+                    !!props.onChange && props.onChange(option.key as string)
+                }
+                placeholder={props.placeholder}
+                // This value should never be `undefined`.
+                defaultSelectedKey={props.value || props.defaultOption?.key || null}
+                disabled={props.isDisabled}
+            />
+            <ErrorRenderer error={props.errorMessage} messageBarType={MessageBarType.error} />
+        </>
+    );
+};
+
+export const DropdownInput = React.memo(DropdownInputComponent);

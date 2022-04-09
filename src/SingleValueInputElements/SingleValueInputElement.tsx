@@ -8,7 +8,7 @@ import { combineClasses } from '../Utilities';
 import { SingleValueInputElementWrapper } from './InternalPresentationComponents/SingleValueInputElementWrapper';
 import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
 import { ISingleValueInputElement } from './ISingleValueInputElement';
-import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
+import { IInvalidationOptions, ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 
 type WrapperType<TValue, TComponentProps, TRenderProps> = SingleValueInputElementWrapper<
     TValue,
@@ -170,9 +170,13 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
             });
         }
 
+        this.setError(errorMessage);
+    }
+
+    private setError = (errorMessage: FormText): void => {
         this.errorMessage = errorMessage;
         if (this._componentRef.current) this._componentRef.current.setError(errorMessage);
-    }
+    };
 
     private valueIsValid = (): boolean => {
         if (!!this._configuration?.comparator) return this._configuration.comparator.isValid(this.value);
@@ -180,8 +184,10 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
         return !!this.value;
     };
 
-    private invalidateInput = (): void => {
+    private invalidateInput = (options?: IInvalidationOptions): void => {
         this._isInvalidated = true;
+        if (options.errorMessage) this.setError(options.errorMessage);
+
         this.updateInternally();
         this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
     };

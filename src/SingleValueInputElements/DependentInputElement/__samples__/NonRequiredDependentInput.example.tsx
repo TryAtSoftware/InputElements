@@ -1,11 +1,11 @@
 import {
     DropdownInput,
-    DropdownInputElement,
     DropdownHelper,
     IInputElement,
     IBaseInputElementProps,
     IDropdownInputProps,
     ISingleValueInputElement,
+    SingleValueInputElement,
     UpdateCallback,
     getFormState
 } from '@try-at-software/input-elements';
@@ -28,7 +28,7 @@ export default class NonRequiredDependentInputSample extends React.Component<unk
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._principalInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        this._principalInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             {
                 isRequired: true,
                 renderRequiredIndicator: true,
@@ -42,7 +42,7 @@ export default class NonRequiredDependentInputSample extends React.Component<unk
             options: DropdownHelper.mapToDropdownOptions(options)
         });
 
-        this._dependentInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        this._dependentInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: false, label: 'Dependent dropdown (not required, without error handling)' },
             DropdownInput,
             { placeholder: 'This input element is not required, so the button is already enabled.' },

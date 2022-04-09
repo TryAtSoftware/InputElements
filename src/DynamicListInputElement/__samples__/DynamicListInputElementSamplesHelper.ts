@@ -1,6 +1,5 @@
 import {
     DropdownInput,
-    DropdownInputElement,
     IBaseInputElementProps,
     IDropdownInputProps,
     IDropdownInputOption,
@@ -19,7 +18,7 @@ export function createDropdown(updateForm: UpdateCallback): () => ISingleValueIn
 
         for (let i = 0; i < 15; i++) options.push(i.toString());
 
-        const dropdownInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        const dropdownInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, renderRequiredIndicator: true, renderErrors: true },
             DropdownInput,
             { placeholder: 'Choose any value' },

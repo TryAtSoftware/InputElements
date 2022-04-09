@@ -3,11 +3,11 @@ import { Checkbox, PrimaryButton, Stack } from '@fluentui/react';
 import {
     DropdownHelper,
     DropdownInput,
-    DropdownInputElement,
     IInputElement,
     IBaseInputElementProps,
     IDropdownInputProps,
     ISingleValueInputElement,
+    SingleValueInputElement,
     UpdateCallback,
     getFormState
 } from '@try-at-software/input-elements';
@@ -28,7 +28,7 @@ export default class LoadingDependentInputSample extends React.Component<unknown
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._principalInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        this._principalInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, label: 'Loading principal dropdown (required, without error handling)' },
             DropdownInput,
             { placeholder: 'When you change the value, the dependent dropdown will appear.' },
@@ -38,7 +38,7 @@ export default class LoadingDependentInputSample extends React.Component<unknown
             options: DropdownHelper.mapToDropdownOptions(options)
         });
 
-        this._dependentInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        this._dependentInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             { isRequired: true, label: 'Dependent dropdown (required, without error handling)' },
             DropdownInput,
             { placeholder: 'When you change the value, the button will become enabled and this message will disappear.' },

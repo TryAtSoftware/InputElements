@@ -1,10 +1,10 @@
 import {
     DropdownInput,
-    DropdownInputElement,
     IBaseInputElementProps,
     IDropdownInputOption,
     IDropdownInputProps,
     ISingleValueInputElement,
+    SingleValueInputElement,
     UpdateCallback
 } from '@try-at-software/input-elements';
 import { Checkbox, PrimaryButton } from '@fluentui/react';
@@ -24,7 +24,7 @@ export default class DropdownInputWithInvalidOptionSample extends React.Componen
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._dropdownInput = new DropdownInputElement<IBaseInputElementProps, IDropdownInputProps>(
+        this._dropdownInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
             {
                 isRequired: true,
                 renderRequiredIndicator: true,
