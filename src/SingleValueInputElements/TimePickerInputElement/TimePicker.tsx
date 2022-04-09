@@ -3,33 +3,39 @@ import * as React from 'react';
 import { ClearButton, LabelRenderer, materializeErrorMessage } from '../../Components';
 import { combineClasses } from '../../Utilities';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITimePickerProps } from './ITimePickerProps';
 import './TimePicker.less';
 
-export class TimePicker extends React.Component<ISingleValueInputElementProps<Date> & ITimePickerProps & IBaseInputElementDynamicProps> {
+export class TimePicker extends React.Component<
+    ISingleValueInputElementProps<Date> & IOperativeProps<ITimePickerProps> & IDynamicProps<IBaseInputElementDynamicProps>
+> {
     public render(): JSX.Element {
         if (!this.props) return null;
 
-        const clearButtonClassName = combineClasses('q-clear-button', this.props.clearButtonClassName);
+        const { dynamicProps, operativeProps } = this.props;
+
+        const clearButtonClassName = combineClasses('q-clear-button', operativeProps.clearButtonClassName);
         return (
             <>
                 <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <DatePicker
                     data-automationid="time-input"
-                    placeholder={this.props.placeholder}
+                    placeholder={operativeProps.placeholder}
                     onSelectDate={this.onChange}
                     textField={{
                         onRenderSuffix: (): JSX.Element => <ClearButton onClick={this.clearDate} className={clearButtonClassName} />,
-                        inputClassName: this.props.inputClassName,
+                        inputClassName: operativeProps.inputClassName,
                         errorMessage: materializeErrorMessage(this.props.errorMessage),
-                        disabled: this.props.isDisabled
+                        disabled: dynamicProps.isDisabled
                     }}
-                    showGoToToday={!!this.props.showGoToToday}
-                    formatDate={this.props.formatDate}
-                    firstDayOfWeek={this.props.startWeekOnSunday ? DayOfWeek.Sunday : DayOfWeek.Monday}
-                    isMonthPickerVisible={!!this.props.showMonthPicker}
-                    highlightSelectedMonth={!!this.props.showMonthPicker}
+                    showGoToToday={!!operativeProps.showGoToToday}
+                    formatDate={operativeProps.formatDate}
+                    firstDayOfWeek={!!operativeProps.startWeekOnSunday ? DayOfWeek.Sunday : DayOfWeek.Monday}
+                    isMonthPickerVisible={!!operativeProps.showMonthPicker}
+                    highlightSelectedMonth={!!operativeProps.showMonthPicker}
                     value={this.props.value}
                 />
             </>

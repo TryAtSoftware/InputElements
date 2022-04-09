@@ -4,6 +4,8 @@ import { IHidingInputElement } from '../IHidingInputElement';
 import { ILoadingInputElement } from '../ILoadingInputElement';
 import { IValueInputElement } from '../IValueInputElement';
 import { InvalidValueChangeSubscription, ValueChangeSubscription } from '../Subscriptions';
+import { IDynamicProps } from './IDynamicProps';
+import { IOperativeProps } from './IOperativeProps';
 import { ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 
 export interface ISingleValueInputElement<TValue, TComponentProps = unknown, TDynamicProps = unknown>
@@ -18,7 +20,9 @@ export interface ISingleValueInputElement<TValue, TComponentProps = unknown, TDy
      *
      * @see React.Component
      */
-    readonly componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TDynamicProps>;
+    readonly componentToRender: React.ComponentType<
+        ISingleValueInputElementProps<TValue> & IOperativeProps<TComponentProps> & IDynamicProps<TDynamicProps>
+    >;
 
     /**
      * A property containing all additional props that the rendered component needs.

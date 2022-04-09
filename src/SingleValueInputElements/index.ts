@@ -2,6 +2,8 @@ export * from './ISingleInputElementConfiguration';
 export * from './ISingleValueInputElement';
 export * from './ISingleValueInputElementProps';
 export * from './IBaseInputElementProps';
+export * from './IDynamicProps';
+export * from './IOperativeProps';
 export * from './IBaseInputElementDynamicProps';
 export * from './SingleValueInputElement';
 

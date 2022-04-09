@@ -7,6 +7,8 @@ import {
     IRestrictedPresentation,
     PresentationRenderer
 } from '../../Presentations';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 
 interface ISingleValueInputElementWrapperState<TValue, TDynamicProps> {
@@ -17,13 +19,12 @@ interface ISingleValueInputElementWrapperState<TValue, TDynamicProps> {
     dynamicProps: TDynamicProps;
 }
 
-export interface ISingleValueInputElementWrapperProps<
-    TValue,
-    TComponentProps extends ISingleValueInputElementProps<TValue>,
-    TDynamicProps
-> {
-    internalComponent: React.ComponentType<TComponentProps & TDynamicProps>;
-    componentProps: TComponentProps;
+export interface ISingleValueInputElementWrapperProps<TValue, TComponentProps, TDynamicProps> {
+    internalComponent: React.ComponentType<
+        ISingleValueInputElementProps<TValue> & IOperativeProps<TComponentProps> & IDynamicProps<TDynamicProps>
+    >;
+    inputProps: ISingleValueInputElementProps<TValue>;
+    operativeProps: TComponentProps;
     initialDynamicProps: TDynamicProps;
     isInitiallyLoading: boolean;
     isInitiallyVisible: boolean;
@@ -33,21 +34,23 @@ export interface ISingleValueInputElementWrapperProps<
     renderErrors: boolean;
 }
 
-export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISingleValueInputElementProps<TValue>, TDynamicProps = unknown>
+export class SingleValueInputElementWrapper<TValue, TComponentProps, TDynamicProps>
     extends React.Component<
         ISingleValueInputElementWrapperProps<TValue, TComponentProps, TDynamicProps>,
         ISingleValueInputElementWrapperState<TValue, TDynamicProps>
     >
     implements IPresentation, IChangingPresentation<TValue>, IRestrictedPresentation, IDynamicPresentation<TDynamicProps>
 {
-    public constructor(props: ISingleValueInputElementWrapperProps<TValue, TComponentProps, TDynamicProps>) {
+    public constructor(
+        props: ISingleValueInputElementWrapperProps<TValue, ISingleValueInputElementProps<TValue> & TComponentProps, TDynamicProps>
+    ) {
         super(props);
 
         this.state = {
             isLoading: props.isInitiallyLoading,
             isVisible: props.isInitiallyVisible,
-            errorMessage: props.componentProps?.errorMessage,
-            value: props.componentProps?.value,
+            errorMessage: props.inputProps?.errorMessage,
+            value: props.inputProps?.value,
             dynamicProps: props.initialDynamicProps
         };
     }
@@ -103,11 +106,19 @@ export class SingleValueInputElementWrapper<TValue, TComponentProps extends ISin
     };
 
     private renderInternalContent = (): JSX.Element => {
-        const { internalComponent: Component, componentProps } = this.props;
+        const { internalComponent: Component, inputProps, operativeProps } = this.props;
         if (!Component) return null;
 
         const { renderErrors } = this.props;
         const errorMessages = renderErrors ? this.state.errorMessage : null;
-        return <Component {...this.state.dynamicProps} {...componentProps} value={this.state.value} errorMessage={errorMessages} />;
+        return (
+            <Component
+                dynamicProps={this.state.dynamicProps ?? {}}
+                operativeProps={operativeProps}
+                {...inputProps}
+                value={this.state.value}
+                errorMessage={errorMessages}
+            />
+        );
     };
 }

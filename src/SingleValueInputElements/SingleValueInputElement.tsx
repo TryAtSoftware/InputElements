@@ -5,18 +5,15 @@ import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
 import { InvalidValueChangeSubscription, ValueChangeSubscription } from '../Subscriptions';
 import { combineClasses } from '../Utilities';
+import { IDynamicProps } from './IDynamicProps';
 import { SingleValueInputElementWrapper } from './InternalPresentationComponents/SingleValueInputElementWrapper';
+import { IOperativeProps } from './IOperativeProps';
 import { ISingleValueInputElementConfiguration } from './ISingleInputElementConfiguration';
 import { ISingleValueInputElement } from './ISingleValueInputElement';
 import { IInvalidationOptions, ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 
-type WrapperType<TValue, TComponentProps, TRenderProps> = SingleValueInputElementWrapper<
-    TValue,
-    ISingleValueInputElementProps<TValue> & TComponentProps & TRenderProps
->;
-
 export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = unknown>
-    extends ExtendedInputElement<TValue, WrapperType<TValue, TComponentProps, TDynamicProps>>
+    extends ExtendedInputElement<TValue, SingleValueInputElementWrapper<TValue, TComponentProps, TDynamicProps>>
     implements ISingleValueInputElement<TValue, TComponentProps, TDynamicProps>
 {
     private readonly _configuration: ISingleValueInputElementConfiguration<TValue>;
@@ -28,7 +25,9 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
 
     public constructor(
         config: ISingleValueInputElementConfiguration<TValue>,
-        component: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TDynamicProps>,
+        component: React.ComponentType<
+            ISingleValueInputElementProps<TValue> & IOperativeProps<TComponentProps> & IDynamicProps<TDynamicProps>
+        >,
         props: TComponentProps,
         update: UpdateCallback,
         ...validationRules: ValidationRule<TValue>[]
@@ -104,7 +103,9 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     }
 
     /** @inheritdoc */
-    public readonly componentToRender: React.ComponentType<ISingleValueInputElementProps<TValue> & TComponentProps & TDynamicProps>;
+    public readonly componentToRender: React.ComponentType<
+        ISingleValueInputElementProps<TValue> & IOperativeProps<TComponentProps> & IDynamicProps<TDynamicProps>
+    >;
 
     /** @inheritdoc */
     public componentProps: TComponentProps;
@@ -123,8 +124,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
                         internalComponent={this.componentToRender}
                         renderErrors={this._configuration?.renderErrors}
                         loadingIndicator={this._configuration?.loadingComponent}
-                        componentProps={{
-                            ...this.componentProps,
+                        inputProps={{
                             label: this._configuration?.label,
                             value: this.value,
                             renderRequiredIndicator: this._configuration?.renderRequiredIndicator && this._configuration?.isRequired,
@@ -132,6 +132,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
                             onChange: (newValue: TValue): void => this.setValue(newValue),
                             invalidateInput: this.invalidateInput
                         }}
+                        operativeProps={this.componentProps}
                         initialDynamicProps={this._dynamicProps}
                         isInitiallyLoading={this.isLoading}
                         isInitiallyVisible={this.isVisible}

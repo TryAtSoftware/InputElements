@@ -3,6 +3,8 @@ import * as React from 'react';
 import { FormText } from '../../Components';
 import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { INumberInputProps } from './INumberInputProps';
 
@@ -14,7 +16,7 @@ interface INumberInputState {
 const delimiter = '.';
 
 export class NumberInput extends React.Component<
-    ISingleValueInputElementProps<number> & INumberInputProps & IBaseInputElementDynamicProps,
+    ISingleValueInputElementProps<number> & IOperativeProps<INumberInputProps> & IDynamicProps<IBaseInputElementDynamicProps>,
     INumberInputState
 > {
     public state: INumberInputState = {
@@ -25,15 +27,17 @@ export class NumberInput extends React.Component<
     public render(): JSX.Element {
         if (!this.props) return null;
 
+        const { dynamicProps, operativeProps } = this.props;
+
         return (
             <>
                 <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <SpinButton
                     data-automationid="number-input"
                     inputProps={{
-                        autoFocus: this.props.autoFocus,
-                        placeholder: this.props.placeholder,
-                        disabled: this.props.isDisabled,
+                        autoFocus: !!operativeProps.autoFocus,
+                        placeholder: operativeProps.placeholder,
+                        disabled: !!dynamicProps.isDisabled,
                         onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
                             const newValue = event.target.value;
                             const value = NumberInput.normalizeData(newValue);
@@ -83,7 +87,8 @@ export class NumberInput extends React.Component<
         const minValue = this.getMinValue();
         if (value < minValue) return { warning: `The minimum value is ${minValue}`, newValue: undefined };
 
-        if (!this.props.handleDecimalValues && value % 1 !== 0)
+        const { operativeProps } = this.props;
+        if (!operativeProps.handleDecimalValues && value % 1 !== 0)
             return {
                 warning: 'Decimal values are not allowed',
                 newValue: undefined
@@ -93,15 +98,18 @@ export class NumberInput extends React.Component<
     }
 
     private getMaxValue(): number {
-        return this.props?.max ?? Number.MAX_SAFE_INTEGER;
+        const { operativeProps } = this.props;
+        return operativeProps.max ?? Number.MAX_SAFE_INTEGER;
     }
 
     private getMinValue(): number {
-        return this.props?.min ?? Number.MIN_SAFE_INTEGER;
+        const { operativeProps } = this.props;
+        return operativeProps.min ?? Number.MIN_SAFE_INTEGER;
     }
 
     private getStep(): number {
-        return this.props?.step ?? 1;
+        const { operativeProps } = this.props;
+        return operativeProps.step ?? 1;
     }
 
     private static getNumericValue(value: string): number {

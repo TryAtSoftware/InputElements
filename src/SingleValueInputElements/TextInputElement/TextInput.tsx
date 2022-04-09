@@ -2,12 +2,20 @@ import { TextField } from '@fluentui/react';
 import * as React from 'react';
 import { LabelRenderer, materializeErrorMessage } from '../../Components';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { ITextInputProps } from './ITextInputProps';
 
-export class TextInput extends React.Component<ISingleValueInputElementProps<string> & ITextInputProps & IBaseInputElementDynamicProps> {
+export class TextInput extends React.Component<
+    ISingleValueInputElementProps<string> & IOperativeProps<ITextInputProps> & IDynamicProps<IBaseInputElementDynamicProps>
+> {
     public render(): JSX.Element {
         if (!this.props) return null;
+
+        const { dynamicProps, operativeProps } = this.props;
+        const { isDisabled } = dynamicProps;
+        const { autoFocus, contentType, placeholder } = operativeProps;
 
         return (
             <>
@@ -19,11 +27,11 @@ export class TextInput extends React.Component<ISingleValueInputElementProps<str
                         this.props.onChange(newValue);
                     }}
                     errorMessage={materializeErrorMessage(this.props.errorMessage)}
-                    type={this.props.contentType}
-                    placeholder={this.props.placeholder}
+                    type={contentType}
+                    placeholder={placeholder}
                     validateOnFocusOut={true}
-                    disabled={this.props.isDisabled}
-                    autoFocus={this.props.autoFocus}
+                    disabled={isDisabled}
+                    autoFocus={autoFocus}
                 />
             </>
         );

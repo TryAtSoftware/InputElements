@@ -3,15 +3,19 @@ import * as React from 'react';
 import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { IDropdownInputProps } from './IDropdownInputProps';
 
 export class MultiValueDropdownInput extends React.Component<
-    ISingleValueInputElementProps<string[]> & IBaseInputElementProps & IDropdownInputProps
+    ISingleValueInputElementProps<string[]> & IOperativeProps<IBaseInputElementProps> & IDynamicProps<IDropdownInputProps>
 > {
     public render(): JSX.Element {
         if (!this.props) return null;
-        const normalizedOptions = DropdownHelper.getNormalizedOptions(this.props.defaultOption, this.props.options);
+
+        const { dynamicProps, operativeProps } = this.props;
+        const normalizedOptions = DropdownHelper.getNormalizedOptions(dynamicProps.defaultOption, dynamicProps.options);
 
         return (
             <>
@@ -35,10 +39,10 @@ export class MultiValueDropdownInput extends React.Component<
                         this.props.onChange?.(currentValues);
                     }}
                     required={!!this.props.renderRequiredIndicator}
-                    placeholder={this.props.placeholder}
+                    placeholder={operativeProps.placeholder}
                     // This value should never be `undefined`.
-                    defaultSelectedKeys={this.props.value || [this.props.defaultOption?.key] || null}
-                    disabled={this.props.isDisabled}
+                    defaultSelectedKeys={this.props.value || [dynamicProps.defaultOption?.key] || null}
+                    disabled={dynamicProps.isDisabled}
                     multiSelect
                 />
                 <ErrorRenderer error={this.props.errorMessage} messageBarType={MessageBarType.error} />

@@ -2,33 +2,38 @@ import { IPersonaProps, MessageBarType, NormalPeoplePicker } from '@fluentui/rea
 import * as React from 'react';
 import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { IIdentityPickerProps } from './IIdentityPickerProps';
 
 export class IdentityPicker<TIdentity extends IPersonaProps = IPersonaProps> extends React.Component<
-    ISingleValueInputElementProps<TIdentity[]> & IIdentityPickerProps<TIdentity> & IBaseInputElementDynamicProps
+    ISingleValueInputElementProps<TIdentity[]> &
+        IOperativeProps<IIdentityPickerProps<TIdentity>> &
+        IDynamicProps<IBaseInputElementDynamicProps>
 > {
     public render(): JSX.Element {
         if (!this.props) return null;
+        const { dynamicProps, operativeProps } = this.props;
 
         return (
             <>
                 <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <div data-automationid="identity-picker">
                     <NormalPeoplePicker
-                        onResolveSuggestions={this.props.onResolveSuggestions}
-                        onEmptyResolveSuggestions={this.props.onEmptyResolveSuggestions}
-                        getTextFromItem={this.props.getTextFromItem}
-                        pickerSuggestionsProps={this.props.suggestionProps}
-                        onRemoveSuggestion={this.props.onRemoveSuggestion}
-                        onInputChange={this.props.onInputChange}
-                        resolveDelay={this.props.resolveDelay}
-                        itemLimit={this.props.itemLimit}
-                        disabled={this.props.isDisabled}
+                        onResolveSuggestions={operativeProps.onResolveSuggestions}
+                        onEmptyResolveSuggestions={operativeProps.onEmptyResolveSuggestions}
+                        getTextFromItem={operativeProps.getTextFromItem}
+                        pickerSuggestionsProps={operativeProps.suggestionProps}
+                        onRemoveSuggestion={operativeProps.onRemoveSuggestion}
+                        onInputChange={operativeProps.onInputChange}
+                        resolveDelay={operativeProps.resolveDelay}
+                        itemLimit={operativeProps.itemLimit}
+                        disabled={dynamicProps.isDisabled}
                         defaultSelectedItems={this.props.value}
                         inputProps={{
                             required: this.props.renderRequiredIndicator,
-                            placeholder: !!this.props.value && this.props.value.length > 0 ? '' : this.props.placeholder
+                            placeholder: !!this.props.value && this.props.value.length > 0 ? '' : operativeProps.placeholder
                         }}
                         onChange={(items?: TIdentity[]): void => {
                             this.props.onChange(items);

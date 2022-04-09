@@ -4,24 +4,26 @@ import { useEffect, useMemo } from 'react';
 import { ErrorRenderer, FormText, LabelRenderer } from '../../Components';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { IInvalidationOptions, ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
 import { IDropdownInputProps } from './IDropdownInputProps';
 import { IFluentUiDropdownInputProps } from './IFluentUiDropdownInputProps';
 
 interface ISingleValueDropdownInputProps
     extends ISingleValueInputElementProps<string>,
-        IBaseInputElementProps,
-        IDropdownInputProps,
-        IFluentUiDropdownInputProps {
+        IOperativeProps<IBaseInputElementProps>,
+        IDynamicProps<IDropdownInputProps & IFluentUiDropdownInputProps> {
     consistencyErrorMessage?: FormText;
 }
 
 const ConsistencyErrorMessage = 'The value is not present within the specified options.';
 
 const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Element => {
+    const { dynamicProps, operativeProps } = props;
     const normalizedOptions = useMemo(
-        () => DropdownHelper.getNormalizedOptions(props.defaultOption, props.options),
-        [props.defaultOption, props.options]
+        () => DropdownHelper.getNormalizedOptions(dynamicProps.defaultOption, dynamicProps.options),
+        [dynamicProps.defaultOption, dynamicProps.options]
     );
 
     useEffect(() => {
@@ -30,7 +32,7 @@ const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Elem
         const invalidationOptions: IInvalidationOptions = { errorMessage: props.consistencyErrorMessage || ConsistencyErrorMessage };
         props.invalidateInput(invalidationOptions);
     }, [props.value, normalizedOptions, props.consistencyErrorMessage, props.invalidateInput]);
-    const DropdownComponent = useMemo(() => props.dropdownComponent ?? Dropdown, [props.dropdownComponent]);
+    const DropdownComponent = useMemo(() => dynamicProps.dropdownComponent ?? Dropdown, [dynamicProps.dropdownComponent]);
 
     return (
         <>
@@ -41,10 +43,10 @@ const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Elem
                 onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
                     !!props.onChange && props.onChange(option.key as string)
                 }
-                placeholder={props.placeholder}
+                placeholder={operativeProps.placeholder}
                 // This value should never be `undefined`.
-                defaultSelectedKey={props.value || props.defaultOption?.key || null}
-                disabled={props.isDisabled}
+                defaultSelectedKey={props.value || dynamicProps.defaultOption?.key || null}
+                disabled={dynamicProps.isDisabled}
             />
             <ErrorRenderer error={props.errorMessage} messageBarType={MessageBarType.error} />
         </>
