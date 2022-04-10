@@ -1,5 +1,5 @@
 import { Checkbox } from '@fluentui/react';
-import { IInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
+import { IInputElement, prepareInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
 import * as React from 'react';
 
 interface IBasicWorkflowSampleState {
@@ -13,12 +13,10 @@ export default class BasicWorkflowSample extends React.Component<unknown, IBasic
     public constructor(props: unknown) {
         super(props);
 
-        this._inputElement = new SingleValueInputElement<string, ITextInputProps>(
+        this._inputElement = prepareInputElement<string>(
             { isRequired: true, label: 'Required input element' },
-            TextInput,
-            { placeholder: 'Enter some value and observe how the checkboxes will react to it.' },
             this.updateForm
-        );
+        ).materialize(TextInput, { placeholder: 'Enter some value and observe how the checkboxes will react to it.' });
 
         this.state = {
             isValid: this._inputElement.isValid,
