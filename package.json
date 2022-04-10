@@ -21,9 +21,9 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://dev.azure.com/TryAtSoftware/InputElements"
+        "url": "https://github.com/TryAtSoftware/InputElements"
     },
-    "homepage": "https://dev.azure.com/TryAtSoftware/InputElements",
+    "homepage": "https://github.com/TryAtSoftware/InputElements",
     "files": [
         "lib/**/*"
     ],
@@ -34,7 +34,7 @@
         "validation"
     ],
     "author": "Tony Troeff",
-    "license": "ISC",
+    "license": "MIT",
     "devDependencies": {
         "@testing-library/react": "12.1.4",
         "@types/enzyme": "3.10.12",
