@@ -1,2 +1,2 @@
-export type ValueChangeSubscription<TValue> = (newValue: TValue) => void;
+export type ValueChangeSubscription<TValue> = (newValue: TValue, previousValue: TValue) => void;
 export type InvalidValueChangeSubscription = () => void;
