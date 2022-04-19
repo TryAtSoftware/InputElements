@@ -45,7 +45,7 @@ const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Elem
                 }
                 placeholder={operativeProps.placeholder}
                 // This value should never be `undefined`.
-                defaultSelectedKey={props.value || dynamicProps.defaultOption?.key || null}
+                selectedKey={props.value || dynamicProps.defaultOption?.key || null}
                 disabled={dynamicProps.isDisabled}
             />
             <ErrorRenderer error={props.errorMessage} messageBarType={MessageBarType.error} />
