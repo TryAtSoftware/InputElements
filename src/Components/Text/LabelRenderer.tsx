@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Label } from '@fluentui/react';
+import { FormTextRenderer } from './FormTextRenderer';
 import { FormText } from './Types';
 
 interface ILabelRendererProps {
@@ -12,7 +13,11 @@ const LabelRendererComponent = (props: ILabelRendererProps): JSX.Element => {
 
     const { label, required } = props;
     if (!label) return null;
-    return <Label required={required}>{label}</Label>;
+    return (
+        <Label required={required}>
+            <FormTextRenderer text={label} />
+        </Label>
+    );
 };
 
 export const LabelRenderer = React.memo(LabelRendererComponent);
