@@ -97,10 +97,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
 
     /** @inheritdoc */
     public get isValid(): boolean {
-        if (this._isInvalidated) return false;
-        if (this.isLoading) return false;
-        if (this.errorMessage && this.errorMessage.length > 0) return false;
-
+        if (this._isInvalidated || this.isLoading || this.errorMessage) return false;
         return (!!this._configuration && !this._configuration.isRequired) || this._valueIsSet || this._initialValueIsSet;
     }
 
@@ -161,16 +158,20 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     public validate(): void {
         if (!!this._configuration?.shouldExecuteValidation && this._configuration.shouldExecuteValidation() === false) return;
 
-        let errorMessage: FormText = null;
+        let errorMessage: FormText = undefined;
 
         if (this._configuration?.isRequired && !this.valueIsValid()) {
             // If a value is required but the input field is empty.
             errorMessage = this._configuration?.requiredValidationMessage || `The field is required`;
         } else if (this._configuration?.isRequired || this.value || this._configuration?.executeAllValidations) {
             // If a value is provided.
-            this.validationRules.forEach((rule): void => {
-                if (!errorMessage) errorMessage = rule(this.value);
-            });
+            for (const validationRule of this.validationRules) {
+                const currentError = validationRule(this.value);
+                if (currentError) {
+                    errorMessage = currentError;
+                    break;
+                }
+            }
         }
 
         this.setError(errorMessage);
