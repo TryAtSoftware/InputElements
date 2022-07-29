@@ -17,7 +17,6 @@ interface ISingleValueDropdownInputProps
     consistencyErrorMessage?: FormText;
 }
 
-// TODO: This is a temporary solution. Accept FormText value from the operative props instead.
 const ConsistencyErrorMessage = 'The value is not present within the specified options.';
 
 const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Element => {
