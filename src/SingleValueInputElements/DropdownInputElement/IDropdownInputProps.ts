@@ -8,4 +8,6 @@ export interface IDropdownInputProps extends IBaseInputElementDynamicProps {
      * The default option for the dropdown.
      */
     defaultOption: IDropdownInputOption;
+
+    renderOption?: (optionId: string) => JSX.Element;
 }

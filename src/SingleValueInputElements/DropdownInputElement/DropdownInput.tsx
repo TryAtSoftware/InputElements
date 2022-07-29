@@ -1,6 +1,6 @@
 import { Dropdown, IDropdownOption, MessageBarType } from '@fluentui/react';
 import * as React from 'react';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { ErrorRenderer, FormText, LabelRenderer } from '../../Components';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
@@ -17,6 +17,7 @@ interface ISingleValueDropdownInputProps
     consistencyErrorMessage?: FormText;
 }
 
+// TODO: This is a temporary solution. Accept FormText value from the operative props instead.
 const ConsistencyErrorMessage = 'The value is not present within the specified options.';
 
 const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Element => {
@@ -34,15 +35,23 @@ const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Elem
     }, [props.value, normalizedOptions, props.consistencyErrorMessage, props.invalidateInput]);
     const DropdownComponent = useMemo(() => dynamicProps.dropdownComponent ?? Dropdown, [dynamicProps.dropdownComponent]);
 
+    const onChange = useCallback(
+        (_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void => !!props.onChange && props.onChange(option.id),
+        [props.onChange]
+    );
+    const onRenderOption = useCallback((option: IDropdownOption, defaultRender: (option: IDropdownOption) => JSX.Element) => {
+        if (!dynamicProps.renderOption) return defaultRender(option);
+        return dynamicProps.renderOption(option.id);
+    }, []);
+
     return (
         <>
             <LabelRenderer label={props.label} required={!!props.renderRequiredIndicator} />
             <DropdownComponent
                 data-automationid="dropdown-input"
                 options={normalizedOptions}
-                onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
-                    !!props.onChange && props.onChange(option.key as string)
-                }
+                onChange={onChange}
+                onRenderOption={onRenderOption}
                 placeholder={operativeProps.placeholder}
                 // This value should never be `undefined`.
                 selectedKey={props.value || dynamicProps.defaultOption?.key || null}
