@@ -190,7 +190,7 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
 
     private invalidateInput = (options?: IInvalidationOptions): void => {
         this._isInvalidated = true;
-        if (options.errorMessage) this.setError(options.errorMessage);
+        if (options?.errorMessage) this.setError(options.errorMessage);
 
         this.updateInternally();
         this.invalidValueChangeSubscriptions.forEach((x): void => x?.());
