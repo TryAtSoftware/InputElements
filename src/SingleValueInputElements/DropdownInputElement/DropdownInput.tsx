@@ -10,21 +10,31 @@ import { IInvalidationOptions, ISingleValueInputElementProps } from '../ISingleV
 import { IDropdownInputProps } from './IDropdownInputProps';
 import { IFluentUiDropdownInputProps } from './IFluentUiDropdownInputProps';
 
+interface IDropdownInputStyles {
+    automaticHeight?: boolean;
+}
+
 interface ISingleValueDropdownInputProps
     extends ISingleValueInputElementProps<string>,
         IOperativeProps<IBaseInputElementProps>,
         IDynamicProps<IDropdownInputProps & IFluentUiDropdownInputProps> {
     consistencyErrorMessage?: FormText;
+    styles?: IDropdownInputStyles;
 }
 
 const ConsistencyErrorMessage = 'The value is not present within the specified options.';
 
 const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Element => {
-    const { dynamicProps, operativeProps } = props;
+    const { dynamicProps, operativeProps, styles: stylePreferences } = props;
     const normalizedOptions = useMemo(
         () => DropdownHelper.getNormalizedOptions(dynamicProps.defaultOption, dynamicProps.options),
         [dynamicProps.defaultOption, dynamicProps.options]
     );
+
+    const styles = useMemo(() => {
+        if (!stylePreferences?.automaticHeight) return undefined;
+        return { dropdownItem: { height: 'auto' } };
+    }, [stylePreferences]);
 
     useEffect(() => {
         if (!props.value || normalizedOptions.some((o) => o.key === props.value)) return;
@@ -55,6 +65,7 @@ const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Elem
                 // This value should never be `undefined`.
                 selectedKey={props.value || dynamicProps.defaultOption?.key || null}
                 disabled={dynamicProps.isDisabled}
+                styles={styles}
             />
             <ErrorRenderer error={props.errorMessage} messageBarType={MessageBarType.error} />
         </>
