@@ -1,26 +1,21 @@
 import { Dropdown, IDropdownOption, MessageBarType } from '@fluentui/react';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo } from 'react';
-import { ErrorRenderer, FormText, LabelRenderer } from '../../Components';
+import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { DropdownHelper } from '../../Utilities';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 import { IDynamicProps } from '../IDynamicProps';
 import { IOperativeProps } from '../IOperativeProps';
 import { IInvalidationOptions, ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
+import { IDropdownInputConfiguration } from './IDropdownInputConfiguration';
 import { IDropdownInputProps } from './IDropdownInputProps';
 import { IFluentUiDropdownInputProps } from './IFluentUiDropdownInputProps';
 
-interface IDropdownInputStyles {
-    automaticHeight?: boolean;
-}
-
 interface ISingleValueDropdownInputProps
     extends ISingleValueInputElementProps<string>,
+        IDropdownInputConfiguration,
         IOperativeProps<IBaseInputElementProps>,
-        IDynamicProps<IDropdownInputProps & IFluentUiDropdownInputProps> {
-    consistencyErrorMessage?: FormText;
-    styles?: IDropdownInputStyles;
-}
+        IDynamicProps<IDropdownInputProps & IFluentUiDropdownInputProps> {}
 
 const ConsistencyErrorMessage = 'The value is not present within the specified options.';
 
