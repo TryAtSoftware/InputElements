@@ -12,9 +12,9 @@ import { ISingleValueInputElementConfiguration } from './ISingleInputElementConf
 import { ISingleValueInputElement } from './ISingleValueInputElement';
 import { IInvalidationOptions, ISingleValueInputElementProps } from './ISingleValueInputElementProps';
 
-export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = unknown>
-    extends ExtendedInputElement<TValue, SingleValueInputElementWrapper<TValue, TComponentProps, TDynamicProps>>
-    implements ISingleValueInputElement<TValue, TComponentProps, TDynamicProps>
+export class SingleValueInputElement<TValue, TOperativeProps, TDynamicProps = unknown>
+    extends ExtendedInputElement<TValue, SingleValueInputElementWrapper<TValue, TOperativeProps, TDynamicProps>>
+    implements ISingleValueInputElement<TValue, TOperativeProps, TDynamicProps>
 {
     private readonly _configuration: ISingleValueInputElementConfiguration<TValue>;
     private readonly valueChangeSubscriptions: ValueChangeSubscription<TValue>[] = [];
@@ -26,9 +26,9 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
     public constructor(
         config: ISingleValueInputElementConfiguration<TValue>,
         component: React.ComponentType<
-            ISingleValueInputElementProps<TValue> & IOperativeProps<TComponentProps> & IDynamicProps<TDynamicProps>
+            ISingleValueInputElementProps<TValue> & IOperativeProps<TOperativeProps> & IDynamicProps<TDynamicProps>
         >,
-        props: TComponentProps,
+        props: TOperativeProps,
         update: UpdateCallback,
         ...validationRules: ValidationRule<TValue>[]
     ) {
@@ -103,11 +103,11 @@ export class SingleValueInputElement<TValue, TComponentProps, TDynamicProps = un
 
     /** @inheritdoc */
     public readonly componentToRender: React.ComponentType<
-        ISingleValueInputElementProps<TValue> & IOperativeProps<TComponentProps> & IDynamicProps<TDynamicProps>
+        ISingleValueInputElementProps<TValue> & IOperativeProps<TOperativeProps> & IDynamicProps<TDynamicProps>
     >;
 
     /** @inheritdoc */
-    public componentProps: TComponentProps;
+    public componentProps: TOperativeProps;
 
     /** @inheritdoc */
     public getDynamicProps(): TDynamicProps {

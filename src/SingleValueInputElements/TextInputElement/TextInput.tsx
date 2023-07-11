@@ -23,9 +23,7 @@ export class TextInput extends React.Component<
                 <TextField
                     data-automationid="text-input"
                     value={this.props.value || ''}
-                    onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string): void => {
-                        this.props.onChange(newValue);
-                    }}
+                    onChange={this.handleChange}
                     errorMessage={materializeErrorMessage(this.props.errorMessage)}
                     type={contentType}
                     placeholder={placeholder}
@@ -36,4 +34,9 @@ export class TextInput extends React.Component<
             </>
         );
     }
+
+    private handleChange = (_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string): void => {
+        const { onChange } = this.props;
+        onChange?.(newValue);
+    };
 }

@@ -1,4 +1,5 @@
 export * from './EmptyValidationRules';
+export * from './ILongTextInputProps';
 export * from './ITextInputProps';
 export * from './LengthValidationRules';
 export * from './LongTextInput';

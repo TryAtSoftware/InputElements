@@ -6,31 +6,17 @@ import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps'
 import { IDynamicProps } from '../IDynamicProps';
 import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
-import { ITextInputProps } from './ITextInputProps';
-
-export interface ILongTextInputState {
-    isMultiline: boolean;
-}
+import { ILongTextInputProps } from './ILongTextInputProps';
 
 export class LongTextInput extends React.Component<
-    ISingleValueInputElementProps<string> & IOperativeProps<ITextInputProps> & IDynamicProps<IBaseInputElementDynamicProps>,
-    ILongTextInputState
+    ISingleValueInputElementProps<string> & IOperativeProps<ILongTextInputProps> & IDynamicProps<IBaseInputElementDynamicProps>
 > {
-    /**
-     * The number of characters after which the text input is changed to a multiline textbox.
-     */
-    private multilineThreshold = 70;
-
-    public state: ILongTextInputState = {
-        isMultiline: false
-    };
-
     public render(): JSX.Element {
         if (!this.props) return null;
 
         const { dynamicProps, operativeProps } = this.props;
         const { isDisabled } = dynamicProps;
-        const { autoFocus, contentType, placeholder } = operativeProps;
+        const { autoAdjustHeight, autoFocus, contentType, placeholder, resizable } = operativeProps;
 
         return (
             <>
@@ -38,25 +24,23 @@ export class LongTextInput extends React.Component<
                 <TextField
                     data-automationid="long-text-input"
                     value={this.props.value || ''}
-                    onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string): void => {
-                        // Dynamically change the 'isMultiline' state property.
-                        const isMultiline = newValue.length > this.multilineThreshold;
-                        if (this.state.isMultiline !== isMultiline) {
-                            this.setState({ isMultiline: isMultiline });
-                        }
-
-                        this.props.onChange(newValue);
-                    }}
+                    onChange={this.handleChange}
                     errorMessage={materializeErrorMessage(this.props.errorMessage)}
                     type={contentType}
                     placeholder={placeholder}
-                    multiline={this.state.isMultiline}
-                    autoAdjustHeight={this.state.isMultiline}
-                    validateOnFocusOut={true}
+                    autoAdjustHeight={autoAdjustHeight}
+                    resizable={resizable}
                     disabled={isDisabled}
                     autoFocus={autoFocus}
+                    validateOnFocusOut
+                    multiline
                 />
             </>
         );
     }
+
+    private handleChange = (_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string): void => {
+        const { onChange } = this.props;
+        onChange?.(newValue);
+    };
 }
