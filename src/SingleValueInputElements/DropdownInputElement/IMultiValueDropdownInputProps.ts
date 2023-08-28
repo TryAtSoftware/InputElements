@@ -1,5 +1,5 @@
-import { IDropdownInputProps } from "./IDropdownInputProps";
+import { IDropdownInputProps } from './IDropdownInputProps';
 
 export interface IMultiValueDropdownInputProps extends IDropdownInputProps {
-  multiSelectDelimiter?: string;
+    multiSelectDelimiter?: string;
 }
