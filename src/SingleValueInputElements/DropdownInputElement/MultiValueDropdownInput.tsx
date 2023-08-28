@@ -6,7 +6,7 @@ import { IBaseInputElementProps } from '../IBaseInputElementProps';
 import { IDynamicProps } from '../IDynamicProps';
 import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
-import { IMultiValueDropdownInputProps } from "./IMultiValueDropdownInputProps";
+import { IMultiValueDropdownInputProps } from './IMultiValueDropdownInputProps';
 
 export class MultiValueDropdownInput extends React.Component<
     ISingleValueInputElementProps<string[]> & IOperativeProps<IBaseInputElementProps> & IDynamicProps<IMultiValueDropdownInputProps>
@@ -51,5 +51,5 @@ export class MultiValueDropdownInput extends React.Component<
         else currentValues = currentValues.filter((x): boolean => x !== optionKey);
 
         this.props.onChange?.(currentValues);
-    }
+    };
 }
