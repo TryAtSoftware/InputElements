@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+    FormText,
     INumberInputProps,
     IValueInputElement,
     NumberInput,
@@ -30,7 +31,11 @@ export default class NumberInputSample extends React.Component<unknown, INumberI
             },
             NumberInput,
             {
-                placeholder: 'When you enter some number, the button will become enabled.'
+                placeholder: 'When you enter some number, the button will become enabled.',
+                min: 0,
+                max: 100,
+                getMinErrorMessage: (min: number, max: number | undefined): FormText => `The value must be between ${min} and ${max}`,
+                getMaxErrorMessage: (min: number | undefined, max: number): FormText => `The value must be between ${min} and ${max}`
             },
             this.updateForm
         );

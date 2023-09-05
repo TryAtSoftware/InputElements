@@ -70,31 +70,25 @@ export class NumberInput extends React.Component<
     }
 
     private handleUserInput(value: number, intermediateValue: string): void {
-        const changeResult = this.ensureValueConsistency(value);
-        this.setState({ customWarning: changeResult.warning, intermediateValue: intermediateValue });
+        const consistencyWarning = this.ensureValueConsistency(value);
+        this.setState({ customWarning: consistencyWarning, intermediateValue: intermediateValue });
 
-        if (changeResult.newValue !== undefined) this.props.onChange(changeResult.newValue);
+        if (consistencyWarning === undefined) this.props.onChange(value);
         else this.props.invalidateInput();
     }
 
-    private ensureValueConsistency(value: number): {
-        warning: string;
-        newValue: number;
-    } {
-        const maxValue = this.getMaxValue();
-        if (value > maxValue) return { warning: `The maximum value is ${maxValue}`, newValue: undefined };
-
-        const minValue = this.getMinValue();
-        if (value < minValue) return { warning: `The minimum value is ${minValue}`, newValue: undefined };
-
+    private ensureValueConsistency(value: number): FormText | undefined {
         const { operativeProps } = this.props;
-        if (!operativeProps.handleDecimalValues && value % 1 !== 0)
-            return {
-                warning: 'Decimal values are not allowed',
-                newValue: undefined
-            };
 
-        return { warning: '', newValue: value };
+        const maxValue = this.getMaxValue();
+        const minValue = this.getMinValue();
+
+        if (value > maxValue) return operativeProps.getMaxErrorMessage?.(minValue, maxValue) ?? `The maximum value is ${maxValue}`;
+        if (value < minValue) return operativeProps.getMinErrorMessage?.(minValue, maxValue) ?? `The minimum value is ${minValue}`;
+        if (!operativeProps.handleDecimalValues && value % 1 !== 0)
+            return operativeProps.decimalErrorMessage ?? 'Decimal values are not allowed';
+
+        return undefined;
     }
 
     private getMaxValue(): number {
