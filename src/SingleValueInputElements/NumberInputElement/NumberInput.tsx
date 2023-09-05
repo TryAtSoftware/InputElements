@@ -1,124 +1,119 @@
+import { MessageBarType, SpinButton } from '@fluentui/react';
 import * as React from 'react';
-import { MessageBar, MessageBarType, SpinButton } from 'office-ui-fabric-react';
-import { INumberInputProps } from './INumberInputProps';
+import { FormText } from '../../Components';
+import { ErrorRenderer, LabelRenderer } from '../../Components';
+import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
-import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
+import { INumberInputProps } from './INumberInputProps';
 
-export class NumberInput extends React.Component<ISingleValueInputElementProps<number> & INumberInputProps> {
+interface INumberInputState {
+    intermediateValue: string;
+    customWarning: FormText;
+}
+
+const delimiter = '.';
+
+export class NumberInput extends React.Component<
+    ISingleValueInputElementProps<number> & IOperativeProps<INumberInputProps> & IDynamicProps<IBaseInputElementDynamicProps>,
+    INumberInputState
+> {
+    public state: INumberInputState = {
+        intermediateValue: this.props.value?.toString(),
+        customWarning: ''
+    };
+
     public render(): JSX.Element {
         if (!this.props) return null;
 
+        const { dynamicProps, operativeProps } = this.props;
+
         return (
             <>
+                <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
                 <SpinButton
+                    data-automationid="number-input"
                     inputProps={{
-                        autoFocus: this.props.autoFocus,
-                        placeholder: this.props.placeholder,
-                        disabled: this.props.isDisabled
+                        autoFocus: !!operativeProps.autoFocus,
+                        placeholder: operativeProps.placeholder,
+                        disabled: !!dynamicProps.isDisabled,
+                        onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+                            const newValue = event.target.value;
+                            const value = NumberInput.normalizeData(newValue);
+                            if (!value || isNaN(Number(value))) {
+                                this.setState({ intermediateValue: value, customWarning: 'The provided value is not a valid number.' });
+                                this.props.invalidateInput();
+                                return;
+                            }
+
+                            const numericValue = NumberInput.getNumericValue(value);
+                            this.handleUserInput(numericValue, value);
+                        }
                     }}
-                    label={this.props.label}
-                    labelPosition={this.getLabelPosition()}
-                    value={this.getValue(this.props.value)}
-                    onValidate={(newValue: string): void => {
-                        this.processValue(newValue);
-                    }}
-                    onIncrement={(value: string): string => {
-                        let numericValue = this.removeSuffixFromNumber(value);
+                    value={this.state.intermediateValue ?? ''}
+                    onIncrement={(value: string): void => {
+                        let numericValue = NumberInput.getNumericValue(value);
                         numericValue += this.getStep();
-
-                        this.props.onChange(numericValue);
-                        return this.getValue(numericValue);
+                        this.handleUserInput(numericValue, numericValue.toString());
                     }}
-                    onDecrement={(value: string): string => {
-                        let numericValue = this.removeSuffixFromNumber(value);
+                    onDecrement={(value: string): void => {
+                        let numericValue = NumberInput.getNumericValue(value);
                         numericValue -= this.getStep();
-
-                        this.props.onChange(numericValue);
-                        return this.getValue(numericValue);
+                        this.handleUserInput(numericValue, numericValue.toString());
                     }}
                 />
-                {!!this.props?.errorMessage && <MessageBar messageBarType={MessageBarType.warning}>{this.props.errorMessage}</MessageBar>}
+                <ErrorRenderer error={this.props.errorMessage} messageBarType={MessageBarType.warning} />
+                <ErrorRenderer error={this.state.customWarning} messageBarType={MessageBarType.warning} />
             </>
         );
     }
 
-    private getValue(value: number): string {
-        if (!!value === false) value = 0;
+    private handleUserInput(value: number, intermediateValue: string): void {
+        const consistencyWarning = this.ensureValueConsistency(value);
+        this.setState({ customWarning: consistencyWarning, intermediateValue: intermediateValue });
 
-        const stringifiedValue = value.toFixed(this.getPrecision());
-        return !!this.props.suffix ? stringifiedValue + ' ' + this.props.suffix : stringifiedValue.toString();
+        if (consistencyWarning === undefined) this.props.onChange(value);
+        else this.props.invalidateInput();
     }
 
-    private getLabelPosition(): Position {
-        switch (this.props?.labelPosition) {
-            case 'bottom':
-                return Position.bottom;
-            case 'left':
-                return Position.start;
-            case 'right':
-                return Position.end;
-            default:
-                return Position.top;
-        }
-    }
-
-    private removeSuffixFromNumber(value: string): number {
-        const numberValue = this.getNumericValue(this.removeSuffix(value));
-        return Number.isNaN(numberValue) ? 0 : numberValue;
-    }
-
-    private removeSuffix(value: string): string {
-        if (!!value === false) value = '0';
-
-        if (!!this.props.suffix === false || value.length <= this.props.suffix.length) return value;
-
-        const valueSuffix = value.substr(value.length - this.props.suffix.length);
-        if (valueSuffix != this.props.suffix) return value;
-
-        return value.substr(0, value.length - this.props.suffix.length);
-    }
-
-    private getNumericValue(value: string): number {
-        const numericValue = this.props.handleDecimalValues ? Number.parseFloat(value.replace(',', '.')) : Number.parseInt(value);
+    private ensureValueConsistency(value: number): FormText | undefined {
+        const { operativeProps } = this.props;
 
         const maxValue = this.getMaxValue();
-        if (numericValue > maxValue) return maxValue;
-
         const minValue = this.getMinValue();
-        if (numericValue < minValue) return minValue;
 
-        return numericValue;
-    }
+        if (value > maxValue) return operativeProps.getMaxErrorMessage?.(minValue, maxValue) ?? `The maximum value is ${maxValue}`;
+        if (value < minValue) return operativeProps.getMinErrorMessage?.(minValue, maxValue) ?? `The minimum value is ${minValue}`;
+        if (!operativeProps.handleDecimalValues && value % 1 !== 0)
+            return operativeProps.decimalErrorMessage ?? 'Decimal values are not allowed';
 
-    private processValue(value: string): void {
-        const numericValue = this.removeSuffixFromNumber(value);
-        this.props.onChange(numericValue);
+        return undefined;
     }
 
     private getMaxValue(): number {
-        return this.props?.max ?? Number.MAX_SAFE_INTEGER;
+        const { operativeProps } = this.props;
+        return operativeProps.max ?? Number.MAX_SAFE_INTEGER;
     }
 
     private getMinValue(): number {
-        return this.props?.min ?? Number.MIN_SAFE_INTEGER;
+        const { operativeProps } = this.props;
+        return operativeProps.min ?? Number.MIN_SAFE_INTEGER;
     }
 
     private getStep(): number {
-        return this.props?.step ?? 1;
+        const { operativeProps } = this.props;
+        return operativeProps.step ?? 1;
     }
 
-    private getPrecision(): number {
-        // If decimal values are not allowed, we should render only whole numbers.
-        if (!this.props?.handleDecimalValues) return 0;
+    private static getNumericValue(value: string): number {
+        const number = Number(NumberInput.normalizeData(value));
+        if (Number.isNaN(number)) return 0;
 
-        const defaultPrecision = 2;
-        const minPrecision = 1;
-        const maxPrecision = 20;
+        return number;
+    }
 
-        let precision = this.props?.precision ?? defaultPrecision;
-        if (precision < minPrecision) precision = minPrecision;
-        else if (precision > maxPrecision) precision = maxPrecision;
-
-        return precision;
+    private static normalizeData(value: string): string {
+        return value?.replace(',', delimiter);
     }
 }

@@ -1,9 +1,14 @@
+import { IHidingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
+import { Checkbox, DefaultButton, Stack } from '@fluentui/react';
 import * as React from 'react';
-import { Checkbox, DefaultButton, Stack } from 'office-ui-fabric-react';
-import { IHidingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateType } from '@try-at-software/input-elements';
-import { UpdateCallback } from '../../IInputElement';
 
-export default class HidingInputElementsSample extends React.Component {
+interface IHidingInputElementSampleState {
+    isValid: boolean;
+    isVisible: boolean;
+    hasChanges: boolean;
+}
+
+export default class HidingInputElementsSample extends React.Component<unknown, IHidingInputElementSampleState> {
     private _inputElement: IHidingInputElement;
 
     public constructor(props: unknown) {
@@ -17,11 +22,27 @@ export default class HidingInputElementsSample extends React.Component {
             },
             this.updateForm
         );
+
+        this.state = {
+            isValid: this._inputElement.isValid,
+            hasChanges: this._inputElement.hasChanges,
+            isVisible: this._inputElement.isVisible
+        };
     }
 
-    private updateForm: UpdateCallback = (updateType: UpdateType): void => {
-        console.log(updateType);
-        this.forceUpdate();
+    private updateForm: UpdateCallback = (): void => {
+        if (
+            this._inputElement.isValid === this.state.isValid &&
+            this._inputElement.isVisible === this.state.isVisible &&
+            this._inputElement.hasChanges === this.state.hasChanges
+        )
+            return;
+
+        this.setState({
+            isValid: this._inputElement.isValid,
+            isVisible: this._inputElement.isVisible,
+            hasChanges: this._inputElement.hasChanges
+        });
     };
 
     public render(): JSX.Element {
@@ -33,9 +54,9 @@ export default class HidingInputElementsSample extends React.Component {
                     <DefaultButton text="Show" onClick={this.show} disabled={this._inputElement.isVisible} />
                     <DefaultButton text="Hide" onClick={this.hide} disabled={!this._inputElement.isVisible} />
                 </Stack>
-                <Checkbox label="Is valid" checked={this._inputElement.isValid} disabled={true} />
-                <Checkbox label="Has changes" checked={this._inputElement.hasChanges} disabled={true} />
-                <Checkbox label="Is visible" checked={this._inputElement.isVisible} disabled={true} />
+                <Checkbox label="Is valid" checked={this.state.isValid} disabled={true} />
+                <Checkbox label="Has changes" checked={this.state.hasChanges} disabled={true} />
+                <Checkbox label="Is visible" checked={this.state.isVisible} disabled={true} />
             </div>
         );
     }

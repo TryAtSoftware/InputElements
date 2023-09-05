@@ -1,11 +1,13 @@
+import { FormText } from '../../Components';
 import { IBaseInputElementProps } from '../IBaseInputElementProps';
 
 export interface INumberInputProps extends IBaseInputElementProps {
-    suffix?: string;
     handleDecimalValues?: boolean;
-    labelPosition?: 'top' | 'bottom' | 'left' | 'right';
     min?: number;
     max?: number;
     step?: number;
-    precision?: number;
+
+    getMinErrorMessage?: (min: number, max: number | undefined) => FormText;
+    getMaxErrorMessage?: (min: number | undefined, max: number) => FormText;
+    decimalErrorMessage?: FormText;
 }

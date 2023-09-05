@@ -1,6 +1,6 @@
 import * as Adapter from 'enzyme-adapter-react-16';
 import * as Enzyme from 'enzyme';
-import { initializeIcons } from 'office-ui-fabric-react';
+import { initializeIcons } from '@fluentui/react';
 
 // The logic in this file is going to be executed before the tests are run.
 // We want our snapshots to be as realistic as possible. That's why we want to initialize the icons.

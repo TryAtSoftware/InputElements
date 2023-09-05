@@ -1,7 +1,7 @@
-import { ISingleValueInputElement } from '../../SingleValueInputElements/ISingleValueInputElement';
+import { InternalDynamicInput } from '../IDynamicListInputElement';
 
 export interface IDynamicListMenuOption<TValue> {
     name: string;
     icon?: string;
-    createInput: () => ISingleValueInputElement<TValue>;
+    createInput: () => InternalDynamicInput<TValue>;
 }

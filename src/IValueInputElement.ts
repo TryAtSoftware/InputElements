@@ -1,3 +1,4 @@
+import { FormText } from './Components';
 import { IInputElement } from './IInputElement';
 
 export interface IValueInputElement<TValue> extends IInputElement {
@@ -20,4 +21,4 @@ export interface IValueInputElement<TValue> extends IInputElement {
     validate(): void;
 }
 
-export type ValidationRule<TValue> = (value: TValue) => string;
+export type ValidationRule<TValue> = (value: TValue) => FormText;

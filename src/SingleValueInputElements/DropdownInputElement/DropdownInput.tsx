@@ -1,51 +1,70 @@
+import { Dropdown, IDropdownOption, MessageBarType } from '@fluentui/react';
 import * as React from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react';
+import { useCallback, useEffect, useMemo } from 'react';
+import { ErrorRenderer, LabelRenderer } from '../../Components';
+import { DropdownHelper } from '../../Utilities';
+import { IBaseInputElementProps } from '../IBaseInputElementProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
+import { IInvalidationOptions, ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
+import { IDropdownInputConfiguration } from './IDropdownInputConfiguration';
 import { IDropdownInputProps } from './IDropdownInputProps';
-import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
+import { IFluentUiDropdownInputProps } from './IFluentUiDropdownInputProps';
 
-export class DropdownInput extends React.Component<ISingleValueInputElementProps<string> & IDropdownInputProps> {
-    public render(): JSX.Element {
-        const normalizedOptions = this.getNormalizedOptions();
+interface ISingleValueDropdownInputProps
+    extends ISingleValueInputElementProps<string>,
+        IDropdownInputConfiguration,
+        IOperativeProps<IBaseInputElementProps>,
+        IDynamicProps<IDropdownInputProps & IFluentUiDropdownInputProps> {}
 
-        return (
-            <Dropdown
-                label={this.props?.label}
+const ConsistencyErrorMessage = 'The value is not present within the specified options.';
+
+const DropdownInputComponent = (props: ISingleValueDropdownInputProps): JSX.Element => {
+    const { dynamicProps, operativeProps, styles: stylePreferences } = props;
+    const normalizedOptions = useMemo(
+        () => DropdownHelper.getNormalizedOptions(dynamicProps.defaultOption, dynamicProps.options),
+        [dynamicProps.defaultOption, dynamicProps.options]
+    );
+
+    const styles = useMemo(() => {
+        if (!stylePreferences?.automaticHeight) return undefined;
+        return { dropdownItem: { height: 'auto' } };
+    }, [stylePreferences]);
+
+    useEffect(() => {
+        if (!props.value || normalizedOptions.some((o) => o.key === props.value)) return;
+
+        const invalidationOptions: IInvalidationOptions = { errorMessage: props.consistencyErrorMessage || ConsistencyErrorMessage };
+        props.invalidateInput(invalidationOptions);
+    }, [props.value, normalizedOptions, props.consistencyErrorMessage, props.invalidateInput]);
+    const DropdownComponent = useMemo(() => dynamicProps.dropdownComponent ?? Dropdown, [dynamicProps.dropdownComponent]);
+
+    const onChange = useCallback(
+        (_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void => !!props.onChange && props.onChange(option.id),
+        [props.onChange]
+    );
+    const onRenderOption = useCallback((option: IDropdownOption, defaultRender: (option: IDropdownOption) => JSX.Element) => {
+        if (!dynamicProps.renderOption) return defaultRender(option);
+        return dynamicProps.renderOption(option.id);
+    }, []);
+
+    return (
+        <>
+            <LabelRenderer label={props.label} required={!!props.renderRequiredIndicator} />
+            <DropdownComponent
+                data-automationid="dropdown-input"
                 options={normalizedOptions}
-                onChange={(_event: React.FormEvent<HTMLDivElement>, option: IDropdownOption): void =>
-                    !!this.props?.onChange && this.props.onChange(option.key as string)
-                }
-                errorMessage={this.props?.errorMessage}
-                required={!!this.props?.isRequired}
-                placeholder={this.props?.placeholder}
+                onChange={onChange}
+                onRenderOption={onRenderOption}
+                placeholder={operativeProps.placeholder}
                 // This value should never be `undefined`.
-                defaultSelectedKey={this.props?.value || this.props?.defaultOption?.key || null}
-                disabled={this.props?.isDisabled}
+                selectedKey={props.value || dynamicProps.defaultOption?.key || null}
+                disabled={dynamicProps.isDisabled}
+                styles={styles}
             />
-        );
-    }
+            <ErrorRenderer error={props.errorMessage} messageBarType={MessageBarType.error} />
+        </>
+    );
+};
 
-    private getNormalizedOptions(): IDropdownOption[] {
-        const options = [];
-
-        if (!!this.props?.defaultOption) {
-            const defaultOption: IDropdownOption = {
-                ...this.props.defaultOption,
-                selected: true
-            };
-            options.push(defaultOption);
-        }
-
-        if (!!this.props?.options)
-            this.props.options.forEach((o): void => {
-                if (!o) return;
-
-                const newOption: IDropdownOption = {
-                    ...o,
-                    selected: false
-                };
-                options.push(newOption);
-            });
-
-        return options;
-    }
-}
+export const DropdownInput = React.memo(DropdownInputComponent);

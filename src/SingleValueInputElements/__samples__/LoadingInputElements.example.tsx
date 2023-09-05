@@ -1,12 +1,23 @@
 import * as React from 'react';
-import { Checkbox, DefaultButton, Stack } from 'office-ui-fabric-react';
-import { ILoadingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateType } from '@try-at-software/input-elements';
-import { UpdateCallback } from '../../IInputElement';
+import { Checkbox, DefaultButton, Stack } from '@fluentui/react';
+import { ILoadingInputElement, ITextInputProps, SingleValueInputElement, TextInput, UpdateCallback } from '@try-at-software/input-elements';
 
-export default class LoadingInputElementsSample extends React.Component {
+interface ILoadingInputElementSampleState {
+    isValid: boolean;
+    isLoading: boolean;
+    hasChanges: boolean;
+}
+
+export default class LoadingInputElementsSample extends React.Component<unknown, ILoadingInputElementSampleState> {
     private loadingFinishedCallback: () => void;
 
     private _inputElement: ILoadingInputElement;
+
+    public state: ILoadingInputElementSampleState = {
+        isLoading: false,
+        isValid: false,
+        hasChanges: false
+    };
 
     public constructor(props: unknown) {
         super(props);
@@ -19,11 +30,27 @@ export default class LoadingInputElementsSample extends React.Component {
             },
             this.updateForm
         );
+
+        this.state = {
+            isValid: this._inputElement.isValid,
+            hasChanges: this._inputElement.hasChanges,
+            isLoading: this._inputElement.isLoading
+        };
     }
 
-    private updateForm: UpdateCallback = (updateType: UpdateType): void => {
-        console.log(updateType);
-        this.forceUpdate();
+    private updateForm: UpdateCallback = (): void => {
+        if (
+            this._inputElement.isValid === this.state.isValid &&
+            this._inputElement.isLoading === this.state.isLoading &&
+            this._inputElement.hasChanges === this.state.hasChanges
+        )
+            return;
+
+        this.setState({
+            isValid: this._inputElement.isValid,
+            isLoading: this._inputElement.isLoading,
+            hasChanges: this._inputElement.hasChanges
+        });
     };
 
     public render(): JSX.Element {
@@ -34,9 +61,9 @@ export default class LoadingInputElementsSample extends React.Component {
                     <DefaultButton text="Start loading" onClick={this.startLoading} disabled={!!this.loadingFinishedCallback} />
                     <DefaultButton text="Finish loading" onClick={this.finishLoading} disabled={!this.loadingFinishedCallback} />
                 </Stack>
-                <Checkbox label="Is valid" checked={this._inputElement.isValid} disabled={true} />
-                <Checkbox label="Has changes" checked={this._inputElement.hasChanges} disabled={true} />
-                <Checkbox label="Is loading" checked={this._inputElement.isLoading} disabled={true} />
+                <Checkbox label="Is valid" checked={this.state.isValid} disabled={true} />
+                <Checkbox label="Has changes" checked={this.state.hasChanges} disabled={true} />
+                <Checkbox label="Is loading" checked={this.state.isLoading} disabled={true} />
             </div>
         );
     }

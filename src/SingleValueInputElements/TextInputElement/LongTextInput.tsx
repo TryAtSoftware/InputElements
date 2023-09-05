@@ -1,48 +1,46 @@
+import { TextField } from '@fluentui/react';
 import * as React from 'react';
+import { materializeErrorMessage } from '../../Components';
+import { LabelRenderer } from '../../Components';
+import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
+import { IDynamicProps } from '../IDynamicProps';
+import { IOperativeProps } from '../IOperativeProps';
 import { ISingleValueInputElementProps } from '../ISingleValueInputElementProps';
-import { ITextInputProps } from './ITextInputProps';
-import { TextField } from 'office-ui-fabric-react';
+import { ILongTextInputProps } from './ILongTextInputProps';
 
-export interface ILongTextInputState {
-    isMultiline: boolean;
-}
-
-export class LongTextInput extends React.Component<ISingleValueInputElementProps<string> & ITextInputProps, ILongTextInputState> {
-    /**
-     * The number of characters after which the text input is changed to a multiline textbox.
-     */
-    private multilineThreshold = 70;
-
-    public state: ILongTextInputState = {
-        isMultiline: false
-    };
-
+export class LongTextInput extends React.Component<
+    ISingleValueInputElementProps<string> & IOperativeProps<ILongTextInputProps> & IDynamicProps<IBaseInputElementDynamicProps>
+> {
     public render(): JSX.Element {
         if (!this.props) return null;
 
-        return (
-            <TextField
-                label={this.props.label}
-                underlined={true}
-                value={this.props.value || ''}
-                onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string): void => {
-                    // Dynamically change the 'isMultiline' state property.
-                    const isMultiline = newValue.length > this.multilineThreshold;
-                    if (this.state.isMultiline !== isMultiline) {
-                        this.setState({ isMultiline: isMultiline });
-                    }
+        const { dynamicProps, operativeProps } = this.props;
+        const { isDisabled } = dynamicProps;
+        const { autoAdjustHeight, autoFocus, contentType, placeholder, resizable } = operativeProps;
 
-                    this.props.onChange(newValue);
-                }}
-                errorMessage={this.props.errorMessage}
-                required={this.props.isRequired}
-                type={this.props.contentType}
-                placeholder={this.props.placeholder}
-                multiline={this.state.isMultiline}
-                autoAdjustHeight={this.state.isMultiline}
-                validateOnFocusOut={true}
-                disabled={this.props.isDisabled}
-            />
+        return (
+            <>
+                <LabelRenderer label={this.props.label} required={!!this.props.renderRequiredIndicator} />
+                <TextField
+                    data-automationid="long-text-input"
+                    value={this.props.value || ''}
+                    onChange={this.handleChange}
+                    errorMessage={materializeErrorMessage(this.props.errorMessage)}
+                    type={contentType}
+                    placeholder={placeholder}
+                    autoAdjustHeight={autoAdjustHeight}
+                    resizable={resizable}
+                    disabled={isDisabled}
+                    autoFocus={autoFocus}
+                    validateOnFocusOut
+                    multiline
+                />
+            </>
         );
     }
+
+    private handleChange = (_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string): void => {
+        const { onChange } = this.props;
+        onChange?.(newValue);
+    };
 }

@@ -1,17 +1,23 @@
 import * as React from 'react';
 import {
-    DependentInputElementInitializer,
     DropdownInput,
-    IDropdownInputOption,
+    DropdownHelper,
+    IBaseInputElementProps,
     IDropdownInputProps,
     ISingleValueInputElement,
     SingleValueInputElement,
-    UpdateCallback
+    UpdateCallback,
+    getFormState
 } from '@try-at-software/input-elements';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from '@fluentui/react';
 
-export default class SequentialDependenciesSample extends React.Component {
-    private _allInputs: ISingleValueInputElement<string, IDropdownInputProps>[] = [];
+interface ISequentialDependenciesSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class SequentialDependenciesSample extends React.Component<unknown, ISequentialDependenciesSampleState> {
+    private _allInputs: ISingleValueInputElement<string>[] = [];
 
     public constructor(props: unknown) {
         super(props);
@@ -20,50 +26,64 @@ export default class SequentialDependenciesSample extends React.Component {
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        const initialInput = new SingleValueInputElement<string, IDropdownInputProps>(
-            {
-                isRequired: true,
-                label: 'Principal dropdown with sequential dependencies (required, without error handling)'
-            },
+        const principalInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
+            { isRequired: true, label: 'Principal dropdown with sequential dependencies (required, without error handling)' },
             DropdownInput,
-            {
-                options: this.mapToDropdownOptions(options),
-                placeholder: 'When you change the value, a dependent dropdown will appear.'
-            },
+            { placeholder: 'When you change the value, the dependent dropdown will appear.' },
             this.updateForm
         );
+        principalInput.changeDynamicProps({
+            options: DropdownHelper.mapToDropdownOptions(options)
+        });
 
-        this._allInputs.push(initialInput);
+        this._allInputs.push(principalInput);
 
-        let previousElement = initialInput;
-
+        let previousElement: ISingleValueInputElement<string> = principalInput;
         for (let i = 0; i < dependentElementsCount; i++) {
-            const currentDependentInput = new SingleValueInputElement<string, IDropdownInputProps>(
+            const dependentInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
                 { isRequired: true, label: `Dependent dropdown #${i + 1} (required, without error handling)` },
                 DropdownInput,
-                {
-                    placeholder: 'None of all dependent input elements is required, so the button is already enabled.'
-                },
+                { placeholder: 'The next sequentially dependent input element will appear after you enter some value here.' },
                 this.updateForm
             );
 
-            DependentInputElementInitializer.initializeDependency(
-                previousElement,
-                currentDependentInput,
-                (newPrincipalValue: string, doneCallback: () => void): void => {
-                    const dependentOptions: string[] = [];
-                    for (let i = 0; i < 10; i++) dependentOptions.push(newPrincipalValue + i);
+            previousElement.subscribeToValueChange((newPrincipalValue: string): void => {
+                if (!dependentInput.isVisible) dependentInput.show();
 
-                    currentDependentInput.componentProps.options = this.mapToDropdownOptions(dependentOptions);
+                const dependentOptions: string[] = [];
+                for (let i = 0; i < 10; i++) dependentOptions.push(newPrincipalValue + i);
 
-                    doneCallback();
-                }
-            );
+                dependentInput.changeDynamicProps({
+                    options: DropdownHelper.mapToDropdownOptions(dependentOptions)
+                });
 
-            this._allInputs.push(currentDependentInput);
-            previousElement = currentDependentInput;
+                dependentInput.resetValue();
+            });
+            previousElement.subscribeToInvalidValueChange((): void => {
+                if (dependentInput.isVisible) dependentInput.hide();
+                dependentInput.resetValue();
+            });
+            dependentInput.hide();
+
+            this._allInputs.push(dependentInput);
+            previousElement = dependentInput;
         }
+
+        const initialFormStatus = getFormState(this._allInputs);
+        this.state = {
+            ...initialFormStatus
+        };
     }
+
+    private updateForm: UpdateCallback = (): void => {
+        const formStatus = getFormState(this._allInputs);
+        if (formStatus.isValid === this.state.isValid && formStatus.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: formStatus.isValid,
+            hasChanges: formStatus.hasChanges
+        });
+    };
 
     public render(): JSX.Element {
         return (
@@ -78,24 +98,7 @@ export default class SequentialDependenciesSample extends React.Component {
         );
     }
 
-    private updateForm: UpdateCallback = (): void => {
-        this.forceUpdate();
-    };
-
     private printValues = (): void => {
         console.log('All values: ' + this._allInputs.map((x): string => x.value));
     };
-
-    private mapToDropdownOptions(values: string[]): IDropdownInputOption[] {
-        return values
-            ?.filter((x): boolean => !!x)
-            ?.map(
-                (o): IDropdownInputOption => {
-                    return {
-                        key: o,
-                        text: o
-                    };
-                }
-            );
-    }
 }

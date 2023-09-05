@@ -1,15 +1,22 @@
-import * as React from 'react';
 import {
     DropdownInput,
+    IBaseInputElementProps,
     IDropdownInputOption,
     IDropdownInputProps,
-    IValueInputElement,
-    SingleValueInputElement
+    ISingleValueInputElement,
+    SingleValueInputElement,
+    UpdateCallback
 } from '@try-at-software/input-elements';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from '@fluentui/react';
+import * as React from 'react';
 
-export default class DropdownInputSample extends React.Component {
-    private _dropdownInput: IValueInputElement<string>;
+interface IDropdownInputSampleState {
+    isValid: boolean;
+    hasChanges: boolean;
+}
+
+export default class DropdownInputSample extends React.Component<unknown, IDropdownInputSampleState> {
+    private _dropdownInput: ISingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>;
 
     public constructor(props: unknown) {
         super(props);
@@ -17,23 +24,42 @@ export default class DropdownInputSample extends React.Component {
         const options: string[] = [];
         for (let i = 0; i < 10; i++) options.push(i.toString());
 
-        this._dropdownInput = new SingleValueInputElement<string, IDropdownInputProps>(
-            { isRequired: true, label: 'Basic dropdown input (required, without error handling)' },
+        this._dropdownInput = new SingleValueInputElement<string, IBaseInputElementProps, IDropdownInputProps>(
+            {
+                isRequired: true,
+                renderRequiredIndicator: true,
+                label: 'Basic dropdown input (required, without error handling)'
+            },
             DropdownInput,
             {
-                options: options.map(
-                    (o): IDropdownInputOption => {
-                        return {
-                            key: o,
-                            text: o
-                        };
-                    }
-                ),
                 placeholder: 'When you change the value, the button will become enabled and this message will disappear.'
             },
-            (): void => this.forceUpdate()
+            this.updateForm
         );
+
+        this._dropdownInput.changeDynamicProps({
+            options: options.map((o): IDropdownInputOption => {
+                return {
+                    key: o,
+                    text: o
+                };
+            })
+        });
+
+        this.state = {
+            isValid: this._dropdownInput.isValid,
+            hasChanges: this._dropdownInput.hasChanges
+        };
     }
+
+    private updateForm: UpdateCallback = (): void => {
+        if (this._dropdownInput.isValid === this.state.isValid && this._dropdownInput.hasChanges === this.state.hasChanges) return;
+
+        this.setState({
+            isValid: this._dropdownInput.isValid,
+            hasChanges: this._dropdownInput.hasChanges
+        });
+    };
 
     public render(): JSX.Element {
         return (
@@ -41,7 +67,7 @@ export default class DropdownInputSample extends React.Component {
                 {this._dropdownInput.render()}
                 <PrimaryButton
                     text="Submit"
-                    disabled={!this._dropdownInput.isValid || !this._dropdownInput.hasChanges}
+                    disabled={!this.state.isValid || !this.state.hasChanges}
                     onClick={(): void => console.log(this._dropdownInput.value)}
                 />
             </div>

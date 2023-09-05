@@ -1,6 +1,6 @@
 import { IInputElementConfiguration } from '../IInputElementConfiguration';
 import { ILoadingInputElementConfiguration } from '../ILoadingInputElementConfiguration';
-import { IValueComparator } from './Comparators/IValueComparator';
+import { IValueComparator } from './Comparators';
 
 export interface ISingleValueInputElementConfiguration<TValue> extends IInputElementConfiguration, ILoadingInputElementConfiguration {
     /**

@@ -1,4 +1,4 @@
-import { IPersonaProps, PersonaPresence } from 'office-ui-fabric-react';
+import { IPersonaProps, PersonaPresence } from '@fluentui/react';
 
 export const people: (IPersonaProps & { key: string | number })[] = [
     {

@@ -1,4 +1,4 @@
-import { UpdateType } from './UpdateType';
+import { FormText } from './Components';
 
 export interface IInputElement {
     /**
@@ -9,7 +9,7 @@ export interface IInputElement {
     /**
      * The message of the first validation error that occurred if any.
      */
-    errorMessage: string;
+    errorMessage: FormText;
 
     /**
      * Gets or sets a value indicating whether the input element has any changes made.
@@ -29,4 +29,4 @@ export interface IInputElement {
     update: UpdateCallback;
 }
 
-export type UpdateCallback = (updateType: UpdateType) => void;
+export type UpdateCallback = () => void;

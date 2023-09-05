@@ -1,7 +1,14 @@
+import { FormText } from '../Components';
+
+export interface IInvalidationOptions {
+    errorMessage: FormText;
+}
+
 export interface ISingleValueInputElementProps<TValue> {
     value: TValue;
-    label: string;
-    isRequired: boolean;
-    errorMessage: string;
+    label: FormText;
+    renderRequiredIndicator: boolean;
+    errorMessage: FormText;
     onChange: (newValue: TValue) => void;
+    invalidateInput: (options?: IInvalidationOptions) => void;
 }

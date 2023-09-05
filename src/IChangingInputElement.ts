@@ -1,4 +1,6 @@
-export interface IChangingInputElement<TValue> {
+import { IInputElement } from './IInputElement';
+
+export interface IChangingInputElement<TValue> extends IInputElement {
     /**
      * A method used to set new value, validate it and update the form.
      *

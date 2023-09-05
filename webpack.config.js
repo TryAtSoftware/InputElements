@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
@@ -19,8 +20,7 @@ module.exports = {
     devtool: 'source-map',
     devServer: {
         port: 5000,
-        contentBase: './src/__samples__',
-        inline: true,
+        static: './src/__samples__',
         hot: true
     },
     resolve: {
@@ -30,56 +30,14 @@ module.exports = {
 
     module: {
         rules: [
-            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
-
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
-
+            { test: /\.tsx?$/, loader: 'ts-loader' },
             {
                 test: /\.css?$/,
-                use: [
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }
-                ]
+                use: ['style-loader', 'css-loader']
             },
-
             {
                 test: /\.less$/,
-                use: [
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    },
-                    {
-                        loader: 'less-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.(ts|tsx|js)$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
-                enforce: 'pre',
-                options: {
-                    failOnWarning: false,
-                    failOnError: true
-                }
+                use: ['style-loader', 'css-loader', 'less-loader']
             }
         ]
     },
@@ -89,5 +47,6 @@ module.exports = {
             template: './src/__samples__/index.html',
             favicon: './src/__samples__/favicon.ico'
         })
-    ]
+    ],
+    ignoreWarnings: [{ module: /@fluentui\/react/ }]
 };
