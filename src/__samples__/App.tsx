@@ -23,6 +23,7 @@ import IdentityPickerWithInitialValueSample from '../SingleValueInputElements/Id
 import CustomStepNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/CustomStepNumberInput.example';
 import DecimalNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/DecimalNumberInput.example';
 import NumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/NumberInput.example';
+import NonRequiredNumberInputSample from '../SingleValueInputElements/NumberInputElement/__samples__/NonRequiredNumberInput.example';
 import TextInputSample from '../SingleValueInputElements/TextInputElement/__samples__/TextInput.example';
 import TextInputWithValidationRulesSample from '../SingleValueInputElements/TextInputElement/__samples__/TextInputWithValidationRules.example';
 import TimePickerSample from '../SingleValueInputElements/TimePickerInputElement/__samples__/TimePicker.example';
@@ -61,6 +62,7 @@ export default class App extends React.Component {
                     <Link href="#number-input">Number input</Link>
                 </h2>
                 <NumberInputSample />
+                <NonRequiredNumberInputSample />
                 <CustomStepNumberInputSample />
                 <DecimalNumberInputSample />
 
