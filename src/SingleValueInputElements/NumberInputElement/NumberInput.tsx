@@ -1,5 +1,5 @@
-import { MessageBarType, SpinButton } from '@fluentui/react';
 import * as React from 'react';
+import { MessageBarType, SpinButton } from '@fluentui/react';
 import { FormText } from '../../Components';
 import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
@@ -27,7 +27,8 @@ export class NumberInput extends React.Component<
     public render(): JSX.Element {
         if (!this.props) return null;
 
-        const { dynamicProps, operativeProps } = this.props;
+        const { dynamicProps, errorMessage, operativeProps } = this.props;
+        const { customWarning } = this.state;
 
         return (
             <>
@@ -38,36 +39,51 @@ export class NumberInput extends React.Component<
                         autoFocus: !!operativeProps.autoFocus,
                         placeholder: operativeProps.placeholder,
                         disabled: !!dynamicProps.isDisabled,
-                        onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-                            const newValue = event.target.value;
-                            const value = NumberInput.normalizeData(newValue);
-                            if (!value || isNaN(Number(value))) {
-                                this.setState({ intermediateValue: value, customWarning: 'The provided value is not a valid number.' });
-                                this.props.invalidateInput();
-                                return;
-                            }
-
-                            const numericValue = NumberInput.getNumericValue(value);
-                            this.handleUserInput(numericValue, value);
-                        }
+                        onChange: this.handleChange
                     }}
                     value={this.state.intermediateValue ?? ''}
-                    onIncrement={(value: string): void => {
-                        let numericValue = NumberInput.getNumericValue(value);
-                        numericValue += this.getStep();
-                        this.handleUserInput(numericValue, numericValue.toString());
-                    }}
-                    onDecrement={(value: string): void => {
-                        let numericValue = NumberInput.getNumericValue(value);
-                        numericValue -= this.getStep();
-                        this.handleUserInput(numericValue, numericValue.toString());
-                    }}
+                    onIncrement={this.handleIncrement}
+                    onDecrement={this.handleDecrement}
                 />
-                <ErrorRenderer error={this.props.errorMessage} messageBarType={MessageBarType.warning} />
-                <ErrorRenderer error={this.state.customWarning} messageBarType={MessageBarType.warning} />
+                <ErrorRenderer error={errorMessage} messageBarType={MessageBarType.warning} />
+                <ErrorRenderer error={customWarning} messageBarType={MessageBarType.warning} />
             </>
         );
     }
+
+    private handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        const newValue = event.target.value;
+        const value = NumberInput.normalizeData(newValue);
+
+        const { isRequired } = this.props;
+        console.log(isRequired, value);
+        if (!isRequired && !value) {
+            this.setState({ intermediateValue: '', customWarning: '' });
+            this.props.onChange(undefined);
+            return;
+        }
+
+        if (!value || isNaN(Number(value))) {
+            this.setState({ intermediateValue: value, customWarning: 'The provided value is not a valid number.' });
+            this.props.invalidateInput();
+            return;
+        }
+
+        const numericValue = NumberInput.getNumericValue(value);
+        this.handleUserInput(numericValue, value);
+    };
+
+    private handleIncrement = (value: string): void => {
+        let numericValue = NumberInput.getNumericValue(value);
+        numericValue += this.getStep();
+        this.handleUserInput(numericValue, numericValue.toString());
+    };
+
+    private handleDecrement = (value: string): void => {
+        let numericValue = NumberInput.getNumericValue(value);
+        numericValue -= this.getStep();
+        this.handleUserInput(numericValue, numericValue.toString());
+    };
 
     private handleUserInput(value: number, intermediateValue: string): void {
         const consistencyWarning = this.ensureValueConsistency(value);

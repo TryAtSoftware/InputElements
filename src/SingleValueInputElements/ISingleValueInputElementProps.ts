@@ -7,6 +7,7 @@ export interface IInvalidationOptions {
 export interface ISingleValueInputElementProps<TValue> {
     value: TValue;
     label: FormText;
+    isRequired: boolean;
     renderRequiredIndicator: boolean;
     errorMessage: FormText;
     onChange: (newValue: TValue) => void;

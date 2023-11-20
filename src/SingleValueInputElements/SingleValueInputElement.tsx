@@ -126,7 +126,8 @@ export class SingleValueInputElement<TValue, TOperativeProps, TDynamicProps = un
                         inputProps={{
                             label: this._configuration?.label,
                             value: this.value,
-                            renderRequiredIndicator: this._configuration?.renderRequiredIndicator && this._configuration?.isRequired,
+                            isRequired: this._configuration.isRequired,
+                            renderRequiredIndicator: this._configuration?.isRequired && this._configuration?.renderRequiredIndicator,
                             errorMessage: this.errorMessage,
                             onChange: (newValue: TValue): void => this.setValue(newValue),
                             invalidateInput: this.invalidateInput
