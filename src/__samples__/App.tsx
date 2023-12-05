@@ -30,6 +30,7 @@ import TimePickerSample from '../SingleValueInputElements/TimePickerInputElement
 import TimePickerWithMonthsSample from '../SingleValueInputElements/TimePickerInputElement/__samples__/TimePickerWithMonths.example';
 import './App.less';
 import './styles.less';
+import ResetSample from '../SingleValueInputElements/__samples__/Reset.example';
 
 export default class App extends React.Component {
     public render(): JSX.Element {
@@ -44,6 +45,7 @@ export default class App extends React.Component {
                 <InitialValueWorkflowSample />
                 <LoadingInputElementsSample />
                 <HidingInputElementsSample />
+                <ResetSample />
 
                 <h2 id="text-input">
                     <Link href="#text-input">Text input</Link>

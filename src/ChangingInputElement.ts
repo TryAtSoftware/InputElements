@@ -34,9 +34,14 @@ export abstract class ChangingInputElement<TValue> extends InputElement implemen
     public resetValue(): void {
         if (!this._valueIsSet && !this._initialValueIsSet) return;
 
-        this.setInternalValue(undefined, false);
-        this.updateInternally();
+        this._valueIsSet = false;
+
+        if (this._initialValueIsSet) {
+            this._initialValueIsSet = false;
+            this.setInitialValue(this.initialValue);
+        } else this.resetInternalValue();
     }
 
     protected abstract setInternalValue(value: TValue, isInitial: boolean): void;
+    protected abstract resetInternalValue(): void;
 }
