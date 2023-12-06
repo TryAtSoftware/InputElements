@@ -1,4 +1,4 @@
-import { IChangingInputElement } from './IChangingInputElement';
+import { IChangingInputElement, ResetValueOptions } from './IChangingInputElement';
 import { UpdateCallback } from './IInputElement';
 import { InputElement } from './InputElement';
 
@@ -31,12 +31,12 @@ export abstract class ChangingInputElement<TValue> extends InputElement implemen
     }
 
     /** @inheritdoc */
-    public resetValue(): void {
+    public resetValue(options?: ResetValueOptions): void {
         if (!this._valueIsSet && !this._initialValueIsSet) return;
 
         this._valueIsSet = false;
 
-        if (this._initialValueIsSet) {
+        if (!options?.avoidFallbackToInitialValue && this._initialValueIsSet) {
             this._initialValueIsSet = false;
             this.setInitialValue(this.initialValue);
         } else this.resetInternalValue();

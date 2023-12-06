@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ISingleValueInputElement, ITextInputProps, TextInput, UpdateCallback } from '@try-at-software/input-elements';
+import { ISingleValueInputElement, ITextInputProps, ResetValueOptions, TextInput, UpdateCallback } from '@try-at-software/input-elements';
 import { Checkbox, PrimaryButton, Stack } from '@fluentui/react';
 import { getFormState, prepareInputElement } from '../../Utilities';
 import { IInputElement } from '../../IInputElement';
@@ -36,7 +36,7 @@ export default class ResetSample extends React.Component<unknown, IResetSampleSt
     }
 
     private updateForm: UpdateCallback = (): void => {
-        const formState = getFormState([]);
+        const formState = getFormState(this._allInputs);
         if (formState.isValid === this.state.isValid && formState.hasChanges === this.state.hasChanges) return;
 
         this.setState({
@@ -56,6 +56,7 @@ export default class ResetSample extends React.Component<unknown, IResetSampleSt
 
                 <Stack horizontal tokens={{ childrenGap: 5 }}>
                     <PrimaryButton text="Reset" onClick={this.resetInput} />
+                    <PrimaryButton text="Reset (hard)" onClick={this.hardResetInput} />
                     <PrimaryButton text="Submit" onClick={this.submit} />
                 </Stack>
             </div>
@@ -65,6 +66,12 @@ export default class ResetSample extends React.Component<unknown, IResetSampleSt
     private resetInput = (): void => {
         this._inputElementWithInitialValue.resetValue();
         this._inputElementWithoutInitialValue.resetValue();
+    };
+
+    private hardResetInput = (): void => {
+        const options: ResetValueOptions = { avoidFallbackToInitialValue: true };
+        this._inputElementWithInitialValue.resetValue(options);
+        this._inputElementWithoutInitialValue.resetValue(options);
     };
 
     private submit = (): void => {
