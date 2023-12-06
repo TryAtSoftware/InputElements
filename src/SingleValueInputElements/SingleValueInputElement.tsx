@@ -83,6 +83,17 @@ export class SingleValueInputElement<TValue, TOperativeProps, TDynamicProps = un
     }
 
     /** @inheritdoc */
+    protected resetInternalValue(): void {
+        this.setError(undefined);
+        this.value = undefined;
+
+        if (this._isInvalidated) this._isInvalidated = false;
+        if (this._componentRef?.current) this._componentRef.current.update(undefined);
+
+        this.updateInternally();
+    }
+
+    /** @inheritdoc */
     public get hasChanges(): boolean {
         return !!this._configuration?.comparator
             ? !this._configuration.comparator.areEqual(this.value, this.initialValue)

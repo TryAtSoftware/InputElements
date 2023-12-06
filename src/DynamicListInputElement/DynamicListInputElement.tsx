@@ -184,6 +184,11 @@ export class DynamicListInputElement<TValue>
         this._componentRef.current?.update(this._inputs);
     }
 
+    /** @inheritdoc */
+    protected resetInternalValue(): void {
+        this._inputs = [];
+    }
+
     private filterInputs(): IInputInformation<TValue>[] {
         return this._inputs?.filter((i): boolean => !!i?.input);
     }
