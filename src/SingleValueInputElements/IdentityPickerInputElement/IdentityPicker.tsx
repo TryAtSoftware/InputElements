@@ -38,6 +38,7 @@ export class IdentityPicker<TIdentity extends IPersonaProps = IPersonaProps> ext
                         onChange={(items?: TIdentity[]): void => {
                             this.props.onChange(items);
                         }}
+                        pickerCalloutProps={{ className: operativeProps.pickerCalloutClassName }}
                     />
                 </div>
                 <ErrorRenderer error={this.props.errorMessage} messageBarType={MessageBarType.warning} />

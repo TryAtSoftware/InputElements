@@ -10,4 +10,5 @@ export interface IIdentityPickerProps<TIdentity extends IPersonaProps = IPersona
     onInputChange?: (input: string) => string;
     resolveDelay?: number;
     itemLimit?: number;
+    pickerCalloutClassName?: string;
 }
