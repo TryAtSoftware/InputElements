@@ -1,5 +1,5 @@
-import { IPersonaProps, MessageBarType, NormalPeoplePicker } from '@fluentui/react';
 import * as React from 'react';
+import { IPersonaProps, MessageBarType, NormalPeoplePicker } from '@fluentui/react';
 import { ErrorRenderer, LabelRenderer } from '../../Components';
 import { IBaseInputElementDynamicProps } from '../IBaseInputElementDynamicProps';
 import { IDynamicProps } from '../IDynamicProps';
@@ -25,6 +25,7 @@ export class IdentityPicker<TIdentity extends IPersonaProps = IPersonaProps> ext
                         onEmptyResolveSuggestions={operativeProps.onEmptyResolveSuggestions}
                         getTextFromItem={operativeProps.getTextFromItem}
                         pickerSuggestionsProps={operativeProps.suggestionProps}
+                        onRenderSuggestionsItem={operativeProps.onRenderSuggestionItems}
                         onRemoveSuggestion={operativeProps.onRemoveSuggestion}
                         onInputChange={operativeProps.onInputChange}
                         resolveDelay={operativeProps.resolveDelay}
