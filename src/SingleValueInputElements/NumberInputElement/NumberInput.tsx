@@ -56,7 +56,7 @@ export class NumberInput extends React.Component<
         const value = NumberInput.normalizeData(newValue);
 
         const { isRequired } = this.props;
-        console.log(isRequired, value);
+
         if (!isRequired && !value) {
             this.setState({ intermediateValue: '', customWarning: '' });
             this.props.onChange(undefined);
