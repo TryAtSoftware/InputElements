@@ -7,8 +7,6 @@ export interface IDynamicListInputElementConfiguration extends IInputElementConf
     insertButtonConfig?: IBasicMenuButtonConfiguration;
     addButtonConfig?: IBasicMenuButtonConfiguration;
 
-    renderMoveGripper?: () => JSX.Element;
-
     /**
      * If this value os set to true, it will overwrite the menu configuration.
      * This is implemented for easier initialization of the dynamic list input element.

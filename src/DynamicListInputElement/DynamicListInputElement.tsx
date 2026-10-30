@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { DropResult } from 'react-beautiful-dnd';
 import { ExtendedInputElement } from '../ExtendedInputElement';
 import { UpdateCallback } from '../IInputElement';
 import { ValidationRule } from '../IValueInputElement';
@@ -78,11 +77,9 @@ export class DynamicListInputElement<TValue>
             <DynamicListInputElementWrapper
                 className={this._configuration.className}
                 inputs={this.filterInputs()}
-                onDragEnd={this.onDragEnd}
                 renderMenu={this.renderMenu}
                 renderFooterMenu={this.renderFooterMenu}
                 loadingComponent={this._configuration?.loadingComponent}
-                renderMoveGripper={this._configuration?.renderMoveGripper}
                 ref={this._componentRef}
             />
         );
@@ -140,18 +137,6 @@ export class DynamicListInputElement<TValue>
         this._componentRef.current?.update(this._inputs);
         this.updateInternally();
     };
-
-    private onDragEnd = (result: DropResult): void => {
-        if (!result?.destination) return;
-
-        this.reorder(result.source.index, result.destination.index);
-        this.update();
-    };
-
-    private reorder(startIndex: number, endIndex: number): void {
-        const [removed] = this._inputs.splice(startIndex, 1);
-        this._inputs.splice(endIndex, 0, removed);
-    }
 
     private convert(input: InternalDynamicInput<TValue>): IInputInformation<TValue> {
         if (!input) return null;
